@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Theme directions — Liam portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    background: #141414;
+    color: #f0eee8;
+    min-height: 100vh;
+    padding: 64px 24px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  .lead {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #60a5fa;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-weight: 600;
+    font-size: clamp(36px, 5vw, 48px);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .sub {
+    color: #b8b3aa;
+    font-size: 16px;
+    max-width: 620px;
+    margin-bottom: 56px;
+    line-height: 1.7;
+  }
+  .grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .card {
+    display: block;
+    background: #1c1c1c;
+    border: 1px solid rgba(240, 238, 232, 0.08);
+    border-radius: 10px;
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+  }
+  .card:hover { transform: translateY(-3px); border-color: rgba(96, 165, 250, 0.4); }
+  .card.featured { border-color: rgba(96, 165, 250, 0.4); }
+  .card.featured::before {
+    content: "RECOMMENDED";
+    position: absolute;
+    top: -10px; left: 16px;
+    background: #60a5fa;
+    color: #0a0a0a;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .swatch { display: flex; gap: 4px; margin-bottom: 18px; }
+  .swatch span { width: 28px; height: 28px; border-radius: 4px; }
+  .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6e6962;
+    margin-bottom: 8px;
+  }
+  .title {
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    color: #f0eee8;
+  }
+  .desc { color: #b8b3aa; font-size: 13px; line-height: 1.6; }
+  .arrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: #60a5fa;
+    margin-top: 18px;
+    display: inline-block;
+  }
+  .section-divider {
+    margin: 56px 0 32px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(240, 238, 232, 0.08);
+  }
+  .section-divider .label { font-size: 11px; color: #b8b3aa; }
+  .footer {
+    margin-top: 56px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #6e6962;
+  }
+  .footer a { color: #60a5fa; text-decoration: none; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="lead">// theme directions</p>
+    <h1>Five takes on the personal portfolio.</h1>
+    <p class="sub">Same content. Five visual languages. Click each, read it like an HR scanner first, a founder second. Pick the one that lands.</p>
+
+    <div class="section-divider">
+      <p class="label">Latest — clean, dark, Inter sans, doc-grade legibility</p>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 1fr;">
+      <a class="card featured" href="./direction-clean-dark.html" style="max-width: 100%;">
+        <div class="swatch">
+          <span style="background:#141414"></span>
+          <span style="background:#f0eee8"></span>
+          <span style="background:#60a5fa"></span>
+          <span style="background:#f4a378"></span>
+          <span style="background:#fbbf24"></span>
+          <span style="background:#34d399"></span>
+        </div>
+        <div class="label">Direction · Clean Dark</div>
+        <div class="title">Clean Dark — 4 accent palettes (live switcher)</div>
+        <p class="desc">Inter sans throughout. Documentation-grade legibility. Top-right toggle to compare Sky / Peach / Amber / Mint accents live. <strong style="color:#f0eee8">My current pick.</strong></p>
+        <span class="arrow">View →</span>
+      </a>
+    </div>
+
+    <div class="section-divider">
+      <p class="label">Earlier directions — for reference</p>
+    </div>
+
+    <div class="grid">
+      <a class="card" href="./direction-1-editor-dark.html">
+        <div class="swatch">
+          <span style="background:#0e0d0b"></span>
+          <span style="background:#f4f1ea"></span>
+          <span style="background:#d4a017"></span>
+        </div>
+        <div class="label">Direction 01b</div>
+        <div class="title">Editor&rsquo;s Notebook · Dark</div>
+        <p class="desc">Fraunces serif on warm near-black. Gold accent. Premium leather-bound feel.</p>
+        <span class="arrow">View →</span>
+      </a>
+
+      <a class="card" href="./direction-1-editor.html">
+        <div class="swatch">
+          <span style="background:#fafaf7"></span>
+          <span style="background:#0a0a0a"></span>
+          <span style="background:#3730a3"></span>
+        </div>
+        <div class="label">Direction 01a</div>
+        <div class="title">Editor&rsquo;s Notebook · Light</div>
+        <p class="desc">Cream paper. Inkwell indigo. Stripe Press × NYT essay.</p>
+        <span class="arrow">View →</span>
+      </a>
+
+      <a class="card" href="./direction-2-engineer.html">
+        <div class="swatch">
+          <span style="background:#fafafa"></span>
+          <span style="background:#0a0a0a"></span>
+          <span style="background:#1d4ed8"></span>
+        </div>
+        <div class="label">Direction 02</div>
+        <div class="title">Engineer&rsquo;s Lab</div>
+        <p class="desc">Off-white. Deep cobalt. All sans, terminal flourishes.</p>
+        <span class="arrow">View →</span>
+      </a>
+
+      <a class="card" href="./direction-3-cinematic.html">
+        <div class="swatch">
+          <span style="background:#fafaf7"></span>
+          <span style="background:#0c1322"></span>
+          <span style="background:#dc2626"></span>
+        </div>
+        <div class="label">Direction 03</div>
+        <div class="title">Cinematic Inverted</div>
+        <p class="desc">Cream hero. Dark stack. Coral accent. Sectional drama.</p>
+        <span class="arrow">View →</span>
+      </a>
+    </div>
+
+    <p class="footer">Picker at <a href="./index.html">/previews</a></p>
+  </div>
+</body>
+</html>

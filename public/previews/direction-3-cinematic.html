@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Direction 03 — Cinematic Inverted</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #fafaf7;
+    --paper-elevated: #ffffff;
+    --ink: #0a0a0a;
+    --ink-soft: #404040;
+    --ink-muted: #737373;
+    --rule: #e7e5e0;
+    --night: #0c1322;
+    --night-elevated: #141c2e;
+    --night-text: #e8eaef;
+    --night-muted: #94a3b8;
+    --night-rule: #1e293b;
+    --accent: #dc2626;
+    --accent-hover: #ef4444;
+    --accent-soft: rgba(220, 38, 38, 0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+
+  /* nav */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(250, 250, 247, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    transition: all 0.4s ease;
+  }
+  nav .row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 32px; max-width: 1140px; margin: 0 auto;
+  }
+  nav .brand {
+    font-family: "Fraunces", serif;
+    font-weight: 600; font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  nav .brand .accent { color: var(--accent); }
+  nav .brand small {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; color: var(--ink-muted);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-left: 8px;
+  }
+  nav .links a {
+    color: var(--ink-soft); font-size: 14px; margin-left: 28px;
+    text-decoration: none; transition: color 0.2s;
+  }
+  nav .links a:hover { color: var(--accent); }
+
+  /* hero — light, dramatic */
+  .hero {
+    padding: 120px 0 96px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(220, 38, 38, 0.08) 0%, transparent 65%);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero > .container { position: relative; z-index: 1; }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2);
+  }
+  h1.display {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: clamp(46px, 7vw, 84px);
+    letter-spacing: -0.04em;
+    line-height: 1.0;
+    color: var(--ink);
+    margin-bottom: 40px;
+    max-width: 1000px;
+  }
+  h1.display em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  .lede {
+    max-width: 660px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+  .lede.strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .lede.strong strong {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: 500;
+    margin-right: 6px;
+  }
+  .ctas { margin-top: 36px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 16px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.25s ease;
+    letter-spacing: 0.02em;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.25);
+  }
+  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  .btn-secondary:hover { background: var(--ink); color: var(--paper); }
+  .meta-strip {
+    margin-top: 64px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+    line-height: 1.7;
+  }
+  .meta-strip span { color: var(--accent); margin-right: 8px; }
+
+  /* receipts — light */
+  .section-light { padding: 96px 0; background: var(--paper); position: relative; }
+  .section-light .section-head { margin-bottom: 56px; max-width: 720px; }
+  .section-light .section-head h2 {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: clamp(36px, 4.5vw, 52px);
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .section-light .section-head p {
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .receipts-grid {
+    display: grid; gap: 0;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .receipt {
+    padding: 40px 32px;
+    border-right: 1px solid var(--rule);
+  }
+  .receipt:last-child { border-right: none; }
+  .receipt .num {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: 60px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .receipt .lbl {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .receipt .ctx {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+  }
+
+  /* DARK section — cinematic break */
+  .section-dark {
+    background: var(--night);
+    color: var(--night-text);
+    padding: 120px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .section-dark::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(232, 234, 239, 0.04) 1px, transparent 0);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+  .section-dark::after {
+    content: "";
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 400px;
+    background: radial-gradient(ellipse, rgba(220, 38, 38, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .section-dark > .container { position: relative; z-index: 1; }
+  .section-dark .section-head { margin-bottom: 56px; max-width: 720px; }
+  .section-dark .eyebrow { color: var(--accent); }
+  .section-dark .section-head h2 {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: clamp(36px, 4.5vw, 52px);
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    color: var(--night-text);
+  }
+  .section-dark .section-head p {
+    color: var(--night-muted);
+    line-height: 1.7;
+  }
+
+  /* case study card — sits in light section */
+  .case {
+    background: var(--paper-elevated);
+    border: 1px solid var(--rule);
+    padding: 48px 40px;
+    margin-bottom: 24px;
+    position: relative;
+    border-radius: 4px;
+    box-shadow:
+      0 1px 2px rgba(0,0,0,0.02),
+      0 8px 24px rgba(0,0,0,0.04);
+  }
+  .case::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--accent);
+    border-radius: 4px 0 0 4px;
+  }
+  .case-tags {
+    display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .tag-pill {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    color: var(--ink-soft);
+  }
+  .tag-pill.accent {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: rgba(220, 38, 38, 0.2);
+  }
+  .case h3 {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: clamp(28px, 3.5vw, 40px);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .case h3 + p {
+    font-size: 17px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .case .org {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .case blockquote {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink);
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 22px;
+    margin: 28px 0;
+    max-width: 720px;
+  }
+  .case-metrics {
+    display: grid; gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+  }
+  .case-metric .num {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: 32px;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .case-metric .lbl {
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1.3;
+  }
+
+  /* stack card on dark */
+  .stack-card {
+    background: var(--night-elevated);
+    border: 1px solid var(--night-rule);
+    padding: 40px;
+    border-radius: 4px;
+  }
+  .stack-card .note {
+    border-left: 2px solid var(--accent);
+    padding-left: 16px;
+    color: var(--night-muted);
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+  .stack-grid {
+    display: grid; gap: 32px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  .stack-grid h5 {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .stack-grid li {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--night-muted);
+    padding: 6px 0;
+    list-style: none;
+  }
+  .stack-grid li::before {
+    content: "▎";
+    color: var(--accent);
+    margin-right: 8px;
+  }
+
+  /* doctrine band */
+  .doctrine {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 24px 0;
+    position: relative;
+    z-index: 1;
+  }
+  .doctrine .row {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .doctrine .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .doctrine .text {
+    font-size: 14px;
+    color: rgba(250, 250, 247, 0.85);
+  }
+
+  /* preview bar */
+  .preview-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    z-index: 100;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  }
+  .preview-bar a {
+    color: var(--accent);
+    text-decoration: none;
+    margin-left: 16px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="row">
+    <div class="brand">Liam <span class="accent">Petersen</span> <small>portfolio</small></div>
+    <div class="links">
+      <a href="#">Systems</a>
+      <a href="#">Arc</a>
+      <a href="#">Stack</a>
+      <a href="#">About</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow"><span class="pulse"></span> Open to senior AI roles · Remote, global</div>
+    <h1 class="display">Six years in direct response. Two years shipping production AI. <em>The numbers got bigger.</em></h1>
+    <p class="lede">I&rsquo;m Liam. I&rsquo;ve spent six years writing copy that had to convert or get killed, and the last two building the systems that scale that work to a portfolio doing $20M+ a year.</p>
+    <p class="lede">I&rsquo;m not a developer pretending to understand marketing. I&rsquo;m a direct response operator who learned to ship platforms because no one was building the ones I needed.</p>
+    <p class="lede strong"><strong>Built on Claude Code.</strong>Frontends, backends, agents, skills, MCP integrations. One runtime, one operator, real receipts.</p>
+    <div class="ctas">
+      <a href="#systems" class="btn btn-primary">See the systems →</a>
+      <a href="mailto:liam@copyweb.io" class="btn btn-secondary">Email me</a>
+    </div>
+    <div class="meta-strip"><span>▎</span>Worked across the US, Europe, and South Africa. Currently founder at Copyweb, building custom AI marketing systems for $10M&ndash;$100M DTC brands.</div>
+  </div>
+</section>
+
+<section class="doctrine">
+  <div class="container row">
+    <span class="tag">// build doctrine</span>
+    <span class="text">Every system below was built on Claude Code. Custom skills, MCP servers, CLIs wired into one runtime. AI as the build environment, not the assistant.</span>
+  </div>
+</section>
+
+<section class="section-light">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">// receipts</div>
+      <h2>Real numbers from production systems.</h2>
+      <p>Every number below ties to a system I shipped. No vanity metrics, no rounding tricks.</p>
+    </div>
+
+    <div class="receipts-grid">
+      <div class="receipt">
+        <div class="num">3.0&times;</div>
+        <div class="lbl">Site conversion lift</div>
+        <div class="ctx">1.2% → 3.6% at Foxelli</div>
+      </div>
+      <div class="receipt">
+        <div class="num">3.3&times;</div>
+        <div class="lbl">Email revenue scaled</div>
+        <div class="ctx">$76K → $249K in 4 months</div>
+      </div>
+      <div class="receipt">
+        <div class="num">6&times;</div>
+        <div class="lbl">Video ad output</div>
+        <div class="ctx">25/wk → 150/wk, same 4 editors</div>
+      </div>
+      <div class="receipt">
+        <div class="num">$674K</div>
+        <div class="lbl">Peak monthly revenue</div>
+        <div class="ctx">Through systems I built</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-light" style="background: #f3f0e8; padding-top: 96px; padding-bottom: 96px;">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">// systems shipped</div>
+      <h2>Nine systems. Two continents. One operator.</h2>
+      <p>Production platforms, internal tools, open-source templates, and the meta-tooling that ships them. Each one shipped through Claude Code as the build runtime.</p>
+    </div>
+
+    <article class="case">
+      <div class="case-tags">
+        <span class="tag-pill accent">Shipped to production</span>
+        <span class="tag-pill">2024 — 2026</span>
+        <span class="tag-pill">In daily use</span>
+      </div>
+      <h3>Foxelli Studio</h3>
+      <p>End-to-end AI ad production platform</p>
+      <div class="org">Foxelli Group · Netherlands · 7 DTC brands · $20M+ portfolio</div>
+
+      <blockquote>Six months from blank repo to a platform the entire ads team uses every day. 26-workflow engine. Architected for 100 concurrent users.</blockquote>
+
+      <div class="case-metrics">
+        <div class="case-metric"><div class="num">26</div><div class="lbl">Production workflows</div></div>
+        <div class="case-metric"><div class="num">60+</div><div class="lbl">Custom skills authored</div></div>
+        <div class="case-metric"><div class="num">73</div><div class="lbl">Production bugs resolved</div></div>
+        <div class="case-metric"><div class="num">6&times;</div><div class="lbl">Video ad output</div></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">// stack</div>
+      <h2>The runtime, the surfaces, and what&rsquo;s wired in.</h2>
+      <p>Most portfolios list AI alongside React. Mine doesn&rsquo;t. AI is the layer everything else runs through.</p>
+    </div>
+
+    <div class="stack-card">
+      <p class="note">The build environment, not the assistant. Every system on this site shipped through Claude Code as the primary orchestration layer.</p>
+      <div class="stack-grid">
+        <div>
+          <h5>Runtime</h5>
+          <ul>
+            <li>Claude Code (primary)</li>
+            <li>Claude Agent SDK</li>
+            <li>60+ custom skills</li>
+            <li>Hooks &amp; settings.json</li>
+          </ul>
+        </div>
+        <div>
+          <h5>Surfaces</h5>
+          <ul>
+            <li>VS Code (daily driver)</li>
+            <li>Google Antigravity</li>
+            <li>Terminal CLI</li>
+          </ul>
+        </div>
+        <div>
+          <h5>MCP servers</h5>
+          <ul>
+            <li>Supabase</li>
+            <li>n8n</li>
+            <li>Notion</li>
+            <li>GitHub · Firecrawl</li>
+          </ul>
+        </div>
+        <div>
+          <h5>CLIs</h5>
+          <ul>
+            <li>Codex</li>
+            <li>Gemini</li>
+            <li>NotebookLM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="preview-bar">
+  Direction 03 · Cinematic Inverted
+  <a href="./direction-2-engineer.html">← 02</a>
+  <a href="./index.html">picker</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Direction 02 — Engineer&rsquo;s Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fafafa;
+    --bg-elevated: #ffffff;
+    --ink: #0a0a0a;
+    --ink-soft: #404040;
+    --ink-muted: #737373;
+    --ink-faint: #a3a3a3;
+    --rule: #e5e5e5;
+    --rule-soft: #f0f0f0;
+    --accent: #1d4ed8;
+    --accent-hover: #2563eb;
+    --accent-soft: rgba(29, 78, 216, 0.08);
+    --terminal: #16a34a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+  /* engineering grid background */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(10, 10, 10, 0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(10, 10, 10, 0.025) 1px, transparent 1px);
+    background-size: 64px 64px;
+    z-index: 0;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 70%);
+  }
+
+  /* nav */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(250, 250, 250, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+  nav .row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 32px; max-width: 1200px; margin: 0 auto;
+  }
+  nav .brand {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  nav .brand .accent { color: var(--accent); }
+  nav .brand small {
+    color: var(--ink-muted);
+    margin-left: 12px;
+    font-weight: 400;
+  }
+  nav .links a {
+    color: var(--ink-soft); font-size: 13px; margin-left: 28px;
+    text-decoration: none; transition: color 0.2s;
+    font-family: "JetBrains Mono", monospace;
+  }
+  nav .links a:hover { color: var(--accent); }
+
+  /* hero */
+  .hero { padding: 120px 0 96px; position: relative; z-index: 1; }
+  .terminal-prompt {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--terminal);
+    margin-bottom: 32px;
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 14px;
+    background: rgba(22, 163, 74, 0.06);
+    border: 1px solid rgba(22, 163, 74, 0.2);
+    border-radius: 4px;
+    width: fit-content;
+  }
+  .terminal-prompt .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--terminal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  h1.display {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: clamp(40px, 6vw, 76px);
+    letter-spacing: -0.045em;
+    line-height: 1.0;
+    color: var(--ink);
+    margin-bottom: 36px;
+    max-width: 980px;
+  }
+  h1.display .muted {
+    color: var(--ink-muted);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+  }
+  .lede {
+    max-width: 640px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+  .lede.strong {
+    color: var(--ink);
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 2px;
+  }
+  .lede.strong strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .ctas { margin-top: 36px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 4px 12px rgba(29, 78, 216, 0.18);
+  }
+  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+  .btn-secondary {
+    background: var(--bg-elevated);
+    color: var(--ink);
+    border: 1px solid var(--rule);
+  }
+  .btn-secondary:hover { border-color: var(--ink); }
+  .meta-strip {
+    margin-top: 64px;
+    padding: 16px 18px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+  .meta-strip .key { color: var(--accent); margin-right: 6px; }
+
+  /* doctrine band */
+  .doctrine {
+    background: var(--ink);
+    color: #fafafa;
+    padding: 18px 0;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    font-family: "JetBrains Mono", monospace;
+  }
+  .doctrine .row {
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .doctrine .tag {
+    color: #60a5fa;
+    white-space: nowrap;
+  }
+  .doctrine .text { color: rgba(250, 250, 250, 0.7); }
+
+  /* section */
+  .section { padding: 96px 0; position: relative; z-index: 1; }
+  .section-head { margin-bottom: 56px; max-width: 720px; }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: inline-block;
+  }
+  .section-head h2 {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: clamp(32px, 4vw, 48px);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .section-head p {
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  /* receipts */
+  .receipts-grid {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .receipt {
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .receipt:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .receipt::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 32px; height: 2px;
+    background: var(--accent);
+  }
+  .receipt .num {
+    font-family: "Inter", sans-serif;
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .receipt .lbl {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .receipt .ctx {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+  }
+
+  /* case study */
+  .case {
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 40px;
+    margin-bottom: 24px;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .case:hover { border-color: var(--accent); }
+  .case-tags {
+    display: flex; gap: 6px; margin-bottom: 22px; flex-wrap: wrap;
+  }
+  .tag-pill {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .tag-pill.accent {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: rgba(29, 78, 216, 0.25);
+  }
+  .case h3 {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: clamp(26px, 3.5vw, 36px);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .case h3 + p {
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .case .org {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+  }
+  .case-oneliner {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 24px 0;
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.6;
+    max-width: 720px;
+    border-radius: 0 4px 4px 0;
+  }
+  .case-metrics {
+    display: grid; gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    margin-top: 24px;
+    padding: 24px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .case-metric .num {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .case-metric .lbl {
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+  .case-body {
+    margin-top: 28px;
+  }
+  .case-section { margin-bottom: 24px; }
+  .case-section h4 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .case-section p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    max-width: 720px;
+  }
+  .case-built-on {
+    margin-top: 28px;
+    padding: 14px 16px;
+    background: var(--ink);
+    color: #fafafa;
+    border-radius: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .case-built-on .key { color: #60a5fa; }
+
+  /* stack */
+  .stack-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 36px;
+  }
+  .stack-card .note {
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+  .stack-grid {
+    display: grid; gap: 32px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  .stack-grid h5 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .stack-grid li {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    padding: 6px 0;
+    list-style: none;
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .stack-grid li::before {
+    content: "$";
+    color: var(--accent);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* preview bar */
+  .preview-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: #fafafa;
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    z-index: 100;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  }
+  .preview-bar a {
+    color: #60a5fa;
+    text-decoration: none;
+    margin-left: 16px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="row">
+    <div class="brand"><span class="accent">$</span> liam<span class="accent">.</span>petersen <small>// portfolio</small></div>
+    <div class="links">
+      <a href="#">~/systems</a>
+      <a href="#">~/arc</a>
+      <a href="#">~/stack</a>
+      <a href="#">~/about</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="terminal-prompt"><span class="dot"></span> status: open to senior AI roles · remote, global</div>
+    <h1 class="display">Six years in direct response. Two years shipping production AI. <span class="muted">The numbers got bigger.</span></h1>
+    <p class="lede">I&rsquo;m Liam. I&rsquo;ve spent six years writing copy that had to convert or get killed, and the last two building the systems that scale that work to a portfolio doing $20M+ a year.</p>
+    <p class="lede">I&rsquo;m not a developer pretending to understand marketing. I&rsquo;m a direct response operator who learned to ship platforms because no one was building the ones I needed.</p>
+    <p class="lede strong"><strong>Every system on this site was built inside Claude Code.</strong> Frontends, backends, agents, skills, MCP integrations. One runtime, one operator, real receipts.</p>
+    <div class="ctas">
+      <a href="#systems" class="btn btn-primary">$ see-systems →</a>
+      <a href="mailto:liam@copyweb.io" class="btn btn-secondary">$ email-liam</a>
+    </div>
+    <div class="meta-strip"><span class="key">geo:</span> US · EU · ZA &nbsp; <span class="key">role:</span> founder@copyweb &nbsp; <span class="key">target:</span> $10M&ndash;$100M DTC</div>
+  </div>
+</section>
+
+<section class="doctrine">
+  <div class="container row">
+    <span class="tag">// build_doctrine</span>
+    <span class="text">Every system below was built on Claude Code. Custom skills, MCP servers, CLIs wired into one runtime. AI as the build environment, not the assistant.</span>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">// receipts</div>
+      <h2>Real numbers from production systems.</h2>
+      <p>Every number below ties to a system I shipped. No vanity metrics, no rounding tricks.</p>
+    </div>
+
+    <div class="receipts-grid">
+      <div class="receipt">
+        <div class="num">3.0&times;</div>
+        <div class="lbl">Site conversion lift</div>
+        <div class="ctx">1.2% → 3.6% at Foxelli</div>
+      </div>
+      <div class="receipt">
+        <div class="num">3.3&times;</div>
+        <div class="lbl">Email revenue scaled</div>
+        <div class="ctx">$76K → $249K in 4 months</div>
+      </div>
+      <div class="receipt">
+        <div class="num">6&times;</div>
+        <div class="lbl">Video ad output</div>
+        <div class="ctx">25/wk → 150/wk, same 4 editors</div>
+      </div>
+      <div class="receipt">
+        <div class="num">$674K</div>
+        <div class="lbl">Peak monthly revenue</div>
+        <div class="ctx">Through systems I built</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background: var(--rule-soft); padding-top: 96px; padding-bottom: 96px;">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">// systems_shipped</div>
+      <h2>Nine systems. Two continents. One operator.</h2>
+      <p>Production platforms, internal tools, open-source templates, and the meta-tooling that ships them. Each one shipped through Claude Code as the build runtime.</p>
+    </div>
+
+    <article class="case">
+      <div class="case-tags">
+        <span class="tag-pill accent">Shipped to production</span>
+        <span class="tag-pill">2024 — 2026</span>
+        <span class="tag-pill">In daily use</span>
+      </div>
+      <h3>Foxelli Studio</h3>
+      <p>End-to-end AI ad production platform</p>
+      <div class="org">// foxelli group · netherlands · 7 dtc brands · $20M+ portfolio</div>
+
+      <div class="case-oneliner">Six months from blank repo to a platform the entire ads team uses every day. 26-workflow engine. Architected for 100 concurrent users.</div>
+
+      <div class="case-metrics">
+        <div class="case-metric"><div class="num">26</div><div class="lbl">Production workflows</div></div>
+        <div class="case-metric"><div class="num">60+</div><div class="lbl">Custom skills authored</div></div>
+        <div class="case-metric"><div class="num">73</div><div class="lbl">Production bugs resolved</div></div>
+        <div class="case-metric"><div class="num">6&times;</div><div class="lbl">Video ad output</div></div>
+      </div>
+
+      <div class="case-body">
+        <div class="case-section">
+          <h4>// the_problem</h4>
+          <p>Foxelli runs seven DTC brands. Each one needed a steady stream of ad creative. The bottleneck wasn&rsquo;t ideas. It was the gap between &lsquo;we have an idea&rsquo; and &lsquo;we have a finished video ad you can run on Meta tomorrow.&rsquo; That gap was eating my team&rsquo;s week.</p>
+        </div>
+        <div class="case-section">
+          <h4>// architecture_call</h4>
+          <p>The data layer and the media-generation layer are separated by design. Stateful business logic lives in Supabase where row-level security protects tenant data. Stateless heavy-lifting media calls run through n8n where queueing, retries, and provider fallback are trivial to wire. Splitting them by responsibility kept both layers honest.</p>
+        </div>
+      </div>
+
+      <div class="case-built-on"><span class="key">$ built-on</span> Claude Code · 60+ custom skills · MCP servers for Supabase + n8n · Replit deploy</div>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">// stack</div>
+      <h2>The runtime, the surfaces, and what&rsquo;s wired in.</h2>
+      <p>Most portfolios list AI alongside React. Mine doesn&rsquo;t. AI is the layer everything else runs through.</p>
+    </div>
+
+    <div class="stack-card">
+      <p class="note">The runtime, the surfaces, and what&rsquo;s wired in. Most portfolios list AI alongside React. Mine doesn&rsquo;t. AI is the layer everything else runs through.</p>
+      <div class="stack-grid">
+        <div>
+          <h5>// runtime</h5>
+          <ul>
+            <li>Claude Code</li>
+            <li>Claude Agent SDK</li>
+            <li>60+ custom skills</li>
+            <li>Hooks &amp; settings</li>
+          </ul>
+        </div>
+        <div>
+          <h5>// surfaces</h5>
+          <ul>
+            <li>VS Code</li>
+            <li>Antigravity</li>
+            <li>Terminal CLI</li>
+          </ul>
+        </div>
+        <div>
+          <h5>// mcp_servers</h5>
+          <ul>
+            <li>Supabase</li>
+            <li>n8n</li>
+            <li>Notion</li>
+            <li>GitHub · Firecrawl</li>
+          </ul>
+        </div>
+        <div>
+          <h5>// clis</h5>
+          <ul>
+            <li>Codex</li>
+            <li>Gemini</li>
+            <li>NotebookLM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="preview-bar">
+  Direction 02 · Engineer&rsquo;s Lab
+  <a href="./direction-1-editor.html">← 01</a>
+  <a href="./index.html">picker</a>
+  <a href="./direction-3-cinematic.html">03 →</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Direction · Clean Dark — Liam Petersen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* Palette A — Sky (default) */
+    --bg: #141414;
+    --bg-elevated: #1c1c1c;
+    --bg-elevated-2: #232323;
+    --text-primary: #f0eee8;     /* warm off-white, very legible */
+    --text-secondary: #b8b3aa;
+    --text-tertiary: #6e6962;
+    --rule: rgba(240, 238, 232, 0.08);
+    --rule-strong: rgba(240, 238, 232, 0.14);
+    --accent: #60a5fa;            /* sky-400 */
+    --accent-hover: #93c5fd;
+    --accent-soft: rgba(96, 165, 250, 0.10);
+    --accent-text-on: #0a0a0a;
+    --pulse: #6ee7b7;
+  }
+  /* Palette B — Peach (Anthropic-inspired) */
+  body[data-palette="peach"] {
+    --accent: #f4a378;
+    --accent-hover: #fbbf99;
+    --accent-soft: rgba(244, 163, 120, 0.10);
+  }
+  /* Palette C — Amber */
+  body[data-palette="amber"] {
+    --accent: #fbbf24;
+    --accent-hover: #fde047;
+    --accent-soft: rgba(251, 191, 36, 0.10);
+  }
+  /* Palette D — Mint */
+  body[data-palette="mint"] {
+    --accent: #34d399;
+    --accent-hover: #6ee7b7;
+    --accent-soft: rgba(52, 211, 153, 0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    color-scheme: dark;
+  }
+  ::selection { background: var(--accent); color: var(--accent-text-on); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-hover); }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+  /* PALETTE SWITCHER */
+  .palette-bar {
+    position: fixed;
+    top: 16px; right: 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    padding: 6px;
+    z-index: 100;
+    display: flex; gap: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+  .palette-bar button {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0;
+  }
+  .palette-bar button:hover { transform: scale(1.1); }
+  .palette-bar button.active { border-color: var(--text-primary); }
+  .palette-bar button[data-p="sky"] { background: #60a5fa; }
+  .palette-bar button[data-p="peach"] { background: #f4a378; }
+  .palette-bar button[data-p="amber"] { background: #fbbf24; }
+  .palette-bar button[data-p="mint"] { background: #34d399; }
+  .palette-label {
+    position: fixed;
+    top: 60px; right: 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule-strong);
+    border-radius: 6px;
+    padding: 6px 12px;
+    z-index: 100;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .palette-label .name { color: var(--accent); margin-left: 6px; }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule);
+  }
+  nav .row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 32px; max-width: 1080px; margin: 0 auto;
+  }
+  nav .brand {
+    font-weight: 600; font-size: 15px;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+  nav .brand small {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; color: var(--text-tertiary);
+    margin-left: 10px;
+    font-weight: 400;
+  }
+  nav .links a {
+    color: var(--text-secondary); font-size: 14px; margin-left: 28px;
+    transition: color 0.2s;
+  }
+  nav .links a:hover { color: var(--text-primary); }
+
+  /* HERO */
+  .hero { padding: 96px 0 80px; }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 28px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--pulse);
+    box-shadow: 0 0 0 4px rgba(110, 231, 183, 0.18);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  h1.display {
+    font-weight: 600;
+    font-size: clamp(36px, 5.5vw, 56px);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin-bottom: 32px;
+    max-width: 880px;
+  }
+  h1.display .muted {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .lede {
+    max-width: 680px;
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+  }
+  .lede.strong { color: var(--text-primary); }
+  .lede.strong strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .ctas { margin-top: 36px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-text-on);
+    font-weight: 600;
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--rule-strong);
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .meta-strip {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--text-tertiary);
+    line-height: 1.7;
+    max-width: 720px;
+  }
+  .meta-strip strong { color: var(--text-secondary); font-weight: 500; }
+
+  /* DOCTRINE — kept minimal as a quote-block style */
+  .doctrine {
+    background: var(--bg-elevated);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 20px 0;
+  }
+  .doctrine .row {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .doctrine .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* SECTION */
+  .section { padding: 80px 0; }
+  .section-head { margin-bottom: 48px; max-width: 720px; }
+  .section-head h2 {
+    font-weight: 600;
+    font-size: clamp(28px, 3.5vw, 36px);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    color: var(--text-primary);
+  }
+  .section-head p {
+    color: var(--text-secondary);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .section-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: inline-block;
+  }
+
+  /* RECEIPTS */
+  .receipts-grid {
+    display: grid; gap: 1px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .receipt {
+    background: var(--bg);
+    padding: 32px 28px;
+    transition: background 0.3s;
+  }
+  .receipt:hover { background: var(--bg-elevated); }
+  .receipt .num {
+    font-weight: 600;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+  }
+  .receipt .lbl {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .receipt .ctx {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  /* CASE STUDY */
+  .case {
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 36px 32px;
+    margin-bottom: 16px;
+    transition: border-color 0.3s;
+  }
+  .case:hover { border-color: var(--rule-strong); }
+  .case-tags {
+    display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .tag-pill {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    padding: 4px 9px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    color: var(--text-secondary);
+  }
+  .tag-pill.accent {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: var(--accent-soft);
+  }
+  .case h3 {
+    font-weight: 600;
+    font-size: clamp(22px, 3vw, 28px);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+  }
+  .case h3 + p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  .case .org {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 24px;
+  }
+  .case-oneliner {
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 16px;
+    margin: 24px 0;
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.6;
+    max-width: 720px;
+  }
+  .case-metrics {
+    display: grid; gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    margin-top: 20px;
+    padding: 20px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .case-metric .num {
+    font-weight: 600;
+    font-size: 28px;
+    color: var(--accent);
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .case-metric .lbl {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    line-height: 1.4;
+  }
+  .case-body { margin-top: 24px; }
+  .case-section { margin-bottom: 22px; }
+  .case-section h4 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+  .case-section p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    max-width: 720px;
+  }
+  .case-built-on {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--rule);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+  .case-built-on::before {
+    content: "↳ ";
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* NUMBERED LIST (mirroring screenshot vibe) */
+  .numbered-list { list-style: none; counter-reset: nl; }
+  .numbered-list li {
+    counter-increment: nl;
+    padding: 16px 0 16px 44px;
+    position: relative;
+    border-bottom: 1px solid var(--rule);
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .numbered-list li::before {
+    content: counter(nl) ".";
+    position: absolute;
+    left: 0;
+    top: 16px;
+    font-family: "JetBrains Mono", monospace;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .numbered-list li strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+  .numbered-list li:last-child { border-bottom: none; }
+
+  /* STACK */
+  .stack-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 32px;
+  }
+  .stack-card .note {
+    border-left: 2px solid var(--accent);
+    padding-left: 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 640px;
+    margin-bottom: 28px;
+  }
+  .stack-grid {
+    display: grid; gap: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  .stack-grid h5 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+  .stack-grid li {
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding: 5px 0;
+    list-style: none;
+  }
+  .stack-grid li::before {
+    content: "·";
+    color: var(--accent);
+    margin-right: 10px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body data-palette="sky">
+
+<div class="palette-bar" role="group" aria-label="Color palette">
+  <button data-p="sky" class="active" title="Sky"></button>
+  <button data-p="peach" title="Peach (Anthropic)"></button>
+  <button data-p="amber" title="Amber"></button>
+  <button data-p="mint" title="Mint"></button>
+</div>
+<div class="palette-label">accent · <span class="name" id="palette-name">SKY</span></div>
+
+<nav>
+  <div class="row">
+    <div class="brand">Liam Petersen <small>· Portfolio</small></div>
+    <div class="links">
+      <a href="#systems">Systems</a>
+      <a href="#arc">Arc</a>
+      <a href="#stack">Stack</a>
+      <a href="#about">About</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow"><span class="pulse"></span> Open to senior AI roles · Remote, global</div>
+    <h1 class="display">Six years in direct response. Two years shipping production AI. <span class="muted">The numbers got bigger.</span></h1>
+    <p class="lede">I&rsquo;m Liam. I&rsquo;ve spent six years writing copy that had to convert or get killed, and the last two building the systems that scale that work to a portfolio doing $20M+ a year.</p>
+    <p class="lede">I&rsquo;m not a developer pretending to understand marketing. I&rsquo;m a direct response operator who learned to ship platforms because no one was building the ones I needed.</p>
+    <p class="lede strong"><strong>Every system on this site was built inside Claude Code.</strong> Frontends, backends, agents, skills, MCP integrations. One runtime, one operator, real receipts.</p>
+    <div class="ctas">
+      <a href="#systems" class="btn btn-primary">See the systems →</a>
+      <a href="mailto:liam@copyweb.io" class="btn btn-secondary">Email me</a>
+    </div>
+    <div class="meta-strip">
+      <strong>Location:</strong> Cape Town, South Africa &nbsp;·&nbsp;
+      <strong>Worked across:</strong> US, Europe, ZA &nbsp;·&nbsp;
+      <strong>Currently:</strong> Founder at <a href="https://copyweb.io">copyweb.io</a>
+    </div>
+  </div>
+</section>
+
+<section class="doctrine">
+  <div class="container row">
+    <span class="tag">// build doctrine</span>
+    <span>Every system below was built on Claude Code. Custom skills, MCP servers, CLIs wired into one runtime. AI as the build environment, not the assistant.</span>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">// receipts</span>
+      <h2>Real numbers from production systems.</h2>
+      <p>Every number below ties to a system I shipped. No vanity metrics, no rounding tricks.</p>
+    </div>
+
+    <div class="receipts-grid">
+      <div class="receipt">
+        <div class="num">3.0&times;</div>
+        <div class="lbl">Site conversion lift</div>
+        <div class="ctx">1.2% → 3.6% at Foxelli</div>
+      </div>
+      <div class="receipt">
+        <div class="num">3.3&times;</div>
+        <div class="lbl">Email revenue scaled</div>
+        <div class="ctx">$76K → $249K in 4 months</div>
+      </div>
+      <div class="receipt">
+        <div class="num">6&times;</div>
+        <div class="lbl">Video ad output</div>
+        <div class="ctx">25/wk → 150/wk, same 4 editors</div>
+      </div>
+      <div class="receipt">
+        <div class="num">$674K</div>
+        <div class="lbl">Peak monthly revenue</div>
+        <div class="ctx">Through systems I built</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">// systems shipped</span>
+      <h2>Nine systems. Two continents. One operator.</h2>
+      <p>Production platforms, internal tools, open-source templates, and the meta-tooling that ships them. Each one shipped through Claude Code as the build runtime.</p>
+    </div>
+
+    <article class="case">
+      <div class="case-tags">
+        <span class="tag-pill accent">Shipped to production</span>
+        <span class="tag-pill">2024 — 2026</span>
+        <span class="tag-pill">In daily use</span>
+      </div>
+      <h3>Foxelli Studio</h3>
+      <p>End-to-end AI ad production platform</p>
+      <div class="org">Foxelli Group · Netherlands · 7 DTC brands · $20M+ portfolio</div>
+
+      <div class="case-oneliner">Six months from blank repo to a platform the entire ads team uses every day. 26-workflow engine. Architected for 100 concurrent users.</div>
+
+      <div class="case-metrics">
+        <div class="case-metric"><div class="num">26</div><div class="lbl">Production workflows</div></div>
+        <div class="case-metric"><div class="num">60+</div><div class="lbl">Custom skills authored</div></div>
+        <div class="case-metric"><div class="num">73</div><div class="lbl">Production bugs resolved</div></div>
+        <div class="case-metric"><div class="num">6&times;</div><div class="lbl">Video ad output</div></div>
+      </div>
+
+      <div class="case-body">
+        <div class="case-section">
+          <h4>The problem</h4>
+          <p>Foxelli runs seven DTC brands. Each one needed a steady stream of ad creative. The bottleneck wasn&rsquo;t ideas. It was the gap between &lsquo;we have an idea&rsquo; and &lsquo;we have a finished video ad you can run on Meta tomorrow.&rsquo; That gap was eating my team&rsquo;s week.</p>
+        </div>
+        <div class="case-section">
+          <h4>Architecture call I&rsquo;d make again</h4>
+          <p>The data layer and the media-generation layer are separated by design. Stateful business logic lives in Supabase where row-level security protects tenant data. Stateless heavy-lifting media calls run through n8n where queueing, retries, and provider fallback are trivial to wire. Splitting them by responsibility kept both layers honest.</p>
+        </div>
+      </div>
+
+      <div class="case-built-on">Built on Claude Code · 60+ custom skills · MCP servers for Supabase + n8n · CLI integrations for Replit deploy</div>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">// how I work</span>
+      <h2>Five principles that decide what gets built and what doesn&rsquo;t.</h2>
+    </div>
+
+    <ol class="numbered-list">
+      <li><strong>Claude Code is the build environment, not the assistant.</strong> Every system in this portfolio shipped through Claude Code. Frontends, backends, agents, skills, MCP integrations, CLIs. Most people use AI to write code. I use it to ship systems.</li>
+      <li><strong>Humans stay in the chair.</strong> AI handles 90% of the heavy lifting. The human approves every output that touches a customer.</li>
+      <li><strong>Every system gets a learning loop.</strong> If it can&rsquo;t get smarter from the work, I haven&rsquo;t finished building it.</li>
+      <li><strong>Build the meta-tool.</strong> Don&rsquo;t write a script when you can write the skill that writes the script. The leverage compounds.</li>
+      <li><strong>Run AI economically.</strong> Media generation routed through Kie.ai at ~60% under retail. Token discipline upstream. Cost-engineering an AI stack is engineering.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="stack">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">// stack</span>
+      <h2>The runtime, the surfaces, and what&rsquo;s wired in.</h2>
+      <p>Most portfolios list AI alongside React. Mine doesn&rsquo;t. AI is the layer everything else runs through.</p>
+    </div>
+
+    <div class="stack-card">
+      <p class="note">The runtime is Claude Code. The surfaces are VS Code and Antigravity. Everything else hangs off that — MCP servers, CLIs, custom skills, hooks, and project automation.</p>
+      <div class="stack-grid">
+        <div>
+          <h5>Runtime</h5>
+          <ul>
+            <li>Claude Code (primary)</li>
+            <li>Claude Agent SDK</li>
+            <li>60+ custom skills</li>
+            <li>Hooks &amp; settings.json</li>
+          </ul>
+        </div>
+        <div>
+          <h5>Surfaces</h5>
+          <ul>
+            <li>VS Code (daily driver)</li>
+            <li>Google Antigravity</li>
+            <li>Terminal CLI</li>
+          </ul>
+        </div>
+        <div>
+          <h5>MCP servers</h5>
+          <ul>
+            <li>Supabase</li>
+            <li>n8n</li>
+            <li>Notion</li>
+            <li>GitHub · Firecrawl</li>
+          </ul>
+        </div>
+        <div>
+          <h5>CLIs</h5>
+          <ul>
+            <li>Codex</li>
+            <li>Gemini</li>
+            <li>NotebookLM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const buttons = document.querySelectorAll('.palette-bar button');
+  const label = document.getElementById('palette-name');
+  buttons.forEach(b => b.addEventListener('click', () => {
+    buttons.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    document.body.dataset.palette = b.dataset.p;
+    label.textContent = b.dataset.p.toUpperCase();
+  }));
+</script>
+
+</body>
+</html>

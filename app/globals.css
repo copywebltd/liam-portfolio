@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: #0a0a0a;
+  --color-surface: #161616;
+  --color-surface-elevated: #1f1f1f;
+  --color-border-subtle: rgba(217, 119, 6, 0.18);
+  --color-border-structural: #2a2a2a;
+  --color-text-primary: #f0eee8;
+  --color-text-secondary: #c4bfb4;
+  --color-text-tertiary: #8a857d;
+  --color-text-on-accent: #0a0a0a;
+  --color-accent: #d97706;
+  --color-accent-hover: #f59e0b;
+  --color-accent-deep: #431407;
+  --color-success: #22c55e;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+}
+
+/* Helios signature: subtle dot grid + ambient glow background */
+.dot-grid {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(240, 240, 240, 0.06) 1px,
+    transparent 0
+  );
+  background-size: 24px 24px;
+}
+
+.ambient-glow {
+  background: radial-gradient(
+    ellipse 80% 50% at 50% 0%,
+    rgba(217, 119, 6, 0.08) 0%,
+    transparent 60%
+  );
+}
+
+/* MengTo 6-layer beautiful shadow */
+.shadow-beautiful {
+  box-shadow:
+    0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+    0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+}
+
+/* Helios framing — gradient border shell */
+.gradient-border {
+  position: relative;
+  background:
+    linear-gradient(var(--color-bg) 0 0) padding-box,
+    linear-gradient(180deg, rgba(217, 119, 6, 0.35) 0%, rgba(217, 119, 6, 0.05) 50%, rgba(217, 119, 6, 0.25) 100%) border-box;
+  border: 1px solid transparent;
+}
+
+.gradient-border-card {
+  position: relative;
+  background:
+    linear-gradient(var(--color-surface) 0 0) padding-box,
+    linear-gradient(180deg, rgba(217, 119, 6, 0.25) 0%, rgba(217, 119, 6, 0.04) 50%, rgba(217, 119, 6, 0.18) 100%) border-box;
+  border: 1px solid transparent;
+}
+
+/* Slow breathing pulse for the hero ambient layer */
+@keyframes breathe {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+.breathe {
+  animation: breathe 8s ease-in-out infinite;
+}
+
+/* Border-beam loop for primary CTA */
+@keyframes border-beam {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.border-beam {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(217, 119, 6, 0.6) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: border-beam 2.5s linear infinite;
+}
+
+/* Caveat for one annotation per page (the human touch) */
+.caveat {
+  font-family: "Caveat", "Comic Sans MS", cursive;
+  color: var(--color-accent);
+  transform: rotate(-2deg);
+}
+
+/* Engineering markers — tiny X-01 / X-02 strip across hero top */
+.engineering-marker {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(217, 119, 6, 0.7);
+}
+
+/* Aurora — slow drifting radial blurs behind the hero */
+@keyframes aurora-1 {
+  0%, 100% { transform: translate(-10%, -10%) scale(1); }
+  50% { transform: translate(10%, 5%) scale(1.15); }
+}
+@keyframes aurora-2 {
+  0%, 100% { transform: translate(20%, 15%) scale(1.1); }
+  50% { transform: translate(-15%, -5%) scale(0.9); }
+}
+@keyframes aurora-3 {
+  0%, 100% { transform: translate(0%, 30%) scale(0.95); }
+  50% { transform: translate(15%, 10%) scale(1.2); }
+}
+
+.aurora {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.aurora::before,
+.aurora::after,
+.aurora > span {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.55;
+}
+.aurora::before {
+  top: -10%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(217, 119, 6, 0.35), transparent 70%);
+  animation: aurora-1 18s ease-in-out infinite;
+}
+.aurora::after {
+  top: 20%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(180, 83, 9, 0.28), transparent 70%);
+  animation: aurora-2 22s ease-in-out infinite;
+}
+.aurora > span {
+  bottom: -20%;
+  left: 30%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.18), transparent 70%);
+  animation: aurora-3 26s ease-in-out infinite;
+}
+
+/* Card hover lift — MengTo signature */
+.card-lift {
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Spotlight tracking via CSS variables (set from JS on mousemove) */
+.spotlight-grid {
+  position: relative;
+}
+.spotlight-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(217, 119, 6, 0.06),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+.spotlight-grid:hover::before {
+  opacity: 1;
+}
+
+/* Focus rings */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border-structural); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-accent-deep); }
