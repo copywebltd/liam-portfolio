@@ -15,6 +15,8 @@ export type CaseStudy = {
   stack: string[];
   builtOn: string;
   proofPoint?: string;
+  videoId?: string;
+  videoCaption?: string;
 };
 
 export const caseStudies: CaseStudy[] = [
@@ -87,19 +89,21 @@ export const caseStudies: CaseStudy[] = [
     ],
     builtOn:
       "Built on Claude Code. 60+ custom skills, MCP servers for Supabase and n8n, CLI integrations for Replit deploy.",
-    proofPoint: "$414K → $800K/mo brand revenue (Blackmores) running through this pipeline.",
+    proofPoint: "$414K → $800K/mo brand revenue (Hooks & Needles) running through this pipeline.",
+    videoId: "tsBNAIj_h1Y",
+    videoCaption: "Full platform walkthrough. 1:23.",
   },
   {
     slug: "static-ad-system",
-    title: "Copyweb Static Ad System",
-    subtitle: "/lfsl — Facebook-ready static ad packs at scale",
+    title: "LFSL Pipeline",
+    subtitle: "Cold-outreach pack at scale across 16 expert frameworks",
     org: "Copyweb · Cold outreach + client delivery",
     category: "production",
     categoryLabel: "Shipped to production",
     year: "2026",
     status: "Daily production use",
     oneLiner:
-      "Complete cold-outreach pack in 60 minutes of human time. Copy delegated across 16 expert frameworks. Image and video produced at 60% under retail.",
+      "Cold-outreach pack in 60 minutes of human time. Copy delegated across 16 expert frameworks. Media produced at 60% under retail.",
     metrics: [
       { value: "16", label: "Expert frameworks bound" },
       { value: "~280", label: "Evidence entries in canon" },
@@ -154,9 +158,106 @@ export const caseStudies: CaseStudy[] = [
       "Built on Claude Code. Single skill orchestrator (/lfsl) chains research → copy → image → video → deploy.",
   },
   {
+    slug: "cinematic-ad-pipeline",
+    title: "Cinematic Ad Pipeline",
+    subtitle: "Single AI video ad spots, end-to-end, $3.16/spot",
+    org: "Copyweb · Production deliverable",
+    category: "production",
+    categoryLabel: "Shipped to production",
+    year: "2026",
+    status: "Daily production use",
+    oneLiner:
+      "From product image to 720p cinematic ad spot in one orchestrated pipeline. Cross-scene face consistency, voice clone, and brand-fit ranker before delivery.",
+    metrics: [
+      { value: "$3.16", label: "Cost per spot" },
+      { value: "720p", label: "Seedance 2.0 output" },
+      { value: "5", label: "Visual modes supported" },
+      { value: "Pixel-perfect", label: "Logo composite" },
+    ],
+    sections: [
+      {
+        heading: "What it does",
+        body:
+          "A single orchestrator (/cinematic-ad) takes a brand product image and a creative direction and produces a complete cinematic video ad spot. Six phases: brand voice extraction, 4K storyboard generation, expert-grounded ad copy, image generation across 5 visual modes, video synthesis with cross-scene face consistency, voice clone + voiceover, and final composite with logo placement. Total human time per spot: about 10 minutes.",
+      },
+      {
+        heading: "The model layer",
+        body:
+          "Seedance 2.0 for video synthesis (720p production default). GPT Image 2 (default) and Nano Banana 2 (fallback) for 4K storyboard image generation. Kling 3.0 as alternate video provider. ElevenLabs for voice cloning. All routed through Kie.ai at ~60% under retail. Brand-fit ranker scores every output before delivery. Anti-slop validators catch common AI video artifacts (small-label text ceiling, hand mutations, scene drift).",
+      },
+      {
+        heading: "Production safeguards",
+        body:
+          "Universal AI video small-label text ceiling enforced (no AI-generated text smaller than ~24pt — they always degrade). Cross-scene face consistency check between storyboard panels. Provider fallback when any model degrades or rate-limits. Cost ceiling: $3.16/spot is the production default with the 4K storyboard + Seedance 2.0 720p combo.",
+      },
+      {
+        heading: "Why it matters",
+        body:
+          "DTC brands need video at scale, but most AI video tools produce unusable slop. This pipeline enforces production discipline at every phase — script, visual, motion, voice, composite — and ships cinema-quality output at ad-spend-friendly cost.",
+      },
+    ],
+    stack: [
+      "Claude Opus 4.7",
+      "GPT Image 2",
+      "Nano Banana 2",
+      "Seedance 2.0",
+      "Kling 3.0",
+      "ElevenLabs",
+      "Kie.ai (routing)",
+      "FFmpeg compositor",
+    ],
+    builtOn:
+      "Built on Claude Code. Single skill orchestrator (/cinematic-ad) chains storyboard → ad copy → image gen → video synthesis → voice clone → composite.",
+  },
+  {
+    slug: "cinematic-sites-pipeline",
+    title: "Cinematic Sites Pipeline",
+    subtitle: "Transform any website into a cinematic experience, end-to-end",
+    org: "Copyweb · Production deliverable",
+    category: "production",
+    categoryLabel: "Shipped to production",
+    year: "2026",
+    status: "Live demos shipped",
+    oneLiner:
+      "Brand analysis, AI-generated 3D hero animations, cinematic module library, Vercel deploy. Four steps, one command.",
+    metrics: [
+      { value: "4 steps", label: "Brand → analyze → generate → deploy" },
+      { value: "3D", label: "AI-generated hero animations" },
+      { value: "Vercel", label: "Deploy target" },
+      { value: "~30 min", label: "Human time per site" },
+    ],
+    sections: [
+      {
+        heading: "What it does",
+        body:
+          "A skill orchestrator (/cinematic-sites) transforms any prospect's website into a cinematic experience. Four phases: brand analysis (voice, palette, hero focal point) → AI-generated 3D hero animation (Nano Banana 2 for stills + Kling 3.0 for motion) → cinematic module assembly from a curated library (parallax, scroll-driven scenes, cinematic transitions) → Vercel deploy with a live URL handed off.",
+      },
+      {
+        heading: "The visual layer",
+        body:
+          "Nano Banana 2 generates the 3D hero stills (multiple angles, multiple light setups). Kling 3.0 animates them into cinematic loops or parallax sequences. The module library handles scroll-driven scene transitions, camera moves, and reveal animations. Brand-derived palette and typography flow through every layer.",
+      },
+      {
+        heading: "Why it matters",
+        body:
+          "Cold-outreach prospects need to see what's possible before they buy. A static deck pitches services. A cinematic site is the service. The pipeline turns one prospect URL into a deployed demo in 30 minutes — every prospect gets a custom-built, cinematic experience as a hand-raiser, not a generic template.",
+      },
+    ],
+    stack: [
+      "Claude Opus 4.7",
+      "Nano Banana 2",
+      "Kling 3.0",
+      "Cinematic module library",
+      "Vercel",
+      "Next.js",
+    ],
+    builtOn:
+      "Built on Claude Code. /cinematic-sites orchestrator chains brand analysis → 3D hero generation → cinematic modules → Vercel deploy.",
+  },
+  {
     slug: "skill-library",
-    title: "Skill Library / Personal Agent OS",
-    subtitle: "60+ custom Claude Code skills running my work",
+    title: "Skill Library",
+    subtitle: "60+ custom Claude Code skills running production work",
     org: "Copyweb · Personal infrastructure",
     category: "meta",
     categoryLabel: "Meta-tooling",
@@ -205,8 +306,8 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "ad-professor",
-    title: "Ad Professor Creative Engine",
-    subtitle: "Strategy-first AI ad generation + competitor reverse engineering",
+    title: "Ad Professor",
+    subtitle: "Strategy-first AI ad generator + competitor reverse engineering",
     org: "Foxelli Group · Internal",
     category: "internal",
     categoryLabel: "Internal tool",
@@ -237,21 +338,21 @@ export const caseStudies: CaseStudy[] = [
           "Solved the problem of image AIs ignoring spatial instructions. Each layout zone's position and size gets converted to natural language. Zones sorted top-to-bottom for natural reading order. Client-side canvas logo compositor for pixel-perfect brand placement.",
       },
     ],
-    stack: ["React 18", "n8n Cloud", "Claude Sonnet", "Nano Banana Pro", "Kling 3.0", "Sora 2 Pro", "Airtable", "Python"],
+    stack: ["React 18", "n8n Cloud", "Claude Sonnet", "Nano Banana 2", "Kling 3.0", "Sora 2 Pro", "Airtable", "Python"],
     builtOn:
       "Built on Claude Code. Custom Ogilvy-grounded scoring skills, n8n MCP for orchestration.",
   },
   {
     slug: "ai-agent-team",
-    title: "AI Agent Team",
-    subtitle: "Five autonomous agents running my B2B operations",
+    title: "Agent Quintet",
+    subtitle: "Five autonomous agents running B2B operations on cron",
     org: "Copyweb · Internal operations",
     category: "production",
     categoryLabel: "In production",
     year: "2026",
     status: "Running daily",
     oneLiner:
-      "I got tired of running my own ops manually. So I built five agents who run them for me. They don't get tired and they don't forget.",
+      "I got tired of running my own ops manually. So I built five agents who run them for me. They don't get tired. They don't forget.",
     metrics: [
       { value: "5", label: "Specialized agents" },
       { value: "4", label: "Daily cron triggers" },
@@ -291,7 +392,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "creative-content-engine",
-    title: "Creative Content Engine",
+    title: "Forge",
     subtitle: "AI content factory: from product photo to scheduled post",
     org: "Open community template",
     category: "open-source",
@@ -299,7 +400,7 @@ export const caseStudies: CaseStudy[] = [
     year: "2026",
     status: "Released as community template",
     oneLiner:
-      "Released as an open community template because the alternatives cost $200/month and produce slop. Mine produces work I'd actually post.",
+      "Open-sourced because the alternatives cost $200/month and produce slop. Mine produces work I'd actually post.",
     metrics: [
       { value: "3", label: "Core workflows" },
       { value: "6", label: "Python tools" },
@@ -315,7 +416,7 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "Multi-provider abstraction",
         body:
-          "Provider registry routes to Google AI Studio (free tier), Kie AI, or WaveSpeed based on model and availability. Image generation via Nano Banana Pro, video via Veo 3.1 / Kling 3.0 / Sora 2 Pro. Automatic fallback when a provider goes down.",
+          "Provider registry routes to Google AI Studio (free tier), Kie AI, or WaveSpeed based on model and availability. Image generation via Nano Banana 2, video via Veo 3.1 / Kling 3.0 / Sora 2 Pro. Automatic fallback when a provider goes down.",
       },
       {
         heading: "Serverless automation",
@@ -329,8 +430,8 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "copyweb-v2",
-    title: "Copyweb v2 — copyweb.io",
-    subtitle: "My own production Next.js site",
+    title: "copyweb.io",
+    subtitle: "Production marketing site, end-to-end self-built",
     org: "Copyweb",
     category: "production",
     categoryLabel: "Live in production",
@@ -395,13 +496,13 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "copywriting-intelligence-layer",
-    title: "Copywriting Intelligence Layer",
-    subtitle: "16 expert frameworks. ~280 evidence entries. Weighted ranker.",
+    title: "The Canon",
+    subtitle: "16 expert frameworks · ~280 evidence entries · weighted ranker",
     org: "Copyweb · Substrate",
     category: "meta",
     categoryLabel: "Meta-tooling",
     year: "2025 — Present",
-    status: "Underlies every Copyweb deliverable",
+    status: "Underlies every shipped copywriting deliverable",
     oneLiner:
       "The substrate under everything I ship. Schwartz on awareness. Halbert on directness. Wiebe on voice of customer. Hormozi on offer construction.",
     metrics: [
@@ -414,7 +515,7 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "What it is",
         body:
-          "A research-grade intelligence layer that powers every copywriting and creative skill in the Copyweb stack. Each expert has a profile, a worked-examples library, and a weighted set of canonical principles. The ranker chooses the right voice for the angle, the awareness level, the audience, and the medium.",
+          "A research-grade knowledge substrate that powers every copywriting and creative skill across the stack. Each expert has a profile, a worked-examples library, and a weighted set of canonical principles. The ranker chooses the right voice for the angle, the awareness level, the audience, and the medium.",
       },
       {
         heading: "Why it exists",

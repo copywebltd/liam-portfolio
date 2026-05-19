@@ -27,8 +27,8 @@ export function CaseStudies() {
         <FadeIn>
           <SectionHeading
             eyebrow="// systems shipped"
-            title="Nine systems. Two continents. One operator."
-            description="Production platforms, internal tools, open-source templates, and the meta-tooling that ships them. Each one shipped through Claude Code as the build runtime."
+            title="Eleven systems. Three continents. One builder."
+            description="Production platforms, internal tools, open-source templates, and the meta-tooling that ships them. Each one built on Claude Code."
           />
         </FadeIn>
 
@@ -125,6 +125,29 @@ function CaseStudyCard({ cs, index, total }: { cs: CaseStudy; index: number; tot
             className="overflow-hidden"
           >
             <div className="mt-8 pt-8 border-t border-[var(--color-border-structural)]/60 space-y-6">
+              {cs.videoId && (
+                <div>
+                  <h4 className="text-[12px] uppercase tracking-[0.15em] text-[var(--color-accent)]/80 font-semibold mb-3">
+                    Walkthrough
+                  </h4>
+                  <div className="relative w-full overflow-hidden rounded-lg border border-[var(--color-border-structural)]/60 bg-black" style={{ aspectRatio: "16 / 9" }}>
+                    <iframe
+                      src={`https://www.youtube.com/embed/${cs.videoId}`}
+                      title={`${cs.title} walkthrough`}
+                      loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="absolute inset-0 h-full w-full"
+                    />
+                  </div>
+                  {cs.videoCaption && (
+                    <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-text-tertiary)]">
+                      {cs.videoCaption}
+                    </p>
+                  )}
+                </div>
+              )}
+
               {cs.sections.map((s) => (
                 <div key={s.heading}>
                   <h4 className="text-[12px] uppercase tracking-[0.15em] text-[var(--color-accent)]/80 font-semibold">
