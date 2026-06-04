@@ -71,7 +71,7 @@ function CaseStudyCard({ cs, index, total }: { cs: CaseStudy; index: number; tot
   const totalStr = String(total).padStart(2, "0");
 
   return (
-    <Card className="card-lift p-7 md:p-9 h-full flex flex-col hover:border-[var(--color-accent)]/40">
+    <Card className={`card-lift p-7 md:p-9 h-full flex flex-col hover:border-[var(--color-accent)]/40 ${open ? "lg:col-span-2" : ""}`}>
       <div className="flex items-start justify-between gap-4 mb-3">
         <div className="font-mono text-[11px] tracking-[0.18em] text-[var(--color-accent)]/80">
           {num} <span className="text-[var(--color-text-tertiary)]">/ {totalStr}</span>
