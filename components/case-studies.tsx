@@ -53,9 +53,13 @@ export function CaseStudies() {
         <SpotlightWrap className="mt-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative z-[2]">
             {visible.map((cs, i) => (
-              <FadeIn key={cs.slug} delay={Math.min(i * 0.05, 0.3)}>
-                <CaseStudyCard cs={cs} index={i + 1} total={visible.length} />
-              </FadeIn>
+              <CaseStudyCard
+                key={cs.slug}
+                cs={cs}
+                index={i + 1}
+                total={visible.length}
+                delay={Math.min(i * 0.05, 0.3)}
+              />
             ))}
           </div>
         </SpotlightWrap>
@@ -64,14 +68,15 @@ export function CaseStudies() {
   );
 }
 
-function CaseStudyCard({ cs, index, total }: { cs: CaseStudy; index: number; total: number }) {
+function CaseStudyCard({ cs, index, total, delay }: { cs: CaseStudy; index: number; total: number; delay: number }) {
   const [open, setOpen] = useState(false);
   const readTime = readingTime(cs);
   const num = String(index).padStart(2, "0");
   const totalStr = String(total).padStart(2, "0");
 
   return (
-    <Card className={`card-lift p-7 md:p-9 h-full flex flex-col hover:border-[var(--color-accent)]/40 ${open ? "lg:col-span-2" : ""}`}>
+    <FadeIn delay={delay} className={`h-full ${open ? "lg:col-span-2" : ""}`}>
+    <Card className="card-lift p-7 md:p-9 h-full flex flex-col hover:border-[var(--color-accent)]/40">
       <div className="flex items-start justify-between gap-4 mb-3">
         <div className="font-mono text-[11px] tracking-[0.18em] text-[var(--color-accent)]/80">
           {num} <span className="text-[var(--color-text-tertiary)]">/ {totalStr}</span>
@@ -202,5 +207,6 @@ function CaseStudyCard({ cs, index, total }: { cs: CaseStudy; index: number; tot
         </span>
       </button>
     </Card>
+    </FadeIn>
   );
 }
