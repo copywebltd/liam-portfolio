@@ -156,6 +156,8 @@ export const caseStudies: CaseStudy[] = [
     ],
     builtOn:
       "Built on Claude Code. Single skill orchestrator (/lfsl) chains research → copy → image → video → deploy.",
+    videoId: "WHlnVYEmlLA",
+    videoCaption: "One system, two brands. BLK & Bold + Create Wellness. 1:22.",
   },
   {
     slug: "cinematic-ad-pipeline",
