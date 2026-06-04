@@ -95,15 +95,15 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "static-ad-system",
-    title: "LFSL Pipeline",
-    subtitle: "Cold-outreach pack at scale across 16 expert frameworks",
+    title: "Outreach Pack",
+    subtitle: "A full personalized outreach pack per prospect, across 16 expert frameworks",
     org: "Copyweb · Cold outreach + client delivery",
     category: "production",
     categoryLabel: "Shipped to production",
     year: "2026",
     status: "Daily production use",
     oneLiner:
-      "Cold-outreach pack in 60 minutes of human time. Copy delegated across 16 expert frameworks. Media produced at 60% under retail.",
+      "A complete personalized outreach pack per prospect: five Facebook-ready ads, a customer intelligence brief, and a long-form sales page. Copy routed across 16 expert frameworks. Every claim traced to source.",
     metrics: [
       { value: "16", label: "Expert frameworks bound" },
       { value: "~280", label: "Evidence entries in canon" },
@@ -119,12 +119,12 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "The build",
         body:
-          "A skill orchestrator called /lfsl takes a brand's URL and produces a complete cold-outreach pack: deep customer research, a Customer Intelligence Brief, five static ads with copy and visuals, a long-form sales letter, and a Vercel deploy. The copy gets routed through whichever of 16 expert frameworks fits the angle. Halbert for direct response. Schwartz for awareness staging. Ogilvy for fact-led. Sugarman for slippery slide. Bencivenga for proof-heavy. Plus 11 others. Each ad in a pack carries a different framework.",
+          "A skill orchestrator called /lfsl takes a brand's URL and produces a complete cold-outreach pack: deep customer research, a Customer Intelligence Brief, five static ads with copy and visuals, a long-form sales letter, and a Vercel deploy. The copy gets routed through whichever of 16 expert frameworks fits the angle. Halbert for direct response. Schwartz for awareness staging. Ogilvy for fact-led. Sugarman for slippery slide. Bencivenga for proof-heavy. Plus 11 others. Each ad in a pack carries a different framework. Every static ad ships with a Facebook-ready copy package (primary text, headline, description) and a craft breakdown showing the angle, the expert, and the proof behind every line. Any claim the system cannot trace to a source gets cut before the pack ships.",
       },
       {
         heading: "The visual layer",
         body:
-          "GPT Image 2 (default) and Nano Banana 2 (fallback) for static images. Kling 3.0 and Seedance 2.0 for video. ElevenLabs for voice. A brand-fit ranker scores every output before it ships. Claim-types controlled vocabulary keeps the language on-brand. Pixel-perfect logo compositing handled client-side.",
+          "GPT Image 2 (default) and Nano Banana 2 (fallback) for static images. Kling 3.0 and Seedance 2.0 for video. ElevenLabs for voice. A brand-fit ranker scores every output before it ships. Claim-types controlled vocabulary keeps the language on-brand. Pixel-perfect logo compositing handled client-side. Product images are AI-composed around the brand's real product, so every ad is accurate to the actual SKU instead of an AI guess.",
       },
       {
         heading: "Cost engineering",
@@ -134,7 +134,7 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "Validated on",
         body:
-          "Inno Supps. Sun Home. Tower 28. Clove Ona Brilliant White (deployed and live). Each pack scoped, researched, written, designed, and shipped in under 4 hours of human time.",
+          "BLK & Bold and Create Wellness, shown back to back in the walkthrough above. Also run on Inno Supps, Sun Home, Tower 28, Clove Ona Brilliant White, and Pique. Each pack scoped, researched, written, designed, and shipped in under 4 hours of human time.",
       },
       {
         heading: "Why it matters",
