@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Font preview — AI-focused stacks</title>
+
+<!-- All Google Fonts — single request -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0a0908;
+    --bg-deep: #050403;
+    --surface: #121110;
+    --surface-elevated: #1a1816;
+    --border: rgba(245, 241, 232, 0.10);
+    --border-strong: rgba(245, 241, 232, 0.20);
+    --text: #f5f1e8;
+    --text-2: #a8a39a;
+    --text-3: #6b6660;
+    --violet: #a78bfa;
+    --lime: #bef264;
+    --green-dot: #22c55e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: "Inter", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.5;
+    background-image: radial-gradient(circle at 1px 1px, rgba(245, 241, 232, 0.04) 1px, transparent 0);
+    background-size: 32px 32px;
+  }
+  ::selection { background: var(--text); color: var(--bg); }
+  a { color: inherit; }
+
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 64px 32px 48px;
+    text-align: center;
+  }
+  .header .crumb {
+    font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 24px;
+  }
+  .header h1 {
+    font-family: "Inter", sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 600; letter-spacing: -0.04em; line-height: 1.0;
+  }
+  .header h1 .grey { color: var(--text-3); }
+  .header p {
+    margin-top: 18px; color: var(--text-2);
+    font-size: 16px; max-width: 640px; margin-left: auto; margin-right: auto;
+  }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10, 9, 8, 0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center;
+  }
+  .nav a {
+    text-decoration: none;
+    font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-3);
+    padding: 6px 12px; border: 1px solid var(--border); border-radius: 4px;
+    transition: all 200ms ease;
+  }
+  .nav a:hover { color: var(--text); border-color: var(--border-strong); }
+
+  .options { padding: 64px 0; }
+  .opt { padding: 56px 32px; border-top: 1px solid var(--border); position: relative; }
+  .opt:first-child { border-top: none; }
+  .opt-inner { max-width: 1100px; margin: 0 auto; }
+
+  .opt-meta {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 32px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .opt-meta .left { flex: 1; min-width: 280px; }
+  .opt-num {
+    font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--violet); margin-bottom: 12px;
+  }
+  .opt-name {
+    font-family: "Inter", sans-serif; font-weight: 600; font-size: 28px;
+    letter-spacing: -0.02em; color: var(--text); line-height: 1.1;
+  }
+  .opt-vibe {
+    margin-top: 8px; font-family: "Inter", sans-serif; font-size: 14px; color: var(--text-2);
+  }
+  .opt-stack {
+    font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--text-3);
+    letter-spacing: 0.06em;
+    border: 1px solid var(--border); padding: 14px 18px; border-radius: 6px;
+    background: var(--surface);
+    min-width: 320px;
+  }
+  .opt-stack b { color: var(--text); font-weight: 500; }
+  .opt-stack .row { display: flex; justify-content: space-between; padding: 3px 0; }
+
+  /* The actual font sample card */
+  .sample {
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    background: var(--surface);
+    padding: 56px 48px;
+    overflow: hidden;
+  }
+  @media (max-width: 640px) { .sample { padding: 36px 24px; } }
+
+  .live-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(132, 204, 22, 0.4);
+    background: rgba(132, 204, 22, 0.08);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--lime);
+  }
+  .live-chip .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green-dot);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .display {
+    margin-top: 28px;
+    font-size: clamp(40px, 6vw, 88px);
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+  }
+  .display .grey { color: var(--text-3); }
+
+  .body-p {
+    margin-top: 32px;
+    font-size: 16px; line-height: 1.7; color: var(--text-2); max-width: 640px;
+  }
+  .body-p strong { color: var(--text); font-weight: 500; }
+
+  .dispatch {
+    margin-top: 28px;
+    font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-3);
+  }
+  .dispatch .marker { color: var(--violet); margin-right: 4px; }
+  .dispatch .sep { color: rgba(245, 241, 232, 0.18); margin: 0 0.6em; }
+
+  .metric-row {
+    margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  @media (max-width: 640px) { .metric-row { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
+  .metric .v { font-size: clamp(32px, 4.5vw, 48px); font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
+  .metric .l { margin-top: 8px; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-3); }
+
+  .code-block {
+    margin-top: 28px;
+    padding: 18px 22px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-deep);
+    font-size: 13px; line-height: 1.7;
+  }
+  .code-block .prompt { color: var(--violet); margin-right: 8px; }
+  .code-block .ok { color: var(--lime); }
+  .code-block .ok::before { content: "✓ "; }
+  .code-block .dim { color: var(--text-3); }
+
+  .footer-note {
+    padding: 64px 32px 96px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-3);
+    font-size: 14px;
+  }
+  .footer-note .mono { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: 0.06em; }
+
+  /* ============================================================== */
+  /* PER-OPTION FONT BLOCKS                                          */
+  /* ============================================================== */
+
+  /* OPTION 01 — GEIST SANS + GEIST MONO */
+  .opt-01 .display, .opt-01 .body-p, .opt-01 .metric .v, .opt-01 .opt-name {
+    font-family: "Geist", sans-serif;
+  }
+  .opt-01 .display { font-weight: 600; }
+  .opt-01 .body-p { font-weight: 400; }
+  .opt-01 .metric .v { font-weight: 500; }
+  .opt-01 .live-chip, .opt-01 .dispatch, .opt-01 .metric .l, .opt-01 .code-block {
+    font-family: "Geist Mono", monospace;
+  }
+
+  /* OPTION 02 — INTER + JETBRAINS MONO */
+  .opt-02 .display, .opt-02 .body-p, .opt-02 .metric .v {
+    font-family: "Inter", sans-serif;
+  }
+  .opt-02 .display { font-weight: 600; }
+  .opt-02 .live-chip, .opt-02 .dispatch, .opt-02 .metric .l, .opt-02 .code-block {
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* OPTION 03 — INSTRUMENT SERIF + INTER + JETBRAINS MONO */
+  .opt-03 .display {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+  .opt-03 .display .ital { font-style: italic; }
+  .opt-03 .body-p, .opt-03 .metric .v { font-family: "Inter", sans-serif; }
+  .opt-03 .metric .v { font-weight: 500; }
+  .opt-03 .live-chip, .opt-03 .dispatch, .opt-03 .metric .l, .opt-03 .code-block {
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* OPTION 04 — PLUS JAKARTA SANS + JETBRAINS MONO */
+  .opt-04 .display, .opt-04 .body-p, .opt-04 .metric .v {
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+  .opt-04 .display { font-weight: 700; }
+  .opt-04 .metric .v { font-weight: 600; }
+  .opt-04 .live-chip, .opt-04 .dispatch, .opt-04 .metric .l, .opt-04 .code-block {
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* OPTION 05 — IBM PLEX SANS + IBM PLEX MONO */
+  .opt-05 .display, .opt-05 .body-p, .opt-05 .metric .v {
+    font-family: "IBM Plex Sans", sans-serif;
+  }
+  .opt-05 .display { font-weight: 600; }
+  .opt-05 .metric .v { font-weight: 500; }
+  .opt-05 .live-chip, .opt-05 .dispatch, .opt-05 .metric .l, .opt-05 .code-block {
+    font-family: "IBM Plex Mono", monospace;
+  }
+
+  /* OPTION 06 — SPACE GROTESK + DM MONO */
+  .opt-06 .display, .opt-06 .body-p, .opt-06 .metric .v {
+    font-family: "Space Grotesk", sans-serif;
+  }
+  .opt-06 .display { font-weight: 600; }
+  .opt-06 .metric .v { font-weight: 500; }
+  .opt-06 .live-chip, .opt-06 .dispatch, .opt-06 .metric .l, .opt-06 .code-block {
+    font-family: "DM Mono", monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="crumb">// Type preview · 6 stacks · all free</div>
+  <h1>Pick the type system <span class="grey">that sounds like you.</span></h1>
+  <p>Six AI-focused font stacks rendered side-by-side with the same content. All Google Fonts, all free for commercial use, all editor-loadable in Next.js with one import.</p>
+</div>
+
+<div class="nav">
+  <a href="#opt-01">01 · Geist</a>
+  <a href="#opt-02">02 · Inter + JetBrains</a>
+  <a href="#opt-03">03 · Instrument Serif</a>
+  <a href="#opt-04">04 · Jakarta + JetBrains</a>
+  <a href="#opt-05">05 · IBM Plex</a>
+  <a href="#opt-06">06 · Space Grotesk</a>
+</div>
+
+<div class="options">
+
+  <!-- OPTION 01 — GEIST -->
+  <section id="opt-01" class="opt opt-01">
+    <div class="opt-inner">
+      <div class="opt-meta">
+        <div class="left">
+          <div class="opt-num">Option / 01</div>
+          <div class="opt-name">Geist + Geist Mono</div>
+          <p class="opt-vibe">Vercel's house typeface. The single most "current AI tooling" choice in 2026 — Linear, v0, Cursor, Vercel itself. Confident, sharp, technical.</p>
+        </div>
+        <div class="opt-stack">
+          <div class="row"><span>Display</span><b>Geist 600</b></div>
+          <div class="row"><span>Body</span><b>Geist 400</b></div>
+          <div class="row"><span>Mono</span><b>Geist Mono 400</b></div>
+          <div class="row"><span>License</span><b>SIL OFL · free</b></div>
+        </div>
+      </div>
+
+      <div class="sample">
+        <span class="live-chip"><span class="dot"></span>Available · senior AI builder + advisory</span>
+        <h2 class="display">Direct response operator.<br /><span class="grey">Production AI builder.</span></h2>
+        <p class="body-p">Six years writing copy that had to convert or get killed. Two years shipping the AI systems that scale that work to a <strong>$20M+ portfolio</strong>. Eleven production systems. Sixty custom Claude Code skills. One operator.</p>
+        <div class="dispatch"><span class="marker">●</span>Builder<span class="sep">·</span>Cape Town<span class="sep">·</span>23:14</div>
+        <div class="code-block">
+          <div><span class="prompt">›</span>/lfsl tower28.com --build-pack</div>
+          <div class="ok">research · 22 questions · VoC mining</div>
+          <div class="ok">customer intelligence brief · 4 avatars</div>
+          <div class="dim">… deploying →</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="v">$800K</div><div class="l">Peak monthly</div></div>
+          <div class="metric"><div class="v">3.3×</div><div class="l">Email scaled</div></div>
+          <div class="metric"><div class="v">60+</div><div class="l">Skills authored</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 02 — INTER + JETBRAINS MONO -->
+  <section id="opt-02" class="opt opt-02">
+    <div class="opt-inner">
+      <div class="opt-meta">
+        <div class="left">
+          <div class="opt-num">Option / 02</div>
+          <div class="opt-name">Inter + JetBrains Mono</div>
+          <p class="opt-vibe">The universal AI workhorse. Anthropic, OpenAI, Hugging Face, Modal, Replicate — all run Inter or close cousins. Highest readability, lowest design risk. JetBrains Mono is the unmistakable engineering signal.</p>
+        </div>
+        <div class="opt-stack">
+          <div class="row"><span>Display</span><b>Inter 600</b></div>
+          <div class="row"><span>Body</span><b>Inter 400</b></div>
+          <div class="row"><span>Mono</span><b>JetBrains Mono 400</b></div>
+          <div class="row"><span>License</span><b>SIL OFL · free</b></div>
+        </div>
+      </div>
+
+      <div class="sample">
+        <span class="live-chip"><span class="dot"></span>Available · senior AI builder + advisory</span>
+        <h2 class="display">Direct response operator.<br /><span class="grey">Production AI builder.</span></h2>
+        <p class="body-p">Six years writing copy that had to convert or get killed. Two years shipping the AI systems that scale that work to a <strong>$20M+ portfolio</strong>. Eleven production systems. Sixty custom Claude Code skills. One operator.</p>
+        <div class="dispatch"><span class="marker">●</span>Builder<span class="sep">·</span>Cape Town<span class="sep">·</span>23:14</div>
+        <div class="code-block">
+          <div><span class="prompt">›</span>/lfsl tower28.com --build-pack</div>
+          <div class="ok">research · 22 questions · VoC mining</div>
+          <div class="ok">customer intelligence brief · 4 avatars</div>
+          <div class="dim">… deploying →</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="v">$800K</div><div class="l">Peak monthly</div></div>
+          <div class="metric"><div class="v">3.3×</div><div class="l">Email scaled</div></div>
+          <div class="metric"><div class="v">60+</div><div class="l">Skills authored</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 03 — INSTRUMENT SERIF + INTER + JETBRAINS MONO -->
+  <section id="opt-03" class="opt opt-03">
+    <div class="opt-inner">
+      <div class="opt-meta">
+        <div class="left">
+          <div class="opt-num">Option / 03</div>
+          <div class="opt-name">Instrument Serif + Inter + JetBrains Mono</div>
+          <p class="opt-vibe">The Vibecademy / late-night-builder editorial pick. Display serif gives gravitas — feels like a research dispatch, not a SaaS landing page. Italic accents read like emphasis in a long-form essay.</p>
+        </div>
+        <div class="opt-stack">
+          <div class="row"><span>Display</span><b>Instrument Serif</b></div>
+          <div class="row"><span>Body</span><b>Inter 400</b></div>
+          <div class="row"><span>Mono</span><b>JetBrains Mono 400</b></div>
+          <div class="row"><span>License</span><b>SIL OFL · free</b></div>
+        </div>
+      </div>
+
+      <div class="sample">
+        <span class="live-chip"><span class="dot"></span>Available · senior AI builder + advisory</span>
+        <h2 class="display">Direct response operator.<br /><span class="grey ital">Production AI builder.</span></h2>
+        <p class="body-p">Six years writing copy that had to convert or get killed. Two years shipping the AI systems that scale that work to a <strong>$20M+ portfolio</strong>. Eleven production systems. Sixty custom Claude Code skills. One operator.</p>
+        <div class="dispatch"><span class="marker">●</span>Builder<span class="sep">·</span>Cape Town<span class="sep">·</span>23:14</div>
+        <div class="code-block">
+          <div><span class="prompt">›</span>/lfsl tower28.com --build-pack</div>
+          <div class="ok">research · 22 questions · VoC mining</div>
+          <div class="ok">customer intelligence brief · 4 avatars</div>
+          <div class="dim">… deploying →</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="v">$800K</div><div class="l">Peak monthly</div></div>
+          <div class="metric"><div class="v">3.3×</div><div class="l">Email scaled</div></div>
+          <div class="metric"><div class="v">60+</div><div class="l">Skills authored</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 04 — PLUS JAKARTA SANS + JETBRAINS MONO -->
+  <section id="opt-04" class="opt opt-04">
+    <div class="opt-inner">
+      <div class="opt-meta">
+        <div class="left">
+          <div class="opt-num">Option / 04</div>
+          <div class="opt-name">Plus Jakarta Sans + JetBrains Mono</div>
+          <p class="opt-vibe">The BridgeMind pick. Geometric humanist sans — friendlier than Inter, more distinctive than DM Sans. Reads warm and confident at large display sizes. Pairs cleanly with mono for builder credibility.</p>
+        </div>
+        <div class="opt-stack">
+          <div class="row"><span>Display</span><b>Plus Jakarta 700</b></div>
+          <div class="row"><span>Body</span><b>Plus Jakarta 400</b></div>
+          <div class="row"><span>Mono</span><b>JetBrains Mono 400</b></div>
+          <div class="row"><span>License</span><b>SIL OFL · free</b></div>
+        </div>
+      </div>
+
+      <div class="sample">
+        <span class="live-chip"><span class="dot"></span>Available · senior AI builder + advisory</span>
+        <h2 class="display">Direct response operator.<br /><span class="grey">Production AI builder.</span></h2>
+        <p class="body-p">Six years writing copy that had to convert or get killed. Two years shipping the AI systems that scale that work to a <strong>$20M+ portfolio</strong>. Eleven production systems. Sixty custom Claude Code skills. One operator.</p>
+        <div class="dispatch"><span class="marker">●</span>Builder<span class="sep">·</span>Cape Town<span class="sep">·</span>23:14</div>
+        <div class="code-block">
+          <div><span class="prompt">›</span>/lfsl tower28.com --build-pack</div>
+          <div class="ok">research · 22 questions · VoC mining</div>
+          <div class="ok">customer intelligence brief · 4 avatars</div>
+          <div class="dim">… deploying →</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="v">$800K</div><div class="l">Peak monthly</div></div>
+          <div class="metric"><div class="v">3.3×</div><div class="l">Email scaled</div></div>
+          <div class="metric"><div class="v">60+</div><div class="l">Skills authored</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 05 — IBM PLEX SANS + IBM PLEX MONO -->
+  <section id="opt-05" class="opt opt-05">
+    <div class="opt-inner">
+      <div class="opt-meta">
+        <div class="left">
+          <div class="opt-num">Option / 05</div>
+          <div class="opt-name">IBM Plex Sans + IBM Plex Mono</div>
+          <p class="opt-vibe">The research-lab pick. IBM commissioned Plex specifically to feel like serious science. Used by IBM Research, Hugging Face docs, lots of ML-paper-looking sites. Quietest, most credible — least trendy.</p>
+        </div>
+        <div class="opt-stack">
+          <div class="row"><span>Display</span><b>IBM Plex Sans 600</b></div>
+          <div class="row"><span>Body</span><b>IBM Plex Sans 400</b></div>
+          <div class="row"><span>Mono</span><b>IBM Plex Mono 400</b></div>
+          <div class="row"><span>License</span><b>SIL OFL · free</b></div>
+        </div>
+      </div>
+
+      <div class="sample">
+        <span class="live-chip"><span class="dot"></span>Available · senior AI builder + advisory</span>
+        <h2 class="display">Direct response operator.<br /><span class="grey">Production AI builder.</span></h2>
+        <p class="body-p">Six years writing copy that had to convert or get killed. Two years shipping the AI systems that scale that work to a <strong>$20M+ portfolio</strong>. Eleven production systems. Sixty custom Claude Code skills. One operator.</p>
+        <div class="dispatch"><span class="marker">●</span>Builder<span class="sep">·</span>Cape Town<span class="sep">·</span>23:14</div>
+        <div class="code-block">
+          <div><span class="prompt">›</span>/lfsl tower28.com --build-pack</div>
+          <div class="ok">research · 22 questions · VoC mining</div>
+          <div class="ok">customer intelligence brief · 4 avatars</div>
+          <div class="dim">… deploying →</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="v">$800K</div><div class="l">Peak monthly</div></div>
+          <div class="metric"><div class="v">3.3×</div><div class="l">Email scaled</div></div>
+          <div class="metric"><div class="v">60+</div><div class="l">Skills authored</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 06 — SPACE GROTESK + DM MONO -->
+  <section id="opt-06" class="opt opt-06">
+    <div class="opt-inner">
+      <div class="opt-meta">
+        <div class="left">
+          <div class="opt-num">Option / 06</div>
+          <div class="opt-name">Space Grotesk + DM Mono</div>
+          <p class="opt-vibe">The startup-AI pick. Rounder, more characterful than Inter — used by Mistral, Pika, lots of newer YC AI companies. Slightly more "design-forward" feel. DM Mono adds modern dev credibility without going maximalist.</p>
+        </div>
+        <div class="opt-stack">
+          <div class="row"><span>Display</span><b>Space Grotesk 600</b></div>
+          <div class="row"><span>Body</span><b>Space Grotesk 400</b></div>
+          <div class="row"><span>Mono</span><b>DM Mono 400</b></div>
+          <div class="row"><span>License</span><b>SIL OFL · free</b></div>
+        </div>
+      </div>
+
+      <div class="sample">
+        <span class="live-chip"><span class="dot"></span>Available · senior AI builder + advisory</span>
+        <h2 class="display">Direct response operator.<br /><span class="grey">Production AI builder.</span></h2>
+        <p class="body-p">Six years writing copy that had to convert or get killed. Two years shipping the AI systems that scale that work to a <strong>$20M+ portfolio</strong>. Eleven production systems. Sixty custom Claude Code skills. One operator.</p>
+        <div class="dispatch"><span class="marker">●</span>Builder<span class="sep">·</span>Cape Town<span class="sep">·</span>23:14</div>
+        <div class="code-block">
+          <div><span class="prompt">›</span>/lfsl tower28.com --build-pack</div>
+          <div class="ok">research · 22 questions · VoC mining</div>
+          <div class="ok">customer intelligence brief · 4 avatars</div>
+          <div class="dim">… deploying →</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="v">$800K</div><div class="l">Peak monthly</div></div>
+          <div class="metric"><div class="v">3.3×</div><div class="l">Email scaled</div></div>
+          <div class="metric"><div class="v">60+</div><div class="l">Skills authored</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="footer-note">
+  <p>Tell me a number (01 — 06) and I'll wire that stack into <span class="mono">app/layout.tsx</span> + the v2 theme.</p>
+  <p style="margin-top: 8px;" class="mono">All six are loadable via next/font/google · zero dependencies added.</p>
+</div>
+
+</body>
+</html>

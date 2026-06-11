@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>v2 — Improvements preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0908;
+    --bg-deep: #050403;
+    --surface: #121110;
+    --surface-elevated: #1a1816;
+    --border: rgba(245, 241, 232, 0.08);
+    --border-strong: rgba(245, 241, 232, 0.16);
+    --text: #f5f1e8;
+    --text-2: #a8a39a;
+    --text-3: #6b6660;
+    --text-4: #44413d;
+    --violet: #a78bfa;
+    --lime: #bef264;
+    --green: #84cc16;
+    --green-dot: #22c55e;
+    --orange: #f59e0b;
+
+    --sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--text); color: var(--bg); }
+
+  /* Subtle dot grid bg */
+  body {
+    background-image: radial-gradient(circle at 1px 1px, rgba(245, 241, 232, 0.04) 1px, transparent 0);
+    background-size: 32px 32px;
+  }
+
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  .preview-banner {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,9,8,0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-3);
+  }
+  .preview-banner .label { color: var(--violet); }
+
+  .mono { font-family: var(--mono); font-feature-settings: "ss01"; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--text-3);
+  }
+  .live-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(132, 204, 22, 0.4);
+    background: rgba(132, 204, 22, 0.08);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--lime);
+  }
+  .live-chip .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green-dot);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ============================================================== */
+  /* IMPROVEMENT 1 — HERO: bigger, centered, BridgeMind/Vibecademy   */
+  /* ============================================================== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 80px 32px 120px;
+    overflow: hidden;
+    text-align: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=2400&q=80');
+    background-size: cover;
+    background-position: center;
+    filter: saturate(0.5) brightness(0.4) contrast(1.0);
+  }
+  .hero-bg::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 50%, transparent 0%, rgba(10,9,8,0.85) 100%),
+      linear-gradient(180deg, rgba(10,9,8,0.5) 0%, rgba(10,9,8,0.3) 50%, rgba(10,9,8,0.95) 100%);
+  }
+  .hero-ambient {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(ellipse 50% 40% at 20% 30%, rgba(139, 92, 246, 0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 85% 70%, rgba(245, 158, 11, 0.10) 0%, transparent 60%);
+  }
+  .hero-inner { position: relative; z-index: 2; max-width: 1100px; }
+
+  .hero h1 {
+    font-size: clamp(56px, 9vw, 128px);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    font-weight: 600;
+    margin-top: 32px;
+  }
+  .hero h1 .grey { color: var(--text-3); font-weight: 500; }
+  .hero p.lead {
+    margin-top: 32px;
+    font-size: clamp(16px, 1.6vw, 19px);
+    line-height: 1.6;
+    color: var(--text-2);
+    max-width: 640px;
+    margin-left: auto; margin-right: auto;
+  }
+  .hero p.lead strong { color: var(--text); font-weight: 500; }
+
+  .hero-cta { margin-top: 48px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px;
+    font-family: var(--sans); font-size: 14px; font-weight: 500;
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    background: transparent;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 200ms ease;
+    cursor: pointer;
+  }
+  .btn:hover { border-color: var(--text); background: rgba(245, 241, 232, 0.04); }
+  .btn-solid { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .btn-solid:hover { background: rgba(245, 241, 232, 0.85); }
+
+  /* ============================================================== */
+  /* IMPROVEMENT 2 — TRUSTED-BY BUILDER BAR                          */
+  /* ============================================================== */
+  .trusted {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 32px;
+    background: rgba(10, 9, 8, 0.6);
+  }
+  .trusted-header {
+    text-align: center; margin-bottom: 40px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--text-3);
+  }
+  .trusted-header .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--green-dot);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .trusted-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .trusted-cell {
+    text-align: center;
+    padding: 0 16px;
+    border-right: 1px solid var(--border);
+  }
+  .trusted-cell:last-child { border-right: none; }
+  .trusted-cell .icon {
+    width: 28px; height: 28px; margin: 0 auto 16px;
+    border: 1px solid var(--border-strong); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-2);
+  }
+  .trusted-cell .stat {
+    font-size: clamp(36px, 4.5vw, 56px); font-weight: 500;
+    letter-spacing: -0.03em; color: var(--text); line-height: 1;
+  }
+  .trusted-cell .stat-sub {
+    margin-top: 8px;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--text-3);
+  }
+  @media (max-width: 768px) {
+    .trusted-grid { grid-template-columns: repeat(2, 1fr); }
+    .trusted-cell:nth-child(2) { border-right: none; }
+  }
+
+  /* ============================================================== */
+  /* SECTION HEADERS                                                  */
+  /* ============================================================== */
+  section { padding: 100px 0; border-top: 1px solid var(--border); position: relative; }
+  .sect-eyebrow {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--text-3);
+    margin-bottom: 20px;
+  }
+  .sect-eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--green-dot);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .sect-title {
+    font-size: clamp(40px, 6vw, 80px); line-height: 1.0; letter-spacing: -0.045em; font-weight: 600;
+    max-width: 1000px;
+  }
+  .sect-title .grey { color: var(--text-3); font-weight: 500; }
+  .sect-sub {
+    margin-top: 24px; font-size: 16px; line-height: 1.6; color: var(--text-2); max-width: 600px;
+  }
+
+  /* ============================================================== */
+  /* IMPROVEMENT 3 — ARTIFACT CARDS WITH INLINE PRODUCT MOCKUPS      */
+  /* ============================================================== */
+  .artifacts-grid {
+    margin-top: 64px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  @media (max-width: 900px) { .artifacts-grid { grid-template-columns: 1fr; } }
+
+  .artifact {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 32px;
+    transition: border-color 300ms ease, background 300ms ease;
+    display: flex; flex-direction: column;
+  }
+  .artifact:hover { border-color: var(--border-strong); background: var(--surface-elevated); }
+
+  .artifact-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+  .artifact-id { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-3); }
+
+  .artifact-title { margin-top: 8px; font-size: 28px; line-height: 1.1; letter-spacing: -0.025em; font-weight: 500; }
+  .artifact-sub { margin-top: 6px; font-size: 14px; color: var(--text-2); }
+
+  /* ----- KANBAN MOCKUP (Foxelli Studio) ----- */
+  .mockup {
+    margin-top: 28px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-deep);
+    overflow: hidden;
+  }
+  .mockup-bar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(245,241,232,0.02);
+  }
+  .mockup-bar .light {
+    width: 9px; height: 9px; border-radius: 50%; background: var(--text-4);
+  }
+  .mockup-bar .label { margin-left: 12px; font-family: var(--mono); font-size: 10.5px; color: var(--text-3); letter-spacing: 0.06em; }
+
+  .kanban {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    padding: 16px;
+    gap: 14px;
+    min-height: 200px;
+  }
+  .kanban-col {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .kanban-col-head {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--text-3);
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .k-card {
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: var(--mono); font-size: 12px; color: var(--text-2);
+    transition: all 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .k-card.doing {
+    border-color: rgba(167, 139, 250, 0.5);
+    color: var(--text);
+    background: rgba(139, 92, 246, 0.05);
+  }
+  .k-card.doing::before {
+    content: "◆"; color: var(--violet); margin-right: 6px;
+  }
+  .k-card.shipped {
+    color: var(--text-3);
+    text-decoration: line-through;
+  }
+
+  /* ----- TERMINAL MOCKUP (LFSL) ----- */
+  .terminal { padding: 22px 22px 26px; min-height: 240px; }
+  .terminal-line {
+    font-family: var(--mono); font-size: 13px; line-height: 1.7;
+    color: var(--text-2);
+  }
+  .terminal-line .prompt { color: var(--violet); margin-right: 8px; }
+  .terminal-line .cmd { color: var(--text); }
+  .terminal-line .ok { color: var(--lime); }
+  .terminal-line .ok::before { content: "✓ "; }
+  .terminal-line .arrow { color: var(--violet); margin: 0 4px; }
+  .terminal-line .pending { color: var(--text-3); }
+  .cursor {
+    display: inline-block; width: 8px; height: 14px; background: var(--text);
+    vertical-align: middle; margin-left: 2px;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+  }
+
+  .artifact-metrics {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 18px 24px;
+    margin-top: 24px; padding-top: 22px;
+    border-top: 1px solid var(--border);
+  }
+  .metric { }
+  .metric .v { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; color: var(--text); }
+  .metric .l { margin-top: 4px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-3); }
+  .artifact-foot {
+    margin-top: auto; padding-top: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-3);
+  }
+  .artifact-foot a { color: var(--text); text-decoration: none; }
+  .artifact-foot a:hover { color: var(--violet); }
+
+  /* ============================================================== */
+  /* IMPROVEMENT 4 — STACK AS "CONNECTED CLIENTS" DIAGRAM            */
+  /* ============================================================== */
+  .stack-diagram {
+    margin-top: 64px;
+    display: grid; grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 32px; align-items: center;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 40px;
+    position: relative;
+  }
+  @media (max-width: 900px) { .stack-diagram { grid-template-columns: 1fr; } }
+
+  .stack-col-head {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 18px;
+  }
+  .client-row {
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 14px 16px; margin-bottom: 10px;
+    background: var(--surface-elevated);
+    transition: border-color 200ms ease;
+  }
+  .client-row:hover { border-color: var(--border-strong); }
+  .client-row .name { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; color: var(--text); }
+  .client-row .ico {
+    width: 22px; height: 22px; border-radius: 4px;
+    background: var(--bg-deep); border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px; color: var(--text-2);
+  }
+  .client-row .badge {
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-3);
+  }
+  .center-node {
+    border: 1px solid var(--border-strong);
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: 8px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 0 60px rgba(139, 92, 246, 0.18);
+  }
+  .center-node .icon {
+    width: 48px; height: 48px; margin: 0 auto 16px;
+    border-radius: 8px; background: var(--violet);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--bg);
+  }
+  .center-node .name { font-size: 18px; font-weight: 600; }
+  .center-node .desc { margin-top: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-3); }
+
+  .cap-row {
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 14px 16px; margin-bottom: 10px;
+    background: var(--surface-elevated);
+  }
+  .cap-row .left { display: flex; align-items: center; gap: 12px; }
+  .cap-row .left .greendot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--green-dot);
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+  }
+  .cap-row .left .nm { font-size: 14px; font-weight: 500; color: var(--text); }
+  .cap-row .meta {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--text-3);
+  }
+
+  /* SVG connection lines */
+  .stack-svg {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  }
+  .stack-svg .line {
+    stroke: var(--border-strong); stroke-width: 1; fill: none;
+    stroke-dasharray: 4 4;
+    animation: dash-flow 8s linear infinite;
+  }
+  @keyframes dash-flow {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -32; }
+  }
+
+  /* Notes block */
+  .notes {
+    border-top: 1px solid var(--border);
+    padding: 80px 0 120px;
+    background: rgba(245, 241, 232, 0.02);
+  }
+  .notes h2 { font-size: 28px; letter-spacing: -0.02em; font-weight: 500; margin-bottom: 24px; }
+  .notes ol { padding-left: 24px; color: var(--text-2); }
+  .notes ol li { margin-bottom: 14px; line-height: 1.6; font-size: 15px; }
+  .notes ol li strong { color: var(--text); font-weight: 500; }
+  .notes .tag {
+    display: inline-block; margin-right: 8px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--violet);
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    border-radius: 999px; padding: 2px 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">
+  <span><span class="label">Preview /</span> v2 improvements design</span>
+  <span>Static · No build · Open in browser</span>
+</div>
+
+<!-- ====================================================== -->
+<!-- IMPROVEMENT 1 — HERO                                    -->
+<!-- ====================================================== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ambient"></div>
+  <div class="hero-inner">
+    <span class="live-chip">
+      <span class="dot"></span>
+      Available · senior AI builder + advisory
+    </span>
+    <h1>
+      Direct response operator.<br />
+      <span class="grey">Production AI builder.</span>
+    </h1>
+    <p class="lead">
+      The <strong>direct response operator</strong> for builders shipping <strong>production AI systems</strong> at the speed of revenue. Six years writing copy that had to convert. Two years scaling a $20M+ portfolio.
+    </p>
+    <div class="hero-cta">
+      <a href="#artifacts" class="btn btn-solid">See the artifacts <span>→</span></a>
+      <a href="mailto:liam@copyweb.io" class="btn">Email me</a>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- IMPROVEMENT 2 — TRUSTED-BY BUILDER BAR                  -->
+<!-- ====================================================== -->
+<div class="trusted">
+  <div class="wrap">
+    <div class="trusted-header">
+      <span class="dot"></span>
+      Trusted by operators worldwide
+    </div>
+    <div class="trusted-grid">
+      <div class="trusted-cell">
+        <div class="icon">$</div>
+        <div class="stat">$800K+</div>
+        <div class="stat-sub">Peak monthly revenue</div>
+      </div>
+      <div class="trusted-cell">
+        <div class="icon">×</div>
+        <div class="stat">3.3×</div>
+        <div class="stat-sub">Email scaled</div>
+      </div>
+      <div class="trusted-cell">
+        <div class="icon">/</div>
+        <div class="stat">60+</div>
+        <div class="stat-sub">Custom skills authored</div>
+      </div>
+      <div class="trusted-cell">
+        <div class="icon">▎</div>
+        <div class="stat">11</div>
+        <div class="stat-sub">Production systems</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================== -->
+<!-- IMPROVEMENT 3 — ARTIFACT CARDS WITH ANIMATED MOCKUPS    -->
+<!-- ====================================================== -->
+<section id="artifacts">
+  <div class="wrap">
+    <div class="sect-eyebrow"><span class="dot"></span>// Shipped artifacts</div>
+    <h2 class="sect-title">
+      Eleven systems.<br />
+      <span class="grey">One operator.</span>
+    </h2>
+    <p class="sect-sub">Each card shows the actual product, not a paragraph about it.</p>
+
+    <div class="artifacts-grid">
+
+      <!-- ARTIFACT 01 — FOXELLI STUDIO (Kanban mockup, animated) -->
+      <article class="artifact">
+        <div class="artifact-header">
+          <span class="artifact-id">Artifact / 01</span>
+          <span class="live-chip"><span class="dot"></span>In daily use</span>
+        </div>
+        <h3 class="artifact-title">Foxelli Studio</h3>
+        <p class="artifact-sub">End-to-end AI ad production platform · 7 brands · $20M+ portfolio</p>
+
+        <div class="mockup">
+          <div class="mockup-bar">
+            <span class="light"></span><span class="light"></span><span class="light"></span>
+            <span class="label">foxelli-studio · pipeline</span>
+          </div>
+          <div class="kanban" id="kanban">
+            <div class="kanban-col">
+              <div class="kanban-col-head">Brief</div>
+              <div class="k-card" data-card="brief">script v3</div>
+              <div class="k-card" data-card="brief2">hero variant</div>
+            </div>
+            <div class="kanban-col">
+              <div class="kanban-col-head">Generating</div>
+              <div class="k-card doing" data-card="doing">video synthesis</div>
+            </div>
+            <div class="kanban-col">
+              <div class="kanban-col-head">Shipped</div>
+              <div class="k-card shipped" data-card="shipped">voiceover</div>
+              <div class="k-card shipped" data-card="shipped2">composite</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="artifact-metrics">
+          <div class="metric"><div class="v">26</div><div class="l">Production workflows</div></div>
+          <div class="metric"><div class="v">60+</div><div class="l">Custom skills authored</div></div>
+          <div class="metric"><div class="v">73</div><div class="l">Bugs resolved</div></div>
+          <div class="metric"><div class="v">6×</div><div class="l">Video output (25 → 150/wk)</div></div>
+        </div>
+
+        <div class="artifact-foot">
+          <span>Foxelli Group · Netherlands</span>
+          <a href="#">Read the build →</a>
+        </div>
+      </article>
+
+      <!-- ARTIFACT 02 — LFSL (Terminal mockup, typing animation) -->
+      <article class="artifact">
+        <div class="artifact-header">
+          <span class="artifact-id">Artifact / 02</span>
+          <span class="live-chip"><span class="dot"></span>Daily production use</span>
+        </div>
+        <h3 class="artifact-title">LFSL Pipeline</h3>
+        <p class="artifact-sub">Cold-outreach pack across 16 expert frameworks · 60 min human time</p>
+
+        <div class="mockup">
+          <div class="mockup-bar">
+            <span class="light"></span><span class="light"></span><span class="light"></span>
+            <span class="label">lfsl · orchestrator</span>
+          </div>
+          <div class="terminal" id="terminal">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <div class="artifact-metrics">
+          <div class="metric"><div class="v">16</div><div class="l">Expert frameworks</div></div>
+          <div class="metric"><div class="v">~280</div><div class="l">Evidence entries</div></div>
+          <div class="metric"><div class="v">~60%</div><div class="l">Cost reduction on media</div></div>
+          <div class="metric"><div class="v">4 hrs</div><div class="l">Human time per pack</div></div>
+        </div>
+
+        <div class="artifact-foot">
+          <span>Copyweb · Cold outreach</span>
+          <a href="#">Read the build →</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- IMPROVEMENT 4 — STACK AS CONNECTED-CLIENTS DIAGRAM      -->
+<!-- ====================================================== -->
+<section>
+  <div class="wrap">
+    <div class="sect-eyebrow"><span class="dot"></span>// Stack</div>
+    <h2 class="sect-title">
+      The runtime,<br />
+      <span class="grey">and what's wired in.</span>
+    </h2>
+    <p class="sect-sub">Most portfolios list AI alongside React. Mine doesn't. AI is the layer everything runs through.</p>
+
+    <div class="stack-diagram">
+      <svg class="stack-svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+        <path class="line" d="M 250 60 Q 380 60 480 150"></path>
+        <path class="line" d="M 250 110 Q 380 110 480 150"></path>
+        <path class="line" d="M 250 160 Q 380 160 480 150"></path>
+        <path class="line" d="M 250 210 Q 380 210 480 150"></path>
+        <path class="line" d="M 250 260 Q 380 260 480 150"></path>
+        <path class="line" d="M 520 150 Q 620 60 750 60"></path>
+        <path class="line" d="M 520 150 Q 620 110 750 110"></path>
+        <path class="line" d="M 520 150 Q 620 160 750 160"></path>
+        <path class="line" d="M 520 150 Q 620 210 750 210"></path>
+      </svg>
+
+      <!-- LEFT: Surfaces / clients -->
+      <div style="position: relative; z-index: 1;">
+        <div class="stack-col-head">Surfaces</div>
+        <div class="client-row">
+          <span class="name"><span class="ico">VS</span> VS Code</span>
+          <span class="badge">daily</span>
+        </div>
+        <div class="client-row">
+          <span class="name"><span class="ico">AG</span> Antigravity</span>
+          <span class="badge">surface</span>
+        </div>
+        <div class="client-row">
+          <span class="name"><span class="ico">&gt;_</span> Terminal</span>
+          <span class="badge">cli</span>
+        </div>
+        <div class="client-row">
+          <span class="name"><span class="ico">CX</span> Codex CLI</span>
+          <span class="badge">addressable</span>
+        </div>
+        <div class="client-row">
+          <span class="name"><span class="ico">GM</span> Gemini CLI</span>
+          <span class="badge">addressable</span>
+        </div>
+      </div>
+
+      <!-- CENTER: Claude Code runtime -->
+      <div class="center-node" style="position: relative; z-index: 1;">
+        <div class="icon">CC</div>
+        <div class="name">Claude Code</div>
+        <div class="desc">runtime · skills · MCP</div>
+      </div>
+
+      <!-- RIGHT: MCP servers + capabilities -->
+      <div style="position: relative; z-index: 1;">
+        <div class="stack-col-head">Wired in · MCP servers</div>
+        <div class="cap-row">
+          <span class="left"><span class="greendot"></span><span class="nm">Supabase</span></span>
+          <span class="meta">postgres · rls</span>
+        </div>
+        <div class="cap-row">
+          <span class="left"><span class="greendot"></span><span class="nm">n8n</span></span>
+          <span class="meta">orchestration</span>
+        </div>
+        <div class="cap-row">
+          <span class="left"><span class="greendot"></span><span class="nm">Notion</span></span>
+          <span class="meta">vault sync</span>
+        </div>
+        <div class="cap-row">
+          <span class="left"><span class="greendot"></span><span class="nm">Firecrawl</span></span>
+          <span class="meta">research</span>
+        </div>
+        <div class="cap-row">
+          <span class="left"><span class="greendot"></span><span class="nm">Figma · GitHub · Stitch</span></span>
+          <span class="meta">+5 more</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- NOTES                                                    -->
+<!-- ====================================================== -->
+<section class="notes">
+  <div class="wrap">
+    <h2>What you're seeing here</h2>
+    <ol>
+      <li><span class="tag">01</span><strong>Hero</strong> — centered, ~128px display headline, two-tone (white + grey). Single live-chip above the headline. Camera-vignette photo, more violet ambient. This is the BridgeMind/Vibecademy headline pattern.</li>
+      <li><span class="tag">02</span><strong>Trusted-by builder bar</strong> — green-dot eyebrow + 4 huge stat columns separated by hairline rules. Borrowed directly from BridgeMind's "9,700+ Discord · 70,000+ YouTube" bar.</li>
+      <li><span class="tag">03</span><strong>Artifact cards with inline product mockups</strong> — the load-bearing change. Foxelli Studio shows a kanban with auto-cycling cards (watch ~3 sec). LFSL shows a terminal typing the orchestrator command and ✓-marking each phase. This is what BridgeMind's BridgeSpace + BridgeVoice cards do.</li>
+      <li><span class="tag">04</span><strong>Stack as connected-clients diagram</strong> — left column = surfaces, center node = Claude Code runtime (with violet glow), right column = wired-in MCP servers. Animated dashed lines between them. BridgeMCP's "Connected Clients" pattern.</li>
+    </ol>
+    <h2 style="margin-top: 56px;">Animation tech used</h2>
+    <ol>
+      <li><span class="tag">CSS</span><strong>Pulse dots</strong> — `@keyframes pulse` on every live-chip indicator. Pure CSS.</li>
+      <li><span class="tag">CSS</span><strong>Dashed-line flow on the stack diagram</strong> — `stroke-dasharray` + `stroke-dashoffset` animation on SVG paths.</li>
+      <li><span class="tag">JS</span><strong>Kanban auto-cycle</strong> — vanilla setInterval shifts card text every 3.5s. In React this would be a `useState` + `setInterval` hook.</li>
+      <li><span class="tag">JS</span><strong>Terminal typing</strong> — character-by-character append with setTimeout. Same pattern in React.</li>
+      <li><span class="tag">CSS</span><strong>Cursor blink</strong> — `@keyframes blink` step-end.</li>
+    </ol>
+    <p style="margin-top: 32px; color: var(--text-3); font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;">
+      All animations here are CSS + ~30 lines of vanilla JS. No framer-motion, no lottie, no rive. Cheapest possible tier.
+      To upgrade later: Lottie for hand-illustrated loops; Framer Motion `layout` prop for the kanban shift (smoother than setInterval); MP4 loop for one hero showpiece.
+    </p>
+  </div>
+</section>
+
+<script>
+  /* ============================================================== */
+  /* KANBAN AUTO-CYCLE — cards shift across columns                  */
+  /* ============================================================== */
+  (function () {
+    const briefCards = ["script v3", "hero variant", "voice clone", "ad copy", "ranker pass"];
+    const doingCards = ["video synthesis", "voiceover", "composite", "ranker pass", "exporter"];
+    const shippedCards = [
+      ["voiceover", "composite"],
+      ["composite", "exporter"],
+      ["exporter", "scoring"],
+      ["scoring", "delivered"],
+      ["delivered", "queued"],
+    ];
+    let i = 0;
+    const briefEls = document.querySelectorAll("#kanban .kanban-col:nth-child(1) .k-card");
+    const doingEl = document.querySelector("#kanban .kanban-col:nth-child(2) .k-card");
+    const shippedEls = document.querySelectorAll("#kanban .kanban-col:nth-child(3) .k-card");
+
+    setInterval(() => {
+      i = (i + 1) % 5;
+      briefEls[0].textContent = briefCards[i];
+      briefEls[1].textContent = briefCards[(i + 1) % 5];
+      doingEl.textContent = doingCards[i];
+      doingEl.style.transform = "translateX(-4px)";
+      setTimeout(() => { doingEl.style.transform = "translateX(0)"; }, 200);
+      shippedEls[0].textContent = shippedCards[i][0];
+      shippedEls[1].textContent = shippedCards[i][1];
+    }, 2800);
+  })();
+
+  /* ============================================================== */
+  /* TERMINAL TYPING + STAGED OUTPUT                                 */
+  /* ============================================================== */
+  (function () {
+    const term = document.getElementById("terminal");
+    const cmd = "/lfsl tower28.com --build-pack";
+    const stages = [
+      { delay: 600, text: "research · 22 questions · VoC mining" },
+      { delay: 1200, text: "customer intelligence brief · 4 avatars" },
+      { delay: 800, text: "5 ads · 5 expert frameworks · brand-fit ranker" },
+      { delay: 1000, text: "long-form sales letter · halbert + schwartz" },
+      { delay: 700, text: "deployed → tower28-pack.copyweb.io" },
+    ];
+
+    function render(state) {
+      const lines = [];
+      lines.push(
+        `<div class="terminal-line"><span class="prompt">›</span><span class="cmd">${state.typed}</span>${state.cursor ? '<span class="cursor"></span>' : ""}</div>`
+      );
+      state.completed.forEach((s) => {
+        lines.push(`<div class="terminal-line"><span class="ok">${s}</span></div>`);
+      });
+      if (state.pending) {
+        lines.push(`<div class="terminal-line"><span class="pending">… ${state.pending}</span></div>`);
+      }
+      term.innerHTML = lines.join("");
+    }
+
+    function run() {
+      let state = { typed: "", cursor: true, completed: [], pending: null };
+      render(state);
+      // Type the command
+      let pos = 0;
+      const typeInt = setInterval(() => {
+        pos++;
+        state.typed = cmd.slice(0, pos);
+        render(state);
+        if (pos >= cmd.length) {
+          clearInterval(typeInt);
+          // Run stages
+          let stageI = 0;
+          const advance = () => {
+            if (stageI >= stages.length) {
+              // Reset after pause
+              setTimeout(run, 4000);
+              return;
+            }
+            state.pending = stages[stageI].text;
+            render(state);
+            setTimeout(() => {
+              state.completed.push(stages[stageI].text);
+              state.pending = null;
+              stageI++;
+              render(state);
+              setTimeout(advance, 250);
+            }, stages[stageI].delay);
+          };
+          setTimeout(advance, 600);
+        }
+      }, 60);
+    }
+
+    run();
+  })();
+</script>
+
+</body>
+</html>

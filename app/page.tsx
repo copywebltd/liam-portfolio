@@ -7,7 +7,7 @@ import {
   Arc,
   Principles,
   Stack,
-  About,
+  Credentials,
   Contact,
   Footer,
 } from "@/components/sections";
@@ -25,7 +25,7 @@ export default function Home() {
       <Arc />
       <Principles />
       <Stack />
-      <About />
+      <Credentials />
       <Contact />
       <Footer />
     </main>

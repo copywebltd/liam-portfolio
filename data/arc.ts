@@ -21,8 +21,8 @@ export const arc: ArcPhase[] = [
     role: "Senior copywriter → Head of AI Copy",
     org: "Foxelli Group",
     geo: "Netherlands",
-    body: "Stepped up to senior copy across the Foxelli portfolio. Six months in I started using Claude in production workflows. Not as a drafting tool. As part of the actual output. Got promoted to lead a 5-person copy team through the AI transition.",
-    highlight: "1.2% → 3.6% conv. $76K → $249K email in 4 months.",
+    body: "Stepped up to senior copy across the Foxelli portfolio, with Hooks & Needles and Mindful Souls as my primary brands. Six months in I started using Claude in production workflows. Not as a drafting tool. As part of the actual output. Got promoted to lead a 5-person copy team through the AI transition.",
+    highlight: "1.2% → 3.6% conv. Mindful Souls email $76K → $249K in 4 months.",
   },
   {
     years: "2024 — 2026",

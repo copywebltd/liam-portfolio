@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { motion, useInView } from "framer-motion";
 import { arc } from "@/data/arc";
 import { stackTabs } from "@/data/stack";
 import {
@@ -11,9 +11,46 @@ import {
   Card,
   FadeIn,
   SectionHeading,
-  EngineeringMarkers,
   AnimatedCounter,
 } from "./ui";
+
+/* ------------------------------------------------------------------ */
+/*  NavLink — Sig 01: amber underline sweeps in on hover               */
+/* ------------------------------------------------------------------ */
+
+function NavLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a href={href} className="nav-link-sweep text-[var(--color-text-secondary)]">
+      {children}
+    </a>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  ReceiptValue — Sig 02: hairline draws under value when in view     */
+/* ------------------------------------------------------------------ */
+
+function ReceiptValue({
+  value,
+  prefix,
+  suffix,
+}: {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const [drawn, setDrawn] = useState(false);
+  useEffect(() => {
+    if (inView) setDrawn(true);
+  }, [inView]);
+  return (
+    <span ref={ref} className={`receipt-value ${drawn ? "in-view" : ""}`}>
+      <AnimatedCounter value={value} prefix={prefix} suffix={suffix} />
+    </span>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /*  NAV                                                                */
@@ -24,18 +61,18 @@ export function Nav() {
     <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-[var(--color-bg)]/70 border-b border-[var(--color-border-structural)]/40">
       <nav className="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
         <a href="#top" className="flex items-center gap-2">
-          <span className="font-mono text-sm font-semibold tracking-tight text-[var(--color-accent)]">
+          <span className="lp-mark font-mono text-sm font-semibold tracking-tight text-[var(--color-accent)]">
             LP
           </span>
           <span className="text-sm font-medium text-[var(--color-text-secondary)] hidden sm:inline">
             Liam Petersen
           </span>
         </a>
-        <div className="hidden md:flex items-center gap-8 text-sm text-[var(--color-text-secondary)]">
-          <a href="#systems" className="hover:text-[var(--color-text-primary)] transition-colors">Systems</a>
-          <a href="#arc" className="hover:text-[var(--color-text-primary)] transition-colors">Arc</a>
-          <a href="#stack" className="hover:text-[var(--color-text-primary)] transition-colors">Stack</a>
-          <a href="#about" className="hover:text-[var(--color-text-primary)] transition-colors">About</a>
+        <div className="hidden md:flex items-center gap-8 text-sm">
+          <NavLink href="#systems">Systems</NavLink>
+          <NavLink href="#arc">Arc</NavLink>
+          <NavLink href="#stack">Stack</NavLink>
+          <NavLink href="#credentials">Credentials</NavLink>
         </div>
         <Button href="mailto:liam@copyweb.io" variant="secondary">
           Email me
@@ -50,15 +87,42 @@ export function Nav() {
 /* ------------------------------------------------------------------ */
 
 export function Hero() {
+  const heroRef = useRef<HTMLElement>(null);
+  const hRef = useRef<HTMLDivElement>(null);
+  const vRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+    const onMove = (e: MouseEvent) => {
+      const rect = hero.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      if (hRef.current) hRef.current.style.top = `${y}px`;
+      if (vRef.current) vRef.current.style.left = `${x}px`;
+    };
+    const onEnter = () => hero.classList.add("hero-crosshair-active");
+    const onLeave = () => hero.classList.remove("hero-crosshair-active");
+    hero.addEventListener("mousemove", onMove);
+    hero.addEventListener("mouseenter", onEnter);
+    hero.addEventListener("mouseleave", onLeave);
+    return () => {
+      hero.removeEventListener("mousemove", onMove);
+      hero.removeEventListener("mouseenter", onEnter);
+      hero.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
   return (
     <section
+      ref={heroRef}
       id="top"
       className="relative min-h-[100svh] pt-32 pb-24 overflow-hidden flex items-center"
     >
-      <div className="aurora"><span /></div>
-      <div className="absolute inset-0 dot-grid opacity-90 z-[1]" />
+      <div className="absolute inset-0 dot-grid opacity-80 z-[1]" />
       <div className="absolute inset-0 ambient-glow breathe pointer-events-none z-[1]" />
-      <EngineeringMarkers />
+      <div ref={hRef} className="hero-crosshair-h" />
+      <div ref={vRef} className="hero-crosshair-v" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-10 w-full">
         <FadeIn>
@@ -68,31 +132,33 @@ export function Hero() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--color-success)]" />
             </span>
             <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-text-secondary)]">
-              Open to senior AI + advisory roles · Remote, global
+              Available for senior AI builder + advisory roles · Remote, US &amp; EU only
             </span>
           </div>
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <h1 className="text-[40px] sm:text-[56px] md:text-[72px] leading-[1.02] tracking-[-0.04em] font-medium text-[var(--color-text-primary)] max-w-4xl">
-            Six years in direct response. Two years shipping production AI.{" "}
-            <span className="text-[var(--color-text-secondary)]">The numbers got bigger.</span>
+          <h1 className="text-[40px] sm:text-[56px] md:text-[76px] lg:text-[88px] leading-[1.0] tracking-[-0.045em] font-semibold text-[var(--color-text-primary)] max-w-4xl">
+            Six years of direct response.
+            <br />
+            Three years shipping{" "}
+            <span className="text-[var(--color-accent)]">production AI.</span>
           </h1>
         </FadeIn>
 
         <FadeIn delay={0.2}>
-          <div className="mt-10 max-w-2xl space-y-5 text-[16px] leading-[1.7] text-[var(--color-text-secondary)]">
+          <div className="mt-10 max-w-2xl space-y-5 text-[14px] leading-[22.75px] text-[var(--color-text-secondary)]">
             <p>
-              I&apos;m Liam. I&apos;ve spent six years writing copy that had to convert or get killed,
-              and the last two building the systems that scale that work to a portfolio doing $20M+ a year.
+              I&apos;m Liam. Six years writing copy that had to convert or get killed.
+              Three years building the systems that scale that work to a $20M+ portfolio.
             </p>
             <p>
-              I&apos;m not a developer pretending to understand marketing. I&apos;m a direct response operator
-              who learned to ship platforms because no one was building the ones I needed.
+              I&apos;m not a developer pretending to understand marketing. I&apos;m a direct response copywriter
+              who became Head of AI Strategy, then started shipping platforms because no one was building the ones I needed.
             </p>
             <p className="text-[var(--color-text-primary)]">
               <strong className="font-medium">Every system on this site was built inside Claude Code.</strong>{" "}
-              Frontends, backends, agents, skills, MCP integrations. One runtime, one operator, real receipts.
+              Frontends, backends, agents, skills, MCP integrations. One runtime, one builder, real receipts.
             </p>
           </div>
         </FadeIn>
@@ -108,8 +174,7 @@ export function Hero() {
 
         <FadeIn delay={0.4}>
           <div className="mt-16 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
-            <span className="text-[var(--color-accent)]/70">▎</span> Worked across the US, Europe, and South Africa.
-            Currently founder at Copyweb, building custom AI marketing systems for $10M–$100M DTC brands.
+            Worked across US, EU, and ZA. Founder at Copyweb. Open to senior AI builder roles where the work has to ship.
           </div>
         </FadeIn>
       </div>
@@ -126,7 +191,7 @@ export function BuildDoctrine() {
     <section className="relative border-y border-[var(--color-border-structural)]/60 bg-[var(--color-surface)]/40 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6 md:px-10 py-6 flex items-center gap-4 overflow-x-auto">
         <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-accent)] whitespace-nowrap">
-          {"// build doctrine"}
+          Build doctrine
         </span>
         <span className="text-[13px] text-[var(--color-text-secondary)] whitespace-nowrap md:whitespace-normal">
           Every system below was built on Claude Code. Custom skills, MCP servers, CLIs wired into one runtime.
@@ -142,10 +207,10 @@ export function BuildDoctrine() {
 /* ------------------------------------------------------------------ */
 
 const tldr = [
-  { label: "Role", value: "Direct response operator + AI builder" },
-  { label: "Experience", value: "6 yrs DR copy · 2 yrs production AI" },
-  { label: "Worked across", value: "United States · Europe · South Africa" },
-  { label: "Status", value: "Open to senior AI + advisory roles · Remote, global" },
+  { label: "Role", value: "Direct Response → AI Strategy → Production AI" },
+  { label: "Experience", value: "6 yrs DR copy · 3 yrs production AI" },
+  { label: "Worked across", value: "US · EU · ZA" },
+  { label: "Status", value: "Open to senior AI + advisory roles · Remote · US & EU only" },
 ];
 
 export function TLDR() {
@@ -154,7 +219,7 @@ export function TLDR() {
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <FadeIn>
           <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-accent)] mb-6">
-            // tl;dr
+            TL;DR
           </div>
         </FadeIn>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-6">
@@ -189,10 +254,10 @@ type Receipt = {
 };
 
 const receipts: Receipt[] = [
-  { value: 3, suffix: "×", label: "Site conversion lift", sub: "1.2% → 3.6% at Foxelli" },
-  { value: 3.3, suffix: "×", label: "Email revenue scaled", sub: "$76K → $249K in 4 months" },
-  { value: 6, suffix: "×", label: "Video ad output", sub: "25/wk → 150/wk, same 4 editors" },
-  { value: 674, prefix: "$", suffix: "K/mo", label: "Peak revenue", sub: "Through systems I built" },
+  { value: 800, prefix: "$", suffix: "K", label: "Peak monthly revenue", sub: "Hooks & Needles · $414K → $800K via Foxelli Studio" },
+  { value: 3.3, suffix: "×", label: "Email revenue scaled", sub: "$76K → $249K in 4 months · Mindful Souls" },
+  { value: 60, suffix: "+", label: "Custom Claude Code skills", sub: "Authored end-to-end" },
+  { value: 11, suffix: "", label: "Systems shipped", sub: "Cross-functional, end-to-end" },
 ];
 
 export function Receipts() {
@@ -211,8 +276,8 @@ export function Receipts() {
           {receipts.map((r, i) => (
             <FadeIn key={r.label} delay={i * 0.08}>
               <Card className="card-lift p-7 h-full hover:border-[var(--color-accent)]/40">
-                <div className="text-[44px] md:text-[56px] font-medium text-[var(--color-accent)] tracking-[-0.04em] leading-none tabular-nums">
-                  <AnimatedCounter value={r.value} prefix={r.prefix} suffix={r.suffix} />
+                <div className="text-[40px] md:text-[52px] font-light text-[var(--color-accent)] tracking-[-0.04em] leading-none tabular-nums">
+                  <ReceiptValue value={r.value} prefix={r.prefix} suffix={r.suffix} />
                 </div>
                 <div className="mt-4 text-[13px] uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
                   {r.label}
@@ -239,7 +304,7 @@ export function Arc() {
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <FadeIn>
           <SectionHeading
-            eyebrow="// the arc"
+            eyebrow="The arc"
             title="From copy to code, across three continents."
             description="Six years of direct response craft. Two years of production AI systems. The line between writing and shipping got thinner every year."
           />
@@ -332,7 +397,7 @@ export function Principles() {
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <FadeIn>
           <SectionHeading
-            eyebrow="// how I work"
+            eyebrow="How I work"
             title="Five principles that decide what gets built and what doesn't."
           />
         </FadeIn>
@@ -436,58 +501,81 @@ export function Stack() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  ABOUT                                                              */
+/*  CREDENTIALS — featured cert strip                                  */
 /* ------------------------------------------------------------------ */
 
-export function About() {
+const certs = [
+  { name: "Claude Code in Action", issuer: "Anthropic", status: "verified" },
+  { name: "Building with the Claude API", issuer: "Anthropic", status: "verified" },
+  { name: "Introduction to MCP", issuer: "Anthropic", status: "verified" },
+  { name: "MCP: Advanced Topics", issuer: "Anthropic", status: "in-progress" },
+  { name: "EFSET English C2 Advanced", issuer: "75/100", status: "verified" },
+];
+
+export function Credentials() {
   return (
-    <section id="about" className="relative py-24 md:py-32 border-t border-[var(--color-border-structural)]/60">
-      <div className="max-w-3xl mx-auto px-6 md:px-10">
+    <section
+      id="credentials"
+      className="relative py-24 md:py-32 border-t border-[var(--color-border-structural)]/60"
+    >
+      <div className="max-w-5xl mx-auto px-6 md:px-10">
         <FadeIn>
-          <SectionHeading eyebrow="// about" title="A builder who used to write copy." />
+          <SectionHeading
+            eyebrow="// credentials"
+            title="Verified by the people who built the tools."
+            description="Certifications, fluency, and the receipts that back the work. Issued by Anthropic — the lab whose tools I build on every day."
+          />
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <div className="mt-12 space-y-6 text-[16px] leading-[1.8] text-[var(--color-text-secondary)]">
-            <p>
-              I&apos;m Liam. Writing this from Cape Town. Wife, a kid, and a six-year direct response
-              habit that won&apos;t quit.
-            </p>
-            <p>
-              The story starts in 2021 with daily emails for a crypto gaming platform. Two years
-              later, more emails written than worth counting, and the only lesson that matters
-              in direct response was learned: you&apos;ll know if it worked by Wednesday.
-            </p>
-            <p>
-              Got into AI early. Not because AI was exciting. Because the same brief twice was
-              killing me. By 2024 I was running AI strategy across seven DTC brands and a $20M+
-              portfolio. By 2026, four production AI platforms shipped and 60+ custom Claude Code
-              skills authored.
-            </p>
-            <p className="text-[var(--color-text-primary)]">
-              I don&apos;t call myself an architect or an engineer. I&apos;m a builder. I write copy, I ship code,
-              I run systems, and I lead teams. The line between those things got thinner every year, and I stopped
-              trying to draw it.
-            </p>
-            <p className="font-mono text-[13px] text-[var(--color-text-tertiary)] pt-4 border-t border-[var(--color-border-structural)]/50">
-              Open to senior AI and advisory roles. Remote, global. Or just say hi.
-            </p>
+          <div className="mt-12 cert-strip">
+            <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+              <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-accent)]">
+                Anthropic-issued · 2025–2026
+              </div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
+                4 verified · 1 in progress
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2.5">
+              {certs.map((c) => (
+                <span key={c.name} className="cert-pill">
+                  <span className="check" aria-hidden>
+                    {c.status === "verified" ? "✓" : "◐"}
+                  </span>
+                  <span>{c.name}</span>
+                  <span className="text-[var(--color-text-tertiary)] font-normal">· {c.issuer}</span>
+                </span>
+              ))}
+            </div>
           </div>
         </FadeIn>
 
-        <FadeIn delay={0.2}>
-          <div className="mt-12">
-            <Eyebrow>Certifications</Eyebrow>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {[
-                "Claude Code in Action — Anthropic",
-                "Building with the Claude API — Anthropic",
-                "Introduction to MCP — Anthropic",
-                "MCP: Advanced Topics — Anthropic (in progress)",
-                "EFSET English C2 Advanced (75/100)",
-              ].map((c) => (
-                <Pill key={c}>{c}</Pill>
-              ))}
+        <FadeIn delay={0.15}>
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="border-t border-[var(--color-border-structural)]/60 pt-4">
+              <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
+                Languages
+              </div>
+              <div className="mt-2 text-[14px] text-[var(--color-text-primary)]">
+                English (C2 · native-equivalent)
+              </div>
+            </div>
+            <div className="border-t border-[var(--color-border-structural)]/60 pt-4">
+              <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
+                Domain depth
+              </div>
+              <div className="mt-2 text-[14px] text-[var(--color-text-primary)]">
+                Direct response · 6 yrs · production AI · 2 yrs
+              </div>
+            </div>
+            <div className="border-t border-[var(--color-border-structural)]/60 pt-4">
+              <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
+                Built on
+              </div>
+              <div className="mt-2 text-[14px] text-[var(--color-text-primary)]">
+                Claude Code · 60+ custom skills authored
+              </div>
             </div>
           </div>
         </FadeIn>
@@ -505,12 +593,12 @@ export function Contact() {
     <section id="contact" className="relative py-24 md:py-32 border-t border-[var(--color-border-structural)]/60">
       <div className="max-w-3xl mx-auto px-6 md:px-10 text-center">
         <FadeIn>
-          <Eyebrow>// contact</Eyebrow>
+          <Eyebrow>Contact</Eyebrow>
           <h2 className="mt-4 text-[36px] md:text-[52px] font-medium tracking-[-0.03em] leading-[1.05]">
             Let&apos;s build something that compounds.
           </h2>
           <p className="mt-6 text-[16px] leading-relaxed text-[var(--color-text-secondary)] max-w-xl mx-auto">
-            Open to senior AI engineering, AI strategy, and advisory roles. Remote, global. Available now.
+            Open to senior AI engineering, AI strategy, and advisory roles. Remote · US &amp; EU only. Available now.
           </p>
         </FadeIn>
 
