@@ -9,27 +9,27 @@ export type ArcPhase = {
 
 export const arc: ArcPhase[] = [
   {
-    years: "2021 — 2023",
-    role: "Direct response copywriter",
+    years: "2021 — 2026",
+    role: "DR copywriter → Head of AI Copy",
     org: "Satoshi Gaming Group",
     geo: "United States",
-    body: "Started here. Daily emails, push notifications, UX writing, and ad copy for a crypto gaming platform with 1.5M+ players. Two years of writing copy that had to convert or get killed. Learned which words made money and which got cut on Monday.",
-    highlight: "1.5M+ players. Daily DR. No safety net.",
+    body: "Started here. Daily emails, push notifications, UX writing, and ad copy for a crypto gaming platform with 1.5M+ players. Grew from daily direct response into Senior Copywriter, then Head of AI Copy, building Claude Code agents for the Affiliate and VIP teams. Five years of copy that had to convert or get killed.",
+    highlight: "1.5M+ players. $96K → $674K/mo. No safety net.",
   },
   {
-    years: "2023 — 2024",
-    role: "Senior copywriter → Head of AI Copy",
+    years: "2023 — 2025",
+    role: "AI Copywriter → Head of AI Copy",
     org: "Foxelli Group",
     geo: "Netherlands",
-    body: "Stepped up to senior copy across the Foxelli portfolio, with Hooks & Needles and Mindful Souls as my primary brands. Six months in I started using Claude in production workflows. Not as a drafting tool. As part of the actual output. Got promoted to lead a 5-person copy team through the AI transition.",
+    body: "Joined as the first AI-focused copywriter across the Foxelli portfolio, with Hooks & Needles and Mindful Souls as my primary brands. Six months in I was running Claude in production, not as a drafting tool but as the actual output. Promoted to lead a 5-person copy team through the AI transition, then to take AI across the whole company.",
     highlight: "1.2% → 3.6% conv. Mindful Souls email $76K → $249K in 4 months.",
   },
   {
-    years: "2024 — 2026",
-    role: "Head of AI Strategy",
+    years: "2025 — 2026",
+    role: "Head of AI Automation/Strategy",
     org: "Foxelli Group",
     geo: "Netherlands",
-    body: "Owned AI strategy across 7 DTC brands and a $20M+ combined portfolio. Built Foxelli Studio. Built copy agents deployed company-wide. Built research systems that turned customer surveys into AI-ready brand context. Architected for 100 concurrent users.",
+    body: "Owned AI strategy across 7 DTC brands and a $20M+ combined portfolio. Built Foxelli Studio, an end-to-end AI ad production platform. Built copy agents deployed company-wide and research systems that turned customer surveys into AI-ready brand context. Architected for 100 concurrent users.",
     highlight: "Foxelli Studio shipped. 73 prod bugs resolved. 4 security audits passed.",
   },
   {

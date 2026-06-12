@@ -159,7 +159,7 @@ const tickerItems = [
   "26 production workflows · Foxelli Studio",
   "$3.16 per cinematic ad spot",
   "~60% media cost reduction via Kie.ai routing",
-  "4 Anthropic certifications verified",
+  "3 Anthropic certifications verified",
 ];
 
 export function Ticker() {
@@ -568,14 +568,14 @@ export function Credentials() {
           eyebrow="Credentials"
           title="Verified by the people who"
           accent="built the tools."
-          description="Certifications, fluency, and the receipts that back the work. Issued by Anthropic — the lab whose tools I build on every day."
+          description="Anthropic certifications, English fluency, and the receipts behind the work. The certs come from the lab whose tools I build on every day."
         />
 
         <Reveal delay={0.12}>
           <Spot className="v4-card mt-14 rounded-2xl p-8 md:p-10">
             <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
               <div className="v4-eyebrow !text-[10px]">
-                Anthropic-issued · 2025–2026
+                Verified credentials · 2025–2026
               </div>
               <div className="v4-mono-dim">4 verified · 1 in progress</div>
             </div>
