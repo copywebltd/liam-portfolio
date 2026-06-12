@@ -392,8 +392,8 @@ const principles = [
     body: "Every system in this portfolio shipped through Claude Code. Frontends, backends, agents, skills, MCP integrations, CLIs. One runtime. Most people use AI to write code. I use it to ship systems.",
   },
   {
-    title: "Humans stay in the chair.",
-    body: "AI handles 90% of the heavy lifting. The human approves every output that touches a customer. Brand voice, creative instinct, customer empathy. Those don't get automated.",
+    title: "Humans where it counts. Autonomous everywhere else.",
+    body: "Anything that touches a customer gets a human's approval, and brand voice and creative instinct stay human. Back-office systems run fully autonomous, no approval loop. The real skill is knowing which is which.",
   },
   {
     title: "Every system gets a learning loop.",
