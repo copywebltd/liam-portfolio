@@ -160,6 +160,66 @@ export const caseStudies: CaseStudy[] = [
     videoCaption: "One system, two brands. BLK & Bold + Create Wellness. 1:22.",
   },
   {
+    slug: "copyads",
+    title: "CopyAds",
+    subtitle: "A Meta Ads AIOS that reads your account and builds the next ads",
+    org: "Copyweb · Meta Ads operating system · per-brand install",
+    category: "production",
+    categoryLabel: "Shipped to production",
+    year: "2026",
+    status: "Client-installable, in production",
+    oneLiner:
+      "A custom dashboard wired into a brand's Meta Ads account through the API. Every morning it reads the whole account and writes the team a brief: what to scale, what to kill, and the next ads already built and paused.",
+    metrics: [
+      { value: "Daily", label: "Account read → brief" },
+      { value: "5", label: "Expert angles per winner" },
+      { value: "17", label: "Council scorers" },
+      { value: "Paused", label: "Every launch, until you approve" },
+    ],
+    sections: [
+      {
+        heading: "The problem",
+        body:
+          "Media buyers drown in dashboards. Meta's native UI tells you what happened, not what to do next. The work that actually moves the account — reading yesterday, deciding the next move, building the creative to test it — still lands on the team every single morning. That's the bottleneck, and it doesn't scale.",
+      },
+      {
+        heading: "The build",
+        body:
+          "A custom dashboard installed per brand, wired straight into the Meta Ads account through the Marketing API. It auto-detects each account's real conversion event (purchase, lead, subscribe — never hard-coded), so the numbers are right on day one. Every morning it reads spend, creatives, fatigue, and frequency, then writes a plain-English brief: scale the winner, kill the one that's burning, and here are fresh angles already built and paused.",
+      },
+      {
+        heading: "The Studio",
+        body:
+          "Take a winning ad. One click, and the Studio builds five new angles, each carrying a different expert framework: comparison, problem-aware, offer math, authority, stat-led. Every angle is scored by a 17-expert council grounded in direct-response canon. The real product is never redrawn — every image is composed around the brand's actual SKU, accurate to the pixel.",
+      },
+      {
+        heading: "Accuracy and safety gates",
+        body:
+          "Every claim is pulled from a certified list before it can ship. A vision gate reads the generated image itself, not just the text fields, so baked-in claims like '#1' or 'clinically proven' get caught in the pixels before anything launches. And every ad leaves the system paused. Nothing spends until the team approves it. The human stays the one who launches.",
+      },
+      {
+        heading: "Why it matters",
+        body:
+          "Andromeda-era Meta rewards on-brand, clear-angle creative at volume. The teams that win are the ones who can read the account, build the next test, and score it before lunch — without shipping slop into the auction. CopyAds gives a team that loop every morning and keeps a human on the trigger.",
+      },
+    ],
+    stack: [
+      "Claude Opus 4.7",
+      "Meta Marketing API",
+      "GPT Image 2",
+      "Nano Banana 2",
+      "17-expert council",
+      "Next.js",
+      "Supabase",
+      "Kie.ai (routing)",
+      "Vercel",
+    ],
+    builtOn:
+      "Built on Claude Code. Per-brand install reads the account daily, routes winners through the council, and writes every new ad paused for human approval.",
+    videoId: "aBdk6GShv2M",
+    videoCaption: "Full walkthrough — it reads, it builds, it scores. 1:13.",
+  },
+  {
     slug: "cinematic-ad-pipeline",
     title: "Cinematic Ad Pipeline",
     subtitle: "Single AI video ad spots, end-to-end, $3.16/spot",
