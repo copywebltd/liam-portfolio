@@ -117,7 +117,7 @@ export function V3aHero() {
               { text: "✓ foxelli-studio       LIVE   $414→$800K/mo", className: "ok" },
               { text: "✓ lfsl-pipeline        LIVE   60-min cold pack", className: "ok" },
               { text: "✓ cinematic-ad-pipeline LIVE  $3.16/spot", className: "ok" },
-              { text: "✓ skill-library        LIVE   60+ skills", className: "ok" },
+              { text: "✓ operator             LIVE   60+ skills", className: "ok" },
               { text: "○ next                 → diagnostic-build", className: "dim" },
               { text: "" },
               { text: <><span className="prompt">❯</span> liam --hire <span className="hl">_</span></> },
@@ -138,7 +138,7 @@ export function V3aHero() {
 const FEATURED = [
   caseStudies.find((c) => c.slug === "foxelli-studio")!,
   caseStudies.find((c) => c.slug === "static-ad-system")!,
-  caseStudies.find((c) => c.slug === "skill-library")!,
+  caseStudies.find((c) => c.slug === "operator")!,
   caseStudies.find((c) => c.slug === "cinematic-ad-pipeline")!,
 ];
 
