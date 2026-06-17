@@ -332,16 +332,16 @@ export const caseStudies: CaseStudy[] = [
       "Built on Claude Code. Single skill orchestrator (/cinematic-ad) chains storyboard → ad copy → image gen → video synthesis → voice clone → composite.",
   },
   {
-    slug: "skill-library",
-    title: "Skill Library",
-    subtitle: "60+ custom Claude Code skills running production work",
+    slug: "operator",
+    title: "Operator",
+    subtitle: "60+ skills, four pipelines, one deck",
     org: "Copyweb · Personal infrastructure",
     category: "meta",
     categoryLabel: "Meta-tooling",
     year: "2025 — Present",
     status: "Used daily",
     oneLiner:
-      "I don't just use AI. I build the skills that build the systems. The skills compound. So does the work.",
+      "I don't just use AI. I build the skills that build the systems, and one deck to run them all. Sixty skills, four pipelines, one council, every campaign launched and watched from a single screen.",
     metrics: [
       { value: "60+", label: "Custom skills authored" },
       { value: "9", label: "MCP servers wired" },
@@ -353,6 +353,11 @@ export const caseStudies: CaseStudy[] = [
         heading: "The thesis",
         body:
           "Don't write a script when you can write the skill that writes the script. Don't write the skill when you can write the agent that picks the right skill. The leverage compounds.",
+      },
+      {
+        heading: "The deck",
+        body:
+          "Operator is the command surface for all of it. Launch a workflow and the pipeline runs in front of you: it reads the brand, writes the sales letter, designs the pack, scores every line against the council, and runs a final quality check, with the fabrication count and the cost ticking up live. Four pipelines, one operator, one council of sixteen direct-response minds. A system that runs the work, with a human on every gate.",
       },
       {
         heading: "What's in the library",
