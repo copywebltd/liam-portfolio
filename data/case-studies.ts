@@ -220,6 +220,66 @@ export const caseStudies: CaseStudy[] = [
     videoCaption: "Full walkthrough — it reads, it builds, it scores. 1:13.",
   },
   {
+    slug: "copysite",
+    title: "CopySite",
+    subtitle: "A Landing Page AIOS: a brand URL in, a deployed page out",
+    org: "Copyweb · Landing Page operating system",
+    category: "production",
+    categoryLabel: "Shipped to production",
+    year: "2026",
+    status: "Live at copyweb.io",
+    oneLiner:
+      "Point it at a brand and it ships a production landing page: research, copy, design, deploy. copyweb.io is one it built end to end.",
+    metrics: [
+      { value: "URL → page", label: "Brand in, deployed page out" },
+      { value: "16", label: "Expert frameworks bound" },
+      { value: "99.9%", label: "Claim accuracy by design" },
+      { value: "Vercel", label: "Deploy target" },
+    ],
+    sections: [
+      {
+        heading: "The problem",
+        body:
+          "The landing page is where DTC spend converts or dies, and it usually takes weeks of back-and-forth between a copywriter, a designer, and a developer. Most AI site builders skip that and hand you a generic template that reads like every other SaaS page. Slop on the page is slop in the funnel, and the algorithm makes you pay for it.",
+      },
+      {
+        heading: "The build",
+        body:
+          "CopySite takes a brand and ships a full production landing page end to end. It researches the brand and its customer, writes the copy routed through the expert canon, designs every section, and deploys to a live URL. Each section earns its place: the problem in the customer's own words, the mechanism, proof from real results, the offer, objections handled, and a close. Not a template with the logo swapped. A page built for that one brand.",
+      },
+      {
+        heading: "Built on the accuracy moat",
+        body:
+          "Every claim on the page traces back to source. Real brand assets, never AI-invented product shots. The same source-of-truth, verification-agent, human-gate chain that runs across every Copyweb system. 99.9% accuracy by design, because a landing page that overpromises is a refund and a chargeback waiting to happen.",
+      },
+      {
+        heading: "The proof is this page",
+        body:
+          "copyweb.io is a CopySite build, shown end to end in the walkthrough above. A premium animated hero, scroll-driven sections, a 5-layer architecture explainer, real client results, founders in the open, and a close that tells you exactly where to start. Built on Next.js, deployed on Vercel.",
+      },
+      {
+        heading: "Why it matters",
+        body:
+          "The landing page is the highest-leverage surface in a funnel. CopySite produces one that reads like a craftsman wrote it, at the speed and cost of a template, with every claim provable. That is the whole Copyweb thesis on a single page.",
+      },
+    ],
+    stack: [
+      "Claude Opus 4.7",
+      "Next.js",
+      "Lenis",
+      "Motion",
+      "Tailwind",
+      "16 expert canon",
+      "Supabase",
+      "Resend",
+      "Vercel",
+    ],
+    builtOn:
+      "Built on Claude Code. Brand research → expert-routed copy → section design → Vercel deploy, one pipeline.",
+    videoId: "XqS_8s3yHtk",
+    videoCaption: "A CopySite build, start to finish: copyweb.io. 1:01.",
+  },
+  {
     slug: "cinematic-ad-pipeline",
     title: "Cinematic Ad Pipeline",
     subtitle: "Single AI video ad spots, end-to-end, $3.16/spot",
