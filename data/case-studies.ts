@@ -385,6 +385,8 @@ export const caseStudies: CaseStudy[] = [
     ],
     builtOn:
       "Built on Claude Code. The skills that build the skills.",
+    videoId: "MYCKNc7t5-o",
+    videoCaption: "The deck, live: launch a build, watch it run. 0:47.",
   },
   {
     slug: "autonomous-ops",
