@@ -332,51 +332,6 @@ export const caseStudies: CaseStudy[] = [
       "Built on Claude Code. Single skill orchestrator (/cinematic-ad) chains storyboard → ad copy → image gen → video synthesis → voice clone → composite.",
   },
   {
-    slug: "cinematic-sites-pipeline",
-    title: "Cinematic Sites Pipeline",
-    subtitle: "Transform any website into a cinematic experience, end-to-end",
-    org: "Copyweb · Production deliverable",
-    category: "production",
-    categoryLabel: "Shipped to production",
-    year: "2026",
-    status: "Live demos shipped",
-    oneLiner:
-      "Brand analysis, AI-generated 3D hero animations, cinematic module library, Vercel deploy. Four steps, one command.",
-    metrics: [
-      { value: "4 steps", label: "Brand → analyze → generate → deploy" },
-      { value: "3D", label: "AI-generated hero animations" },
-      { value: "Vercel", label: "Deploy target" },
-      { value: "~30 min", label: "Human time per site" },
-    ],
-    sections: [
-      {
-        heading: "What it does",
-        body:
-          "A skill orchestrator (/cinematic-sites) transforms any prospect's website into a cinematic experience. Four phases: brand analysis (voice, palette, hero focal point) → AI-generated 3D hero animation (Nano Banana 2 for stills + Kling 3.0 for motion) → cinematic module assembly from a curated library (parallax, scroll-driven scenes, cinematic transitions) → Vercel deploy with a live URL handed off.",
-      },
-      {
-        heading: "The visual layer",
-        body:
-          "Nano Banana 2 generates the 3D hero stills (multiple angles, multiple light setups). Kling 3.0 animates them into cinematic loops or parallax sequences. The module library handles scroll-driven scene transitions, camera moves, and reveal animations. Brand-derived palette and typography flow through every layer.",
-      },
-      {
-        heading: "Why it matters",
-        body:
-          "Cold-outreach prospects need to see what's possible before they buy. A static deck pitches services. A cinematic site is the service. The pipeline turns one prospect URL into a deployed demo in 30 minutes — every prospect gets a custom-built, cinematic experience as a hand-raiser, not a generic template.",
-      },
-    ],
-    stack: [
-      "Claude Opus 4.7",
-      "Nano Banana 2",
-      "Kling 3.0",
-      "Cinematic module library",
-      "Vercel",
-      "Next.js",
-    ],
-    builtOn:
-      "Built on Claude Code. /cinematic-sites orchestrator chains brand analysis → 3D hero generation → cinematic modules → Vercel deploy.",
-  },
-  {
     slug: "skill-library",
     title: "Skill Library",
     subtitle: "60+ custom Claude Code skills running production work",
@@ -427,90 +382,42 @@ export const caseStudies: CaseStudy[] = [
       "Built on Claude Code. The skills that build the skills.",
   },
   {
-    slug: "ad-professor",
-    title: "Ad Professor",
-    subtitle: "Strategy-first AI ad generator + competitor reverse engineering",
-    org: "Foxelli Group · Internal",
-    category: "internal",
-    categoryLabel: "Internal tool",
-    year: "2026",
-    status: "Shipped to production",
-    oneLiner:
-      "Most AI ad generators are slot machines. Mine is grounded in 99 advertising principles, cross-validated against Ogilvy.",
-    metrics: [
-      { value: "99", label: "Ad principles bound" },
-      { value: "28", label: "n8n nodes" },
-      { value: "4,450", label: "Lines of code" },
-      { value: "$0.40", label: "Per full cycle" },
-    ],
-    sections: [
-      {
-        heading: "Strategy-first generation",
-        body:
-          "Every ad is grounded in a named advertising principle from a library of 99 (@The_AdProfessor) and cross-validated against David Ogilvy's 24 lessons + 38 rules. Claude Sonnet generates 3 concepts per batch, each with a different principle, clever idea, headline, image prompt, and complete Facebook ad copy.",
-      },
-      {
-        heading: "Competitor reverse engineering",
-        body:
-          "Upload a winning competitor ad and the system explains why it works (Ogilvy analysis across 10 dimensions), extracts its exact spatial layout as a JSON spec, then rebuilds it for your brand while preserving the winning formula and swapping all content.",
-      },
-      {
-        heading: "Layout zone system",
-        body:
-          "Solved the problem of image AIs ignoring spatial instructions. Each layout zone's position and size gets converted to natural language. Zones sorted top-to-bottom for natural reading order. Client-side canvas logo compositor for pixel-perfect brand placement.",
-      },
-    ],
-    stack: ["React 18", "n8n Cloud", "Claude Sonnet", "Nano Banana 2", "Kling 3.0", "Sora 2 Pro", "Airtable", "Python"],
-    builtOn:
-      "Built on Claude Code. Custom Ogilvy-grounded scoring skills, n8n MCP for orchestration.",
-  },
-  {
-    slug: "ai-agent-team",
-    title: "Agent Quintet",
-    subtitle: "Five autonomous agents running B2B operations on cron",
+    slug: "autonomous-ops",
+    title: "Autonomous Ops",
+    subtitle: "A pipeline dashboard plus five agents that run the business on cron",
     org: "Copyweb · Internal operations",
-    category: "production",
-    categoryLabel: "In production",
+    category: "internal",
+    categoryLabel: "Internal ops",
     year: "2026",
     status: "Running daily",
     oneLiner:
-      "I got tired of running my own ops manually. So I built five agents who run them for me. They don't get tired. They don't forget.",
+      "I got tired of running my own ops by hand, so I built the system that runs them. A real-time pipeline dashboard, and five specialized agents that prospect, write, sell, deliver, and brief me on cron.",
     metrics: [
       { value: "5", label: "Specialized agents" },
+      { value: "11", label: "Pipeline stages tracked" },
       { value: "4", label: "Daily cron triggers" },
-      { value: "3-layer", label: "Memory system" },
       { value: "Telegram", label: "Command center" },
     ],
     sections: [
       {
-        heading: "Scout — recon specialist",
+        heading: "Mission Control — the dashboard",
         body:
-          "Daily B2B prospecting with weighted ICP scoring rubric (Team Size 25%, AI Readiness 25%, Budget 20%, DM Access 15%, Pain Signals 15%). Auto-enriches via Apollo.io + Hunter.io. Tracks pipeline across 11 stages with 14-day stale-lead auto-flagging.",
+          "A real-time view of every prospect, deliverable, and stage in the business. Pipeline across 11 stages, 14-day stale-lead auto-flagging, and Telegram pings when something needs attention. It cross-references Airtable, Supabase, and n8n executions into a single pane of glass. Standard Next.js + Supabase + n8n, the same materials I use for client builds.",
       },
       {
-        heading: "Wordsmith — content engine",
+        heading: "The Agent Quintet — the workforce",
         body:
-          "Weekly LinkedIn/X content batches using Hook-Retain-Reward structure. Enforces 3:1 value ratio. Rotates content types. Monitors engagement signals and flags ICP decision-maker interactions.",
+          "Five agents run on cron with a shared 3-layer memory. Scout prospects daily against a weighted ICP rubric and enriches via Apollo and Hunter. Wordsmith batches LinkedIn and X content on a 3:1 value ratio. Closer drafts outreach, follow-ups, and proposals in the client's own language. Architect runs a 6-phase delivery engine and produces 90% complete first drafts. Command Center syncs at 5:30 AM, briefs at 7, pulses at noon, and wraps at 8, all over Telegram.",
       },
       {
-        heading: "Closer — sales operations",
+        heading: "Why it matters",
         body:
-          "Complete sales workflow from A-C-A outreach drafting through 3-touch follow-up sequences to proposal generation. Pre-call SPIN question briefs. Post-call proposals using client's own language from interviews.",
-      },
-      {
-        heading: "Architect — client delivery",
-        body:
-          "6-phase delivery engine: pre-diagnostic research, interview prep, transcription processing, scorecard generation, blueprint presentation, evolution monitoring. Generates 90% complete first drafts of all client deliverables.",
-      },
-      {
-        heading: "Command Center — orchestrator",
-        body:
-          "5:30 AM data sync, 7 AM morning brief, 12 PM midday pulse, 8 PM evening wrap, all via Telegram. Cross-agent coordination. Voice note routing with transcription. Auto-escalates overdue tasks.",
+          "A one-person operation moves at the velocity of a team only if the boring, repeatable work runs itself. The dashboard tells me what needs attention; the agents handle what doesn't. They don't get tired and they don't forget.",
       },
     ],
-    stack: ["Claude Code", "SKILL.md architecture", "Cron scheduling", "Telegram", "Apollo.io", "Hunter.io", "Supabase"],
+    stack: ["Claude Code", "SKILL.md architecture", "Cron scheduling", "Next.js", "Supabase", "n8n", "Telegram", "Apollo.io", "Hunter.io"],
     builtOn:
-      "Built on Claude Code. All five agents are skill bundles running on cron with shared 3-layer memory.",
+      "Built on Claude Code. A Next.js + Supabase ops dashboard plus five skill-bundle agents on cron with shared 3-layer memory.",
   },
   {
     slug: "creative-content-engine",
@@ -549,72 +456,6 @@ export const caseStudies: CaseStudy[] = [
     stack: ["Python", "Claude Code", "Google AI Studio", "Kie AI", "WaveSpeed AI", "Gemini 2.0 Flash", "Airtable", "Blotato", "Modal.com"],
     builtOn:
       "Built on Claude Code. ART framework with declarative workflows, Modal.com for serverless cron.",
-  },
-  {
-    slug: "copyweb-v2",
-    title: "copyweb.io",
-    subtitle: "Production marketing site, end-to-end self-built",
-    org: "Copyweb",
-    category: "production",
-    categoryLabel: "Live in production",
-    year: "2026",
-    status: "Live at copyweb.io",
-    oneLiner:
-      "Most 'founder portfolios' are Squarespace. Mine is the same Next.js + Supabase + Vercel + Resend stack I'd build for a paying client.",
-    metrics: [
-      { value: "Next.js 15", label: "App Router" },
-      { value: "Supabase", label: "Postgres + RLS" },
-      { value: "Resend", label: "Transactional email" },
-      { value: "Telegram", label: "Pipeline pings" },
-    ],
-    sections: [
-      {
-        heading: "What it does",
-        body:
-          "Expert Council positioning. 3-step offer (Audit / Build / Train). Live application form at /apply that writes to Supabase, sends a Resend email to liam@copyweb.io, and pings me on Telegram in real time. Full v2 redesign on the v2-redesign branch.",
-      },
-      {
-        heading: "Why it matters",
-        body:
-          "I should be able to dogfood my own offer. Every component, every migration, every API route shipped through Claude Code. The site is the credibility artifact.",
-      },
-    ],
-    stack: ["Next.js 15", "TypeScript", "Tailwind v4", "Supabase", "Resend", "Telegram API", "Vercel"],
-    builtOn:
-      "Built on Claude Code. Every component, every migration, every API route shipped through the runtime.",
-  },
-  {
-    slug: "mission-control",
-    title: "Mission Control",
-    subtitle: "Internal pipeline ops dashboard",
-    org: "Copyweb · Internal",
-    category: "internal",
-    categoryLabel: "Internal tool",
-    year: "2026",
-    status: "Phase 4 complete, running daily",
-    oneLiner:
-      "Real-time view of every prospect, deliverable, and stage in my business. Telegram pings when something needs attention.",
-    metrics: [
-      { value: "11", label: "Pipeline stages tracked" },
-      { value: "4", label: "Daily sync cron jobs" },
-      { value: "Real-time", label: "Telegram alerts" },
-      { value: "Phase 4", label: "Complete" },
-    ],
-    sections: [
-      {
-        heading: "What it does",
-        body:
-          "Pipeline view across 11 prospect stages. 14-day stale-lead auto-flagging. Pipeline-state Telegram pings. Cross-references Airtable + Supabase + n8n executions. Used as the single pane of glass for my outbound and delivery work.",
-      },
-      {
-        heading: "Stack",
-        body:
-          "Standard Next.js + Supabase + n8n. Same materials I use for client builds. Predictable, supportable, fast.",
-      },
-    ],
-    stack: ["Next.js", "Supabase", "n8n", "Telegram", "Apollo.io"],
-    builtOn:
-      "Built on Claude Code. Full-stack Next.js + Supabase ops dashboard, zero hand-rolled boilerplate.",
   },
   {
     slug: "copywriting-intelligence-layer",
