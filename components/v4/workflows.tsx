@@ -132,20 +132,18 @@ function Card({ wf }: { wf: Workflow }) {
         </span>
       </div>
 
-      {/* the pain — the hook */}
-      <p className="text-[17px] md:text-[19px] leading-[1.4] font-medium text-[var(--v4-text)] tracking-[-0.01em]">
+      {/* clear name — leads, so you know what it is at a glance */}
+      <h3 className="text-[20px] md:text-[22px] font-medium tracking-[-0.02em] leading-snug text-[var(--v4-text)]">
+        {wf.title}
+      </h3>
+
+      {/* the problem it kills — the hook */}
+      <p className="mt-2.5 text-[14.5px] leading-[1.55] text-[var(--v4-text-2)]">
         “{wf.problem}”
       </p>
 
-      {/* the fix */}
-      <div className="mt-4 flex items-baseline gap-2.5">
-        <span className="text-[var(--v4-amber)] text-[13px]">→</span>
-        <span className="v4-serif text-[var(--v4-amber-hi)] text-[18px]">
-          {wf.title}
-        </span>
-      </div>
-
-      <p className="mt-3 text-[14px] leading-[1.75] text-[var(--v4-text-2)] max-w-[68ch]">
+      {/* what it does */}
+      <p className="mt-3.5 text-[13.5px] leading-[1.7] text-[var(--v4-text-3)] max-w-[68ch]">
         {wf.purpose}
       </p>
 

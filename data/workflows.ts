@@ -50,7 +50,7 @@ export const workflows: Workflow[] = [
     categoryLabel: "Sales",
     problem:
       "Leads sit for hours before anyone replies. The hot ones go cold.",
-    title: "Every lead answered in seconds",
+    title: "Lead response and qualification",
     purpose:
       "A lead fills in the website form. In one second, AI reads it, decides how hot it is, and either texts them back instantly or starts a nurture email, then saves them to the CRM and pings the sales team. No lead ever waits.",
     systems: ["WordPress", "OpenAI", "WhatsApp", "Mailchimp", "HubSpot", "Slack"],
@@ -78,7 +78,7 @@ export const workflows: Workflow[] = [
     categoryLabel: "Support",
     problem:
       "The support inbox overflows with the same questions, and replies are slow.",
-    title: "An AI front desk for support",
+    title: "Support triage assistant",
     purpose:
       "Every incoming message gets sorted by topic and urgency, then AI drafts a reply using only your help-centre articles. If it's confident and simple, it sends and closes the ticket. If not, it hands the draft to a human to approve first, so nothing risky goes out alone.",
     systems: ["Gmail", "Zendesk", "Claude", "Slack"],
@@ -106,7 +106,7 @@ export const workflows: Workflow[] = [
     categoryLabel: "Support",
     problem:
       "Your community needs watching around the clock for spam and rule-breakers.",
-    title: "A moderator that never sleeps",
+    title: "Community moderation",
     purpose:
       "Every new post is checked against your community rules. Clean posts pass instantly; anything borderline (spam, self-promo, abuse) gets sent to a human with the reason attached. The bot flags, it never bans on its own, and every decision is logged.",
     systems: ["Facebook Groups", "OpenAI", "Slack", "Google Sheets"],
@@ -133,7 +133,7 @@ export const workflows: Workflow[] = [
     categoryLabel: "Research",
     problem:
       "Teams write copy and make decisions on gut feel instead of what customers actually say.",
-    title: "Customer research, in under a second",
+    title: "Customer research engine",
     purpose:
       "Type in one brand, and it listens to what real customers are saying about it in nine different places: Reddit, Amazon reviews, TikTok, competitor Facebook ads, and more. Then it checks it gathered enough, and notes exactly where every quote came from, all before anyone writes a single word.",
     systems: ["Apify", "Jina", "Supabase"],
@@ -167,7 +167,7 @@ export const workflows: Workflow[] = [
     category: "ops",
     categoryLabel: "Operations",
     problem: "A sale closes and six teams scramble to do their bit by hand.",
-    title: "When a sale closes, the whole company reacts",
+    title: "New-customer onboarding cascade",
     purpose:
       "The moment a sale is marked “won,” six teams spring into action at the same time: the invoice goes out, onboarding tasks are created, the customer's account is set up, welcome emails start, and leadership gets a heads-up, all without anyone lifting a finger.",
     systems: ["GoHighLevel", "Stripe", "Notion", "Intercom", "Klaviyo", "Slack"],
@@ -198,7 +198,7 @@ export const workflows: Workflow[] = [
     categoryLabel: "HR",
     problem:
       "New hires flood HR with questions already answered in the handbook.",
-    title: "A help-desk bot for new hires",
+    title: "HR handbook assistant",
     purpose:
       "A new hire asks a question in Slack. The bot looks it up in the employee handbook, answers only from what it actually found (and links the page), and if it isn't sure, it quietly hands the question to a real person. It never makes anything up.",
     systems: ["Slack", "Claude", "Handbook search"],
@@ -224,7 +224,7 @@ export const workflows: Workflow[] = [
     category: "finance",
     categoryLabel: "Finance",
     problem: "Someone chases unpaid invoices by hand every single week.",
-    title: "Invoices that chase themselves",
+    title: "Overdue invoice chaser",
     purpose:
       "Every morning it pulls your overdue invoices, picks the right tone for each based on how late it is (a gentle nudge, a firm reminder, or a final notice), sends them all, and flags the worst offenders to a human. The money gets chased while you sleep.",
     systems: ["Stripe", "QuickBooks", "Gmail", "Slack", "Google Sheets"],
@@ -244,7 +244,7 @@ export const workflows: Workflow[] = [
     category: "finance",
     categoryLabel: "Finance",
     problem: "Receipts pile up and get typed into the books one by one.",
-    title: "Receipts that file themselves",
+    title: "Receipt bookkeeping",
     purpose:
       "A receipt lands in the inbox. AI reads the photo or PDF (vendor, amount, category), checks it isn't a duplicate and fits policy, then posts it straight to the books. Anything odd gets flagged to a human. The shoebox of receipts disappears.",
     systems: ["Gmail", "OpenAI", "QuickBooks", "Google Sheets", "Slack"],
@@ -270,7 +270,7 @@ export const workflows: Workflow[] = [
     category: "ops",
     categoryLabel: "Operations",
     problem: "Meeting decisions get made, then never turn into tracked tasks.",
-    title: "Meetings that turn into action",
+    title: "Meeting notes to tasks",
     purpose:
       "When a meeting ends, AI reads the transcript, pulls out every action item with its owner and due date, creates the tasks, messages each person their part, and posts a clean recap. Nothing said in the room gets forgotten.",
     systems: ["Zoom", "Claude", "Asana", "Slack"],
@@ -290,7 +290,7 @@ export const workflows: Workflow[] = [
     category: "marketing",
     categoryLabel: "Marketing",
     problem: "One blog post should become ten pieces of content, but never does.",
-    title: "One post becomes ten",
+    title: "Content repurposing",
     purpose:
       "Publish a blog post and it instantly becomes a LinkedIn post, an X thread, a newsletter blurb, an Instagram caption and a short-video script, all in your brand voice, then gets scheduled and saved to your content calendar. One piece of work, a week of content.",
     systems: ["WordPress", "OpenAI", "Buffer", "Notion"],
@@ -319,7 +319,7 @@ export const workflows: Workflow[] = [
     category: "sales",
     categoryLabel: "Sales",
     problem: "Reps walk into calls cold, with no idea who they're talking to.",
-    title: "Every call, fully briefed",
+    title: "Pre-call prep briefs",
     purpose:
       "Thirty minutes before a meeting, it looks up who you're talking to (their role, their company, recent news), pulls your past history with them from the CRM, and writes a one-page brief with talking points and smart questions. You walk in knowing exactly what to say.",
     systems: ["Google Calendar", "Apollo", "HubSpot", "Claude", "Slack"],
@@ -345,7 +345,7 @@ export const workflows: Workflow[] = [
     category: "hr",
     categoryLabel: "HR",
     problem: "Someone leaves and nobody's sure every account actually got shut off.",
-    title: "Offboarding that closes every door",
+    title: "Employee offboarding",
     purpose:
       "On an employee's last day, it revokes every login at once (email, Slack, single sign-on across all apps), reassigns their open tasks, stops payroll, then posts a confirmed audit checklist to IT and the manager. No forgotten account left open.",
     systems: ["BambooHR", "Google Workspace", "Slack", "Okta", "Asana"],
@@ -373,7 +373,7 @@ export const workflows: Workflow[] = [
     category: "data",
     categoryLabel: "Data",
     problem: "Nobody knows the real numbers without half a day of stitching spreadsheets.",
-    title: "The numbers, every morning, in one place",
+    title: "Daily KPI brief",
     purpose:
       "At 7am it pulls yesterday's sales, ad spend, website traffic and pipeline from four different tools, compares them to the day before, and writes a plain-English brief (revenue, ROAS, what changed, what to watch), then posts it to leadership. No more half-day of stitching.",
     systems: ["Stripe", "Meta Ads", "Google Analytics", "HubSpot", "Claude", "Slack"],
