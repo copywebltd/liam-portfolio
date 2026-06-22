@@ -11,6 +11,7 @@ export const GITHUB = "https://github.com/copywebltd";
 
 export const SECTIONS = [
   { id: "systems", label: "Systems" },
+  { id: "workflows", label: "Workflows" },
   { id: "receipts", label: "Receipts" },
   { id: "arc", label: "The arc" },
   { id: "principles", label: "How I work" },

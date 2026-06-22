@@ -19,6 +19,7 @@ import {
   Ticker,
 } from "@/components/v4/sections";
 import { Systems } from "@/components/v4/systems";
+import { Workflows } from "@/components/v4/workflows";
 
 const instrument = Instrument_Serif({
   subsets: ["latin"],
@@ -46,6 +47,7 @@ export default function Home() {
         <Ticker />
         <RecruiterCard />
         <Systems />
+        <Workflows />
         <Receipts />
         <Arc />
         <Principles />
