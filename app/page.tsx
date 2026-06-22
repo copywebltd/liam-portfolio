@@ -21,6 +21,7 @@ import {
 import { Systems } from "@/components/v4/systems";
 import { Workflows } from "@/components/v4/workflows";
 import { JumpMap } from "@/components/v4/jumpmap";
+import { Showcase } from "@/components/v4/showcase";
 
 const instrument = Instrument_Serif({
   subsets: ["latin"],
@@ -50,6 +51,7 @@ export default function Home() {
         <RecruiterCard />
         <Systems />
         <Workflows />
+        <Showcase />
         <Receipts />
         <Arc />
         <Principles />

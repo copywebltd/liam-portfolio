@@ -13,6 +13,7 @@ import {
 import { Systems } from "@/components/v4/systems";
 import { Workflows } from "@/components/v4/workflows";
 import { JumpMap } from "@/components/v4/jumpmap";
+import { Showcase } from "@/components/v4/showcase";
 
 export default function V4Page() {
   return (
@@ -26,6 +27,7 @@ export default function V4Page() {
       <RecruiterCard />
       <Systems />
       <Workflows />
+      <Showcase />
       <Receipts />
       <Arc />
       <Principles />
