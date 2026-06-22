@@ -101,21 +101,31 @@ export function Hero() {
           <div className="mt-11 flex flex-wrap items-center gap-4">
             <Magnetic>
               <a href="#systems" className="v4-btn v4-btn-primary">
-                See the work
+                The systems
                 <span aria-hidden>↓</span>
               </a>
             </Magnetic>
             <Magnetic>
-              <a href={`mailto:${EMAIL}`} className="v4-btn v4-btn-ghost">
-                Email me
+              <a href="#workflows" className="v4-btn v4-btn-ghost">
+                Live workflows
+                <span aria-hidden>↓</span>
               </a>
             </Magnetic>
-            <button
-              onClick={openPalette}
-              className="hidden md:inline-flex items-center gap-2.5 text-[13px] text-[var(--v4-text-3)] hover:text-[var(--v4-text-2)] transition-colors ml-1"
-            >
-              or press <span className="v4-kbd">⌘K</span> to navigate
-            </button>
+            <div className="hidden md:flex items-center gap-3 ml-1 text-[13px] text-[var(--v4-text-3)]">
+              <a
+                href={`mailto:${EMAIL}`}
+                className="hover:text-[var(--v4-text)] transition-colors"
+              >
+                Email me
+              </a>
+              <span className="text-[var(--v4-border-strong)]">·</span>
+              <button
+                onClick={openPalette}
+                className="inline-flex items-center gap-2 hover:text-[var(--v4-text-2)] transition-colors"
+              >
+                press <span className="v4-kbd">⌘K</span>
+              </button>
+            </div>
           </div>
         </Reveal>
 
