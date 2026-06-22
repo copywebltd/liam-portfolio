@@ -58,9 +58,9 @@ export function Workflows() {
         <SectionHeading
           index="01.5"
           eyebrow="Live workflows"
-          title="Cross-department automations, wired from"
-          accent="real APIs."
-          description="Not screenshots of an idea — running n8n workflows that take the tools a business already pays for (Klaviyo, Stripe, Meta, GoHighLevel, Slack) and turn the seams between departments into one orchestrated system. Each one below was executed and verified."
+          title="The tools a business already pays for,"
+          accent="working together."
+          description="These are real automations I built and ran in n8n (a tool for wiring apps together). Each one takes software a company already uses — Slack, Stripe, Klaviyo, Meta — and makes different teams' work happen on its own, instead of someone doing it by hand. Every one below has been run and checked."
         />
 
         <div className="mt-16 space-y-6">
@@ -109,7 +109,7 @@ export function Workflows() {
                   {/* diagram */}
                   <div className="min-w-0 lg:border-l lg:border-[var(--v4-border)] lg:pl-12">
                     <div className="v4-mono-dim !text-[9.5px] mb-4">
-                      n8n · {wf.stages.reduce((n, s) => n + s.nodes.length, 0)} nodes
+                      n8n · {wf.stages.reduce((n, s) => n + s.nodes.length, 0)} steps
                     </div>
                     <Rail stages={wf.stages} />
                   </div>
@@ -121,9 +121,9 @@ export function Workflows() {
 
         <Reveal delay={0.1}>
           <p className="mt-10 max-w-2xl font-mono text-[11.5px] leading-relaxed text-[var(--v4-text-3)]">
-            Built and verified on a live self-hosted n8n instance. Diagrams mirror
-            the real graphs; the cached demo data keeps them runnable end-to-end
-            without touching a client&apos;s systems.
+            Built and tested on my own live n8n setup. The diagrams match the real
+            thing, and they run on saved sample data so nothing ever touches a real
+            customer&apos;s accounts.
           </p>
         </Reveal>
       </div>
