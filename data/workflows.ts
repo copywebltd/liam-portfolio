@@ -3,28 +3,139 @@ export type WfKind = "trigger" | "code" | "merge" | "gate" | "ai" | "sink";
 export type WfNode = { label: string; sub?: string; kind?: WfKind };
 export type WfStage = { nodes: WfNode[]; parallelLabel?: string };
 
+export type WfCategory =
+  | "sales"
+  | "support"
+  | "research"
+  | "hr"
+  | "ops"
+  | "finance"
+  | "marketing";
+
 export type Workflow = {
   id: string;
   index: string;
+  category: WfCategory;
+  categoryLabel: string;
+  /** the painful, boring problem in the business's own words — the hook */
+  problem: string;
+  /** the named outcome */
   title: string;
-  department: string;
+  /** plain-English description of what it does */
   purpose: string;
+  /** popular, recognizable tools it connects */
   systems: string[];
   /** verified live-execution stat, from a real run */
   stat: string;
   stages: WfStage[];
 };
 
+export const categoryOrder: { id: WfCategory; label: string }[] = [
+  { id: "sales", label: "Sales" },
+  { id: "support", label: "Support" },
+  { id: "research", label: "Research" },
+  { id: "hr", label: "HR" },
+  { id: "ops", label: "Operations" },
+  { id: "finance", label: "Finance" },
+  { id: "marketing", label: "Marketing" },
+];
+
 export const workflows: Workflow[] = [
   {
-    id: "customer-research-engine",
+    id: "instant-lead-response",
     index: "W-01",
-    title: "Customer Research Engine",
-    department: "For a research / marketing team",
+    category: "sales",
+    categoryLabel: "Sales",
+    problem:
+      "Leads sit for hours before anyone replies — and the hot ones go cold.",
+    title: "Every lead answered in seconds",
+    purpose:
+      "A lead fills in the website form. In one second, AI reads it, decides how hot it is, and either texts them back instantly or starts a nurture email — then saves them to the CRM and pings the sales team. No lead ever waits.",
+    systems: ["WordPress", "OpenAI", "WhatsApp", "Mailchimp", "HubSpot", "Slack"],
+    stat: "hot lead · replied in seconds · saved · 0.25s",
+    stages: [
+      { nodes: [{ label: "New website lead", sub: "WordPress", kind: "trigger" }] },
+      { nodes: [{ label: "Read the lead", kind: "code" }] },
+      { nodes: [{ label: "Score & qualify", sub: "AI", kind: "ai" }] },
+      { nodes: [{ label: "Is it a hot lead?", kind: "gate" }] },
+      {
+        parallelLabel: "reply now, or nurture",
+        nodes: [
+          { label: "Text back in seconds", sub: "WhatsApp", kind: "code" },
+          { label: "Add to email nurture", sub: "Mailchimp", kind: "code" },
+        ],
+      },
+      { nodes: [{ label: "Save to the CRM", sub: "HubSpot", kind: "merge" }] },
+      { nodes: [{ label: "Tell the sales team", sub: "Slack", kind: "sink" }] },
+    ],
+  },
+  {
+    id: "support-triage",
+    index: "W-02",
+    category: "support",
+    categoryLabel: "Support",
+    problem:
+      "The support inbox overflows with the same questions, and replies are slow.",
+    title: "An AI front desk for support",
+    purpose:
+      "Every incoming message gets sorted by topic and urgency, then AI drafts a reply using only your help-centre articles. If it's confident and simple, it sends and closes the ticket. If not, it hands the draft to a human to approve first — so nothing risky goes out alone.",
+    systems: ["Gmail", "Zendesk", "Claude", "Slack"],
+    stat: "auto-resolved · 2 sources cited · 0.21s",
+    stages: [
+      { nodes: [{ label: "New support message", sub: "Gmail", kind: "trigger" }] },
+      { nodes: [{ label: "Read the message", kind: "code" }] },
+      { nodes: [{ label: "Sort it + flag urgency", sub: "AI", kind: "ai" }] },
+      { nodes: [{ label: "Draft a grounded reply", sub: "AI", kind: "ai" }] },
+      { nodes: [{ label: "Safe to auto-send?", kind: "gate" }] },
+      {
+        parallelLabel: "send, or get approval",
+        nodes: [
+          { label: "Send the reply", sub: "Zendesk", kind: "code" },
+          { label: "Agent approves first", sub: "Slack", kind: "sink" },
+        ],
+      },
+      { nodes: [{ label: "Tag + close", sub: "Zendesk", kind: "sink" }] },
+    ],
+  },
+  {
+    id: "community-moderation",
+    index: "W-03",
+    category: "support",
+    categoryLabel: "Support",
+    problem:
+      "Your community needs watching around the clock for spam and rule-breakers.",
+    title: "A moderator that never sleeps",
+    purpose:
+      "Every new post is checked against your community rules. Clean posts pass instantly; anything borderline — spam, self-promo, abuse — gets sent to a human with the reason attached. The bot flags, it never bans on its own, and every decision is logged.",
+    systems: ["Facebook Groups", "OpenAI", "Slack", "Google Sheets"],
+    stat: "flagged · sent to a human · logged · 0.24s",
+    stages: [
+      { nodes: [{ label: "New community post", sub: "Facebook", kind: "trigger" }] },
+      { nodes: [{ label: "Read the post", kind: "code" }] },
+      { nodes: [{ label: "Check against the rules", sub: "AI", kind: "ai" }] },
+      { nodes: [{ label: "Is it clearly fine?", kind: "gate" }] },
+      {
+        parallelLabel: "approve, or ask a human",
+        nodes: [
+          { label: "Approve automatically", kind: "code" },
+          { label: "Send to a moderator", sub: "Slack", kind: "sink" },
+        ],
+      },
+      { nodes: [{ label: "Log the decision", sub: "Sheets", kind: "sink" }] },
+    ],
+  },
+  {
+    id: "customer-research-engine",
+    index: "W-04",
+    category: "research",
+    categoryLabel: "Research",
+    problem:
+      "Teams write copy and make decisions on gut feel instead of what customers actually say.",
+    title: "Customer research, in under a second",
     purpose:
       "Type in one brand, and it listens to what real customers are saying about it in nine different places — Reddit, Amazon reviews, TikTok, competitor Facebook ads, and more. Then it checks it gathered enough, and notes exactly where every quote came from, all before anyone writes a single word.",
     systems: ["Apify", "Jina", "Supabase"],
-    stat: "9 sources · 24 customer findings · checks passed · 0.4s",
+    stat: "9 sources · 24 findings · checks passed · 0.4s",
     stages: [
       { nodes: [{ label: "Start", kind: "trigger" }] },
       { nodes: [{ label: "The brand to research", sub: "your input", kind: "code" }] },
@@ -50,11 +161,13 @@ export const workflows: Workflow[] = [
   },
   {
     id: "deal-won-cascade",
-    index: "W-02",
+    index: "W-05",
+    category: "ops",
+    categoryLabel: "Operations",
+    problem: "A sale closes and six teams scramble to do their bit by hand.",
     title: "When a sale closes, the whole company reacts",
-    department: "For sales, finance, ops, support, marketing & leadership",
     purpose:
-      "The moment a sale is marked “won,” six teams spring into action at the same time — the invoice goes out, onboarding tasks are created, the customer’s account is set up, welcome emails start, and leadership gets a heads-up — all without anyone lifting a finger.",
+      "The moment a sale is marked “won,” six teams spring into action at the same time — the invoice goes out, onboarding tasks are created, the customer's account is set up, welcome emails start, and leadership gets a heads-up — all without anyone lifting a finger.",
     systems: ["GoHighLevel", "Stripe", "Notion", "Intercom", "Klaviyo", "Slack"],
     stat: "6 teams · 6 tools · all done · 0.25s",
     stages: [
@@ -78,12 +191,15 @@ export const workflows: Workflow[] = [
   },
   {
     id: "hr-onboarding-assistant",
-    index: "W-03",
+    index: "W-06",
+    category: "hr",
+    categoryLabel: "HR",
+    problem:
+      "New hires flood HR with questions already answered in the handbook.",
     title: "A help-desk bot for new hires",
-    department: "For an HR / people team",
     purpose:
-      "A new hire asks a question in Slack. The bot looks it up in the employee handbook, answers only from what it actually found (and links the page), and if it isn’t sure, it quietly hands the question to a real person. It never makes anything up.",
-    systems: ["Slack", "Claude AI", "Handbook search"],
+      "A new hire asks a question in Slack. The bot looks it up in the employee handbook, answers only from what it actually found (and links the page), and if it isn't sure, it quietly hands the question to a real person. It never makes anything up.",
+    systems: ["Slack", "Claude", "Handbook search"],
     stat: "answered from the handbook · 91% sure · with a source · 0.23s",
     stages: [
       { nodes: [{ label: "New hire asks a question", sub: "in Slack", kind: "trigger" }] },
