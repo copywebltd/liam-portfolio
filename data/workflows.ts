@@ -10,7 +10,8 @@ export type WfCategory =
   | "hr"
   | "ops"
   | "finance"
-  | "marketing";
+  | "marketing"
+  | "data";
 
 export type Workflow = {
   id: string;
@@ -38,6 +39,7 @@ export const categoryOrder: { id: WfCategory; label: string }[] = [
   { id: "ops", label: "Operations" },
   { id: "finance", label: "Finance" },
   { id: "marketing", label: "Marketing" },
+  { id: "data", label: "Data" },
 ];
 
 export const workflows: Workflow[] = [
@@ -309,6 +311,88 @@ export const workflows: Workflow[] = [
       { nodes: [{ label: "Collect all five", kind: "merge" }] },
       { nodes: [{ label: "Schedule them all", sub: "Buffer", kind: "code" }] },
       { nodes: [{ label: "Save the drafts", sub: "Notion", kind: "sink" }] },
+    ],
+  },
+  {
+    id: "pre-call-prep-brief",
+    index: "W-11",
+    category: "sales",
+    categoryLabel: "Sales",
+    problem: "Reps walk into calls cold, with no idea who they're talking to.",
+    title: "Every call, fully briefed",
+    purpose:
+      "Thirty minutes before a meeting, it looks up who you're talking to — their role, their company, recent news — pulls your past history with them from the CRM, and writes a one-page brief with talking points and smart questions. You walk in knowing exactly what to say.",
+    systems: ["Google Calendar", "Apollo", "HubSpot", "Claude", "Slack"],
+    stat: "company + history + questions · briefed in seconds · 0.25s",
+    stages: [
+      { nodes: [{ label: "A call is coming up", sub: "Calendar", kind: "trigger" }] },
+      { nodes: [{ label: "Read the calendar event", kind: "code" }] },
+      {
+        parallelLabel: "research them",
+        nodes: [
+          { label: "Look them up", sub: "Apollo", kind: "code" },
+          { label: "Pull CRM history", sub: "HubSpot", kind: "code" },
+        ],
+      },
+      { nodes: [{ label: "Bring it together", kind: "merge" }] },
+      { nodes: [{ label: "Write the prep brief", sub: "Claude", kind: "ai" }] },
+      { nodes: [{ label: "Send it to the rep", sub: "Slack", kind: "sink" }] },
+    ],
+  },
+  {
+    id: "employee-offboarding",
+    index: "W-12",
+    category: "hr",
+    categoryLabel: "HR",
+    problem: "Someone leaves and nobody's sure every account actually got shut off.",
+    title: "Offboarding that closes every door",
+    purpose:
+      "On an employee's last day, it revokes every login at once — email, Slack, single sign-on across all apps — reassigns their open tasks, stops payroll, then posts a confirmed audit checklist to IT and the manager. No forgotten account left open.",
+    systems: ["BambooHR", "Google Workspace", "Slack", "Okta", "Asana"],
+    stat: "5 systems closed · audit logged · 0.25s",
+    stages: [
+      { nodes: [{ label: "An employee's last day", sub: "HRIS", kind: "trigger" }] },
+      { nodes: [{ label: "Read who's leaving", kind: "code" }] },
+      {
+        parallelLabel: "shut it all down at once",
+        nodes: [
+          { label: "Revoke Google Workspace", sub: "Google", kind: "code" },
+          { label: "Remove from Slack", sub: "Slack", kind: "code" },
+          { label: "Revoke app logins", sub: "Okta SSO", kind: "code" },
+          { label: "Reassign their tasks", sub: "Asana", kind: "code" },
+          { label: "Stop payroll", sub: "Payroll", kind: "code" },
+        ],
+      },
+      { nodes: [{ label: "Collect every step", kind: "merge" }] },
+      { nodes: [{ label: "Confirm + notify IT", sub: "Slack", kind: "sink" }] },
+    ],
+  },
+  {
+    id: "daily-kpi-brief",
+    index: "W-13",
+    category: "data",
+    categoryLabel: "Data",
+    problem: "Nobody knows the real numbers without half a day of stitching spreadsheets.",
+    title: "The numbers, every morning, in one place",
+    purpose:
+      "At 7am it pulls yesterday's sales, ad spend, website traffic and pipeline from four different tools, compares them to the day before, and writes a plain-English brief — revenue, ROAS, what changed, what to watch — then posts it to leadership. No more half-day of stitching.",
+    systems: ["Stripe", "Meta Ads", "Google Analytics", "HubSpot", "Claude", "Slack"],
+    stat: "4 sources · 1 morning brief · 0.25s",
+    stages: [
+      { nodes: [{ label: "Every morning at 7am", sub: "scheduler", kind: "trigger" }] },
+      {
+        parallelLabel: "pull every source",
+        nodes: [
+          { label: "Yesterday's sales", sub: "Stripe", kind: "code" },
+          { label: "Ad spend", sub: "Meta Ads", kind: "code" },
+          { label: "Website traffic", sub: "GA4", kind: "code" },
+          { label: "Sales pipeline", sub: "HubSpot", kind: "code" },
+        ],
+      },
+      { nodes: [{ label: "Stitch it together", kind: "merge" }] },
+      { nodes: [{ label: "Compare to yesterday", kind: "code" }] },
+      { nodes: [{ label: "Write the brief", sub: "Claude", kind: "ai" }] },
+      { nodes: [{ label: "Post to leadership", sub: "Slack", kind: "sink" }] },
     ],
   },
 ];
