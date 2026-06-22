@@ -56,6 +56,35 @@ function Rail({ stages }: { stages: WfStage[] }) {
   );
 }
 
+/* Shows the real n8n canvas screenshot if one exists at
+   /workflows/{id}.png, otherwise falls back to the rendered diagram.
+   Drop a correctly-named PNG in public/workflows/ and redeploy. */
+function CanvasVisual({ wf }: { wf: Workflow }) {
+  const [status, setStatus] = useState<"loading" | "ok" | "fail">("loading");
+  const src = `/workflows/${wf.id}.png`;
+  return (
+    <div>
+      <div className="v4-mono-dim !text-[9.5px] mb-4">
+        {status === "ok"
+          ? "Real n8n canvas · executed"
+          : "Live in n8n · runs left to right"}
+      </div>
+      {status !== "fail" && (
+        <img
+          src={src}
+          alt={`${wf.title} — n8n workflow canvas`}
+          loading="lazy"
+          onLoad={() => setStatus("ok")}
+          onError={() => setStatus("fail")}
+          className="w-full rounded-xl border border-[var(--v4-border-strong)]"
+          style={{ display: status === "ok" ? "block" : "none" }}
+        />
+      )}
+      {status !== "ok" && <Rail stages={wf.stages} />}
+    </div>
+  );
+}
+
 function Card({ wf }: { wf: Workflow }) {
   const [open, setOpen] = useState(false);
   const stepCount = wf.stages.reduce((n, s) => n + s.nodes.length, 0);
@@ -132,10 +161,7 @@ function Card({ wf }: { wf: Workflow }) {
             className="overflow-hidden"
           >
             <div className="mt-7 pt-7 border-t border-[var(--v4-border)]">
-              <div className="v4-mono-dim !text-[9.5px] mb-4">
-                Live in n8n · runs left to right
-              </div>
-              <Rail stages={wf.stages} />
+              <CanvasVisual wf={wf} />
             </div>
           </motion.div>
         )}
