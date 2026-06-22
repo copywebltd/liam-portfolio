@@ -229,10 +229,9 @@ export function Workflows() {
 
         <Reveal delay={0.1}>
           <p className="mt-10 max-w-2xl font-mono text-[11.5px] leading-relaxed text-[var(--v4-text-3)]">
-            Built and tested on my own live n8n setup. The plain-English names are
-            what you see; the real APIs and models sit one layer down in each
-            step. They run on saved sample data, so nothing ever touches a real
-            customer&apos;s accounts. More being added.
+            Built, wired and tested end-to-end on my own n8n. The plain-English
+            names are what you see; the real APIs and models sit one layer down in
+            each step. More being added.
           </p>
         </Reveal>
       </div>
