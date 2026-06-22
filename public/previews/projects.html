@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Projects layouts — liampetersen.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0907;--amber:#f59e0b;--amberhi:#fbbf24;--cream:#f4efe6;--t2:#aaa193;--t3:#6f675a;
+    --bd:rgba(235,217,188,.09);--bd2:rgba(235,217,188,.18);--green:#34d399;
+    --mono:"Geist Mono",ui-monospace,monospace;--serif:"Instrument Serif",Georgia,serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Geist",system-ui,sans-serif;background:#060504;color:var(--cream);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  a{text-decoration:none;color:inherit}
+  .mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.2em;font-size:11px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber)}
+  .lede{font-size:clamp(26px,3.4vw,42px);line-height:1.04;letter-spacing:-.035em;font-weight:560;margin-top:16px}
+  .lede .s{font-family:var(--serif);font-style:italic;color:var(--amber);font-weight:400}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--bd);border-radius:999px;padding:4px 10px;color:var(--t2)}
+  .pill.am{border-color:rgba(245,158,11,.35);color:var(--amber);background:rgba(245,158,11,.07)}
+  .vid{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+
+  .band-label{position:sticky;top:0;z-index:5;background:rgba(6,5,4,.86);backdrop-filter:blur(8px);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+  .band-label .wrap{display:flex;align-items:center;gap:12px;padding-top:13px;padding-bottom:13px;flex-wrap:wrap}
+  .bn{font-weight:500;font-size:15px}
+  .bm{color:var(--t3);font-size:12px}
+  .tagr{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3)}
+  .sec{padding:64px 0}
+
+  .tile{display:block;background:linear-gradient(180deg,rgba(255,244,224,.03),rgba(255,244,224,.008));border:1px solid var(--bd);border-radius:16px;padding:24px;transition:border-color .4s,transform .4s}
+  .tile:hover{border-color:rgba(245,158,11,.4);transform:translateY(-3px)}
+  .tile h3{font-size:22px;font-weight:560;letter-spacing:-.02em;margin-top:14px}
+  .tile .sub{color:var(--t2);font-size:13.5px;margin-top:6px;line-height:1.5}
+  .tile .org{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-top:10px}
+  .metrics{display:flex;gap:22px;flex-wrap:wrap;margin-top:20px}
+  .metric .v{font-size:30px;font-weight:300;letter-spacing:-.03em;color:var(--amber);line-height:1}
+  .metric .l{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-top:5px}
+
+  /* 1 — featured + bento */
+  .feat{display:grid;grid-template-columns:1.7fr 1fr;gap:16px}
+  .feat .big{padding:30px}
+  .feat .big h3{font-size:30px}
+  .feat .big .v{font-size:46px}
+  .bento{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+  .bento .span2{grid-column:span 2}
+  @media(max-width:760px){.feat,.bento{grid-template-columns:1fr}.bento .span2{grid-column:auto}}
+
+  /* 2 — gallery + preview */
+  .gallery{display:grid;grid-template-columns:.85fr 1.5fr;gap:18px}
+  .glist{display:flex;flex-direction:column;border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+  .glist button{all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--bd);color:var(--t2);font-size:14px;transition:background .3s,color .3s}
+  .glist button:last-child{border-bottom:none}
+  .glist button .m{font-family:var(--mono);font-size:11px;color:var(--t3)}
+  .glist button.active{background:rgba(245,158,11,.08);color:var(--cream)}
+  .glist button.active .m{color:var(--amber)}
+  .gprev{background:linear-gradient(180deg,rgba(255,244,224,.03),rgba(255,244,224,.008));border:1px solid var(--bd);border-radius:16px;padding:26px}
+  .gprev h3{font-size:26px;font-weight:560;letter-spacing:-.02em;margin-top:12px}
+  .gprev .sub{color:var(--t2);font-size:14px;margin-top:6px}
+  .gprev .mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px;border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+  .gprev .mgrid div{padding:14px 16px;background:rgba(255,244,224,.015)}
+  .gprev .mgrid .v{font-size:22px;font-weight:300;color:var(--amber);letter-spacing:-.02em}
+  .gprev .mgrid .l{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-top:4px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:20px}
+  .chips span{font-family:var(--mono);font-size:11px;color:var(--t2);border:1px solid var(--bd);border-radius:7px;padding:5px 9px;background:rgba(255,244,224,.02)}
+  @media(max-width:760px){.gallery{grid-template-columns:1fr}.gprev .mgrid{grid-template-columns:repeat(2,1fr)}}
+
+  /* 3 — metric-forward cards */
+  .mcards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .mcard{display:block;background:linear-gradient(180deg,rgba(255,244,224,.03),rgba(255,244,224,.008));border:1px solid var(--bd);border-radius:16px;padding:24px;transition:border-color .4s,transform .4s}
+  .mcard:hover{border-color:rgba(245,158,11,.4);transform:translateY(-3px)}
+  .mcard .big{font-size:42px;font-weight:300;letter-spacing:-.04em;color:var(--amber);line-height:1}
+  .mcard .biglbl{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-top:6px}
+  .mcard h4{font-size:18px;font-weight:560;letter-spacing:-.015em;margin-top:18px}
+  .mcard p{font-size:13px;color:var(--t2);margin-top:7px;line-height:1.55}
+  .mcard .pill{margin-top:14px}
+  @media(max-width:760px){.mcards{grid-template-columns:1fr 1fr}}
+
+  /* 4 — spotlight rows */
+  .rows{border-top:1px solid var(--bd)}
+  .row{display:grid;grid-template-columns:42px 1fr auto auto;gap:24px;align-items:center;padding:22px 6px;border-bottom:1px solid var(--bd);transition:background .35s}
+  .row:hover{background:linear-gradient(90deg,rgba(245,158,11,.05),transparent 70%)}
+  .row .rn{font-family:var(--mono);font-size:12px;color:rgba(245,158,11,.7)}
+  .row h4{font-size:clamp(19px,2.2vw,26px);font-weight:500;letter-spacing:-.02em}
+  .row .rsub{color:var(--t2);font-size:13.5px;margin-top:4px}
+  .row .rmetric{text-align:right}
+  .row .rmetric .v{font-size:26px;font-weight:300;color:var(--amber);letter-spacing:-.03em}
+  .row .rmetric .l{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-top:3px}
+  @media(max-width:760px){.row{grid-template-columns:30px 1fr;gap:14px}.row .rmetric,.row .rcatwrap{display:none}}
+
+  .foot{padding:56px 0;text-align:center;color:var(--t3);font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+  <div class="wrap" style="padding:48px 28px 4px">
+    <div class="mono" style="color:var(--amber)">Four ways to present the projects</div>
+    <p style="color:var(--t2);font-size:14px;margin-top:10px;max-width:62ch;line-height:1.7">Same dark + amber style, same projects, same click-to-expand. Scroll through all four and tell me which layout to build.</p>
+  </div>
+
+  <!-- 1 — FEATURED + BENTO -->
+  <div class="band-label"><div class="wrap"><span class="bn">1 · Featured + bento</span><span class="bm">flagships big, the rest as varied tiles</span><span class="tagr">hierarchy</span></div></div>
+  <section class="sec"><div class="wrap">
+    <div class="eyebrow">Systems shipped</div>
+    <div class="lede">9 systems. Three continents. <span class="s">One builder.</span></div>
+    <div class="feat" style="margin-top:32px">
+      <a class="tile big">
+        <span class="pill am">Flagship · Production</span>
+        <h3>Foxelli Studio</h3>
+        <div class="sub">End-to-end AI ad production platform for 7 DTC brands</div>
+        <div class="metrics"><div class="metric"><div class="v">$800K</div><div class="l">peak / mo</div></div><div class="metric"><div class="v">26</div><div class="l">workflows</div></div><div class="metric"><div class="v">60+</div><div class="l">skills</div></div></div>
+        <div style="margin-top:22px" class="vid">▶ Watch the walkthrough</div>
+      </a>
+      <a class="tile">
+        <span class="pill am">Production</span>
+        <h3>CopyAds</h3>
+        <div class="sub">Meta Ads AIOS, installed per brand</div>
+        <div class="metrics"><div class="metric"><div class="v">17</div><div class="l">expert council</div></div><div class="metric"><div class="v">Live</div><div class="l">Meta API</div></div></div>
+      </a>
+    </div>
+    <div class="bento">
+      <a class="tile span2"><span class="pill">Production</span><h3 style="font-size:19px">Outreach Pack</h3><div class="sub">A full personalised pack per prospect, 16 expert frameworks</div><div style="margin-top:14px" class="vid">▶ Two-brand walkthrough</div></a>
+      <a class="tile"><span class="pill">Production</span><h3 style="font-size:19px">Cinematic Ad</h3><div class="metrics"><div class="metric"><div class="v">$3.16</div><div class="l">per spot</div></div></div></a>
+      <a class="tile"><span class="pill">Meta-tooling</span><h3 style="font-size:19px">Skill Library</h3><div class="metrics"><div class="metric"><div class="v">60+</div><div class="l">skills</div></div></div></a>
+      <a class="tile span2"><span class="pill">Internal</span><h3 style="font-size:19px">Mission Control</h3><div class="sub">Pipeline ops dashboard, 11 stages, real-time alerts</div></a>
+    </div>
+  </div></section>
+
+  <!-- 2 — GALLERY + PREVIEW -->
+  <div class="band-label"><div class="wrap"><span class="bn">2 · Gallery with live preview</span><span class="bm">pick on the left, detail on the right</span><span class="tagr">interactive</span></div></div>
+  <section class="sec"><div class="wrap">
+    <div class="eyebrow">Systems shipped</div>
+    <div class="lede" style="max-width:20ch">Browse the work, <span class="s">one at a time.</span></div>
+    <div class="gallery" style="margin-top:30px">
+      <div class="glist">
+        <button class="active">Foxelli Studio <span class="m">$800K/mo</span></button>
+        <button>CopyAds <span class="m">Meta AIOS</span></button>
+        <button>Outreach Pack <span class="m">16 frwks</span></button>
+        <button>Cinematic Ad <span class="m">$3.16</span></button>
+        <button>Skill Library <span class="m">60+</span></button>
+        <button>Mission Control <span class="m">11 stages</span></button>
+      </div>
+      <div class="gprev">
+        <span class="pill am">Production · 2024-2026 · ▶ video</span>
+        <h3>Foxelli Studio</h3>
+        <div class="sub">Six months from blank repo to a platform the whole ads team uses every day.</div>
+        <div class="mgrid">
+          <div><div class="v">$800K</div><div class="l">peak / mo</div></div>
+          <div><div class="v">26</div><div class="l">workflows</div></div>
+          <div><div class="v">60+</div><div class="l">skills</div></div>
+          <div><div class="v">6×</div><div class="l">ad output</div></div>
+        </div>
+        <div class="chips"><span>React 18</span><span>Supabase + RLS</span><span>n8n</span><span>Claude</span><span>Kling 3.0</span><span>ElevenLabs</span></div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- 3 — METRIC-FORWARD CARDS -->
+  <div class="band-label"><div class="wrap"><span class="bn">3 · Metric-forward cards</span><span class="bm">every project led by its standout number</span><span class="tagr">punchy</span></div></div>
+  <section class="sec"><div class="wrap">
+    <div class="eyebrow">Systems shipped</div>
+    <div class="lede">Real numbers, <span class="s">real systems.</span></div>
+    <div class="mcards" style="margin-top:30px">
+      <a class="mcard"><div class="big">$800K</div><div class="biglbl">peak monthly revenue</div><h4>Foxelli Studio</h4><p>End-to-end AI ad production platform</p><span class="pill am">Production · ▶</span></a>
+      <a class="mcard"><div class="big">16</div><div class="biglbl">expert frameworks</div><h4>Outreach Pack</h4><p>A personalised pack per prospect</p><span class="pill am">Production · ▶</span></a>
+      <a class="mcard"><div class="big">Live</div><div class="biglbl">Meta Ads API</div><h4>CopyAds</h4><p>Meta Ads AIOS, installed per brand</p><span class="pill">Production</span></a>
+      <a class="mcard"><div class="big">$3.16</div><div class="biglbl">per video spot</div><h4>Cinematic Ad</h4><p>AI video ad spots, end to end</p><span class="pill">Production</span></a>
+      <a class="mcard"><div class="big">60+</div><div class="biglbl">custom skills</div><h4>Skill Library</h4><p>The skills that build the systems</p><span class="pill">Meta-tooling</span></a>
+      <a class="mcard"><div class="big">11</div><div class="biglbl">pipeline stages</div><h4>Mission Control</h4><p>Real-time pipeline ops dashboard</p><span class="pill">Internal</span></a>
+    </div>
+  </div></section>
+
+  <!-- 4 — SPOTLIGHT ROWS -->
+  <div class="band-label"><div class="wrap"><span class="bn">4 · Spotlight rows</span><span class="bm">your current list, with a big metric on each row</span><span class="tagr">closest to now</span></div></div>
+  <section class="sec"><div class="wrap">
+    <div class="eyebrow">Systems shipped</div>
+    <div class="lede">Nine systems. <span class="s">One builder.</span></div>
+    <div class="rows" style="margin-top:28px">
+      <a class="row"><span class="rn">01</span><div><h4>Foxelli Studio</h4><div class="rsub">End-to-end AI ad production platform · ▶ video</div></div><div class="rcatwrap"><span class="pill am">Production</span></div><div class="rmetric"><div class="v">$800K</div><div class="l">peak / mo</div></div></a>
+      <a class="row"><span class="rn">02</span><div><h4>Outreach Pack</h4><div class="rsub">A personalised pack per prospect · ▶ video</div></div><div class="rcatwrap"><span class="pill am">Production</span></div><div class="rmetric"><div class="v">16</div><div class="l">frameworks</div></div></a>
+      <a class="row"><span class="rn">03</span><div><h4>CopyAds</h4><div class="rsub">Meta Ads AIOS, installed per brand</div></div><div class="rcatwrap"><span class="pill am">Production</span></div><div class="rmetric"><div class="v">17</div><div class="l">council</div></div></a>
+      <a class="row"><span class="rn">04</span><div><h4>Cinematic Ad</h4><div class="rsub">AI video ad spots, end to end</div></div><div class="rcatwrap"><span class="pill">Production</span></div><div class="rmetric"><div class="v">$3.16</div><div class="l">per spot</div></div></a>
+      <a class="row"><span class="rn">05</span><div><h4>Skill Library</h4><div class="rsub">60+ custom Claude Code skills</div></div><div class="rcatwrap"><span class="pill">Meta-tooling</span></div><div class="rmetric"><div class="v">60+</div><div class="l">skills</div></div></a>
+      <a class="row"><span class="rn">06</span><div><h4>Mission Control</h4><div class="rsub">Pipeline ops dashboard</div></div><div class="rcatwrap"><span class="pill">Internal</span></div><div class="rmetric"><div class="v">11</div><div class="l">stages</div></div></a>
+    </div>
+  </div></section>
+
+  <div class="foot">Mockup · four project layouts · current dark + amber style</div>
+
+</body>
+</html>
