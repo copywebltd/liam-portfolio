@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Landing directions — liampetersen.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark:#0a0907; --dark2:#161009; --amber:#f59e0b; --amberhi:#fbbf24;
+    --cream:#f4efe6; --txt2:#aaa193; --txt3:#6f675a;
+    --mono:"Geist Mono",ui-monospace,monospace;
+    --serif:"Instrument Serif",Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Geist",system-ui,sans-serif;background:#060504;color:var(--cream);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  .mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.2em;font-size:11px}
+  .serif{font-family:var(--serif);font-style:italic}
+
+  /* ---------- HERO (unchanged in every direction) ---------- */
+  .hero{position:relative;min-height:78vh;display:flex;align-items:center;overflow:hidden;
+    background:radial-gradient(60% 55% at 72% 30%,rgba(180,83,9,.5),transparent 60%),#0a0907}
+  .hero::before{content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(235,217,188,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(235,217,188,.04) 1px,transparent 1px);
+    background-size:72px 72px;mask-image:radial-gradient(ellipse 90% 70% at 50% 30%,#000 30%,transparent 78%)}
+  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34vh;background:linear-gradient(transparent,#060504)}
+  .hero-in{position:relative;z-index:2;padding:120px 0}
+  .pill{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(235,217,188,.18);border-radius:999px;
+    background:rgba(10,9,7,.55);padding:9px 16px;color:var(--txt2)}
+  .dot{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 0 4px rgba(52,211,153,.18)}
+  h1.hero-h{font-size:clamp(44px,7vw,96px);line-height:.98;letter-spacing:-.045em;font-weight:600;margin:32px 0 0;max-width:14ch}
+  h1.hero-h .am{color:var(--amber)}
+  .sub{margin-top:28px;max-width:540px;color:var(--txt2);font-size:15px;line-height:1.7}
+  .btns{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;font-size:14px;font-weight:500;padding:13px 26px;text-decoration:none;cursor:pointer}
+  .btn-am{background:linear-gradient(180deg,#fbbf24,#f59e0b 55%,#d97706);color:#1a1206}
+  .btn-gh{border:1px solid rgba(235,217,188,.2);color:var(--cream)}
+
+  /* ---------- direction band scaffold ---------- */
+  .band-label{position:sticky;top:0;z-index:5;background:rgba(6,5,4,.85);backdrop-filter:blur(8px);border-top:1px solid rgba(235,217,188,.1);border-bottom:1px solid rgba(235,217,188,.1)}
+  .band-label .wrap{display:flex;align-items:center;gap:14px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+  .swatch{width:14px;height:14px;border-radius:4px}
+  .band-name{font-weight:500;font-size:15px;color:var(--cream)}
+  .band-meta{color:var(--txt3);font-size:12px}
+  .tag{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt3)}
+
+  .body{padding:72px 0}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase}
+  .lede{font-size:clamp(26px,3.4vw,40px);line-height:1.08;letter-spacing:-.03em;font-weight:560;margin-top:18px}
+  .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+
+  /* ===== 1. DAYBREAK — light editorial, BLUE ===== */
+  .daybreak{background:#f7f2ea;color:#1b2433}
+  .daybreak .eyebrow{color:#2563eb}
+  .daybreak .lede{font-family:var(--serif);font-style:normal;font-weight:400;letter-spacing:-.01em}
+  .daybreak .muted{color:#6b6256;font-size:15px;line-height:1.7;margin-top:16px;max-width:46ch}
+  .db-card{background:#fff;border:1px solid #e7ddca;border-radius:16px;padding:26px}
+  .db-tag{display:inline-block;font-size:11px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#2563eb;background:#eaf1fe;padding:5px 11px;border-radius:999px}
+  .db-h{font-size:22px;font-weight:560;letter-spacing:-.02em;margin-top:16px}
+  .db-chips{margin-top:18px;display:flex;flex-wrap:wrap;gap:7px}
+  .db-chips span{font-family:var(--mono);font-size:11px;color:#5b6472;border:1px solid #e1d8c6;border-radius:7px;padding:5px 9px;background:#faf6ef}
+  .db-stat{margin-top:18px;display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:#1e7a52;background:#e7f6ee;border:1px solid #bfe6d2;border-radius:999px;padding:7px 13px}
+  .db-btn{margin-top:28px;display:inline-flex;align-items:center;gap:8px;background:#2563eb;color:#fff;border-radius:999px;padding:13px 24px;font-size:14px;font-weight:500;text-decoration:none}
+
+  /* ===== 2. CONCIERGE — guided dark, GREEN ===== */
+  .concierge{background:#0b0f0d;color:#e9efe9}
+  .concierge .eyebrow{color:#34d399}
+  .guide{display:flex;gap:14px;align-items:flex-start;background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.28);border-radius:16px;padding:20px 22px;max-width:620px}
+  .guide-av{flex:0 0 auto;width:38px;height:38px;border-radius:10px;background:rgba(52,211,153,.14);display:grid;place-items:center;color:#34d399;font-family:var(--mono);font-size:13px}
+  .guide p{font-size:15px;line-height:1.6;color:#cfe0d4}
+  .guide b{color:#fff;font-weight:500}
+  .next{margin-top:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .nextc{border:1px solid rgba(235,217,188,.12);border-radius:14px;padding:18px;background:rgba(255,255,255,.015)}
+  .nextc .n{font-family:var(--mono);font-size:11px;color:#34d399}
+  .nextc h4{font-size:16px;font-weight:500;margin-top:10px}
+  .nextc .go{margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#34d399}
+
+  /* ===== 3. PLAYFUL PRO — dark delight, TEAL + coral ===== */
+  .playful{background:#0a0f11;color:#eaf2f3}
+  .playful .eyebrow{color:#2dd4bf}
+  .pf-cards{margin-top:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .pf-card{position:relative;background:rgba(255,255,255,.02);border:1px solid rgba(235,217,188,.12);border-radius:22px;padding:22px;transition:transform .35s cubic-bezier(.16,1,.3,1)}
+  .pf-card:hover{transform:translateY(-6px) rotate(-.6deg)}
+  .pf-emoji{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:20px}
+  .pf-h{font-size:17px;font-weight:500;margin-top:14px;letter-spacing:-.01em}
+  .pf-p{font-size:13px;color:#9fb2b2;margin-top:7px;line-height:1.6}
+  .pf-num{position:relative;display:inline-block;font-size:13px;color:#2dd4bf;font-family:var(--mono)}
+  .pf-ring{position:absolute;left:-10px;top:-8px;width:64px;height:34px;pointer-events:none}
+  .coral{color:#f3a183}
+
+  /* ===== 4. CALM WORKSPACE — spacious light, AMBER (current) ===== */
+  .calm{background:#f6f3ec;color:#2a241b}
+  .calm .eyebrow{color:#b4730f}
+  .calm-in{max-width:720px;margin:0 auto;text-align:center;padding:40px 0}
+  .calm-h{font-size:clamp(28px,4vw,46px);line-height:1.1;letter-spacing:-.03em;font-weight:560;margin-top:20px}
+  .calm-h .am{color:#d98a09}
+  .calm-p{margin:22px auto 0;max-width:52ch;color:#6b6256;font-size:16px;line-height:1.8}
+  .calm-row{margin-top:40px;display:flex;gap:48px;justify-content:center;flex-wrap:wrap}
+  .calm-stat .v{font-size:34px;font-weight:560;letter-spacing:-.03em;color:#d98a09}
+  .calm-stat .l{font-size:12px;color:#8a8275;margin-top:4px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase}
+  .calm-btn{margin-top:40px;display:inline-flex;gap:8px;align-items:center;background:#f59e0b;color:#2a1a05;border-radius:999px;padding:14px 28px;font-size:15px;font-weight:500;text-decoration:none}
+
+  .foot{padding:60px 0;text-align:center;color:var(--txt3);font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+  <!-- ===== HERO (identical in all four directions) ===== -->
+  <section class="hero">
+    <div class="wrap hero-in">
+      <span class="pill"><span class="dot"></span><span class="mono" style="font-size:10.5px">Available · Senior AI builder + advisory roles · Remote · US &amp; EU</span></span>
+      <h1 class="hero-h">Six years of <span class="serif">direct response.</span><br>Three years shipping <span class="am">production AI.</span></h1>
+      <p class="sub">I'm Liam. Six years writing copy that had to convert or get killed. Three years building the systems that scale that work to a $20M+ portfolio.</p>
+      <div class="btns"><a class="btn btn-am" href="#daybreak">See the work ↓</a><a class="btn btn-gh" href="#">Email me</a></div>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding:40px 28px 8px">
+    <div class="mono" style="color:var(--amber)">The hero stays. Four ways the body could feel.</div>
+    <p style="color:var(--txt2);font-size:14px;margin-top:10px;max-width:60ch;line-height:1.7">Scroll through all four. Three explore colours HR tends to trust more (blue, green, teal); the fourth keeps your current amber. Same content, very different welcome.</p>
+  </div>
+
+  <!-- ===== 1. DAYBREAK / BLUE ===== -->
+  <div class="band-label" id="daybreak"><div class="wrap">
+    <span class="swatch" style="background:#2563eb"></span>
+    <span class="band-name">1 · Daybreak</span>
+    <span class="band-meta">light editorial body · trust blue · friendly because it is open and magazine-readable</span>
+    <span class="tag">dark → light</span>
+  </div></div>
+  <section class="body daybreak"><div class="wrap">
+    <div class="grid2">
+      <div>
+        <div class="eyebrow">The work</div>
+        <div class="lede">Nine systems, a 13-workflow library, and real revenue behind each one.</div>
+        <p class="muted">The dark hero opens into daylight. Long sections become genuinely readable, the tone softens, and the blue signals dependable and calm without losing the craft.</p>
+        <a class="db-btn" href="#concierge">Browse the systems →</a>
+      </div>
+      <div class="db-card">
+        <span class="db-tag">Sales</span>
+        <div class="db-h">Every lead answered in seconds</div>
+        <div class="db-chips"><span>WordPress</span><span>HubSpot</span><span>WhatsApp</span><span>Slack</span></div>
+        <div class="db-stat">✓ replied in seconds · saved · 0.25s</div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- ===== 2. CONCIERGE / GREEN ===== -->
+  <div class="band-label" id="concierge"><div class="wrap">
+    <span class="swatch" style="background:#34d399"></span>
+    <span class="band-name">2 · Concierge</span>
+    <span class="band-meta">stays dark · approachable green · friendly because a warm voice guides you</span>
+    <span class="tag">guided tour</span>
+  </div></div>
+  <section class="body concierge"><div class="wrap">
+    <div class="eyebrow">A quick tour</div>
+    <div class="lede" style="max-width:18ch">Not sure where to start? I'll point you.</div>
+    <div class="guide" style="margin-top:26px">
+      <div class="guide-av">Hi</div>
+      <p><b>Most recruiters want one of three things.</b> If you care about impact, jump to the receipts. If you want range, the systems. If you want to see me build, the live workflows. Pick one and I'll walk you through it.</p>
+    </div>
+    <div class="next">
+      <div class="nextc"><div class="n">01</div><h4>The receipts</h4><div class="go">Show me the numbers →</div></div>
+      <div class="nextc"><div class="n">02</div><h4>The systems</h4><div class="go">Show me the range →</div></div>
+      <div class="nextc"><div class="n">03</div><h4>Live workflows</h4><div class="go">Watch me build →</div></div>
+    </div>
+  </div></section>
+
+  <!-- ===== 3. PLAYFUL PRO / TEAL ===== -->
+  <div class="band-label" id="playful"><div class="wrap">
+    <span class="swatch" style="background:#2dd4bf"></span>
+    <span class="band-name">3 · Playful pro</span>
+    <span class="band-meta">dark with delight · teal + coral · friendly because it has personality</span>
+    <span class="tag">tactile · springy</span>
+  </div></div>
+  <section class="body playful"><div class="wrap">
+    <div class="eyebrow">How I work</div>
+    <div class="lede" style="max-width:20ch">Real systems. <span class="coral serif" style="font-style:italic">A human in the loop.</span></div>
+    <div class="pf-cards">
+      <div class="pf-card"><div class="pf-emoji" style="background:rgba(45,212,191,.14);color:#2dd4bf">◆</div><div class="pf-h">It runs on its own</div><p class="pf-p">Cards lift and tilt on hover. Soft corners, springy motion, nothing stiff.</p></div>
+      <div class="pf-card"><div class="pf-emoji" style="background:rgba(243,161,131,.16);color:#f3a183">✶</div><div class="pf-h">A human approves</div><p class="pf-p"><span class="pf-num">91% sure<svg class="pf-ring" viewBox="0 0 64 34"><path d="M8 17 C 10 4, 54 3, 56 16 C 58 29, 12 32, 7 19" fill="none" stroke="#f3a183" stroke-width="1.6" stroke-linecap="round" opacity=".8"/></svg></span> before anything risky ships.</p></div>
+      <div class="pf-card"><div class="pf-emoji" style="background:rgba(45,212,191,.14);color:#2dd4bf">⟲</div><div class="pf-h">It gets smarter</div><p class="pf-p">Little hand-marked notes, like a person circled the good parts.</p></div>
+    </div>
+  </div></section>
+
+  <!-- ===== 4. CALM WORKSPACE / AMBER (current) ===== -->
+  <div class="band-label" id="calm"><div class="wrap">
+    <span class="swatch" style="background:#f59e0b"></span>
+    <span class="band-name">4 · Calm workspace</span>
+    <span class="band-meta">spacious light · your current amber · friendly because nothing is crowded</span>
+    <span class="tag">current colours</span>
+  </div></div>
+  <section class="body calm"><div class="wrap"><div class="calm-in">
+    <div class="eyebrow">The short version</div>
+    <h1 class="calm-h">Direct response, then production <span class="am">AI.</span> Same hands on both.</h1>
+    <p class="calm-p">Lots of room to breathe. Big, calm type. One accent. Easy to scan, nothing intimidating, and it keeps the warm amber you already have.</p>
+    <div class="calm-row">
+      <div class="calm-stat"><div class="v">9</div><div class="l">systems</div></div>
+      <div class="calm-stat"><div class="v">13</div><div class="l">workflows</div></div>
+      <div class="calm-stat"><div class="v">$800K</div><div class="l">peak / mo</div></div>
+    </div>
+    <a class="calm-btn" href="#daybreak">Back to the top ↑</a>
+  </div></div></section>
+
+  <div class="foot">Mockup · same hero, four body directions · liampetersen.dev</div>
+
+</body>
+</html>
