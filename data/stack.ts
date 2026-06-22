@@ -52,22 +52,22 @@ export const stackTabs: StackTab[] = [
       {
         heading: "Coding & orchestration",
         items: [
-          "Claude Opus 4.7 — primary, the model I trust to ship",
-          "Codex / GPT-5.5 — heavy refactors, OpenAI agentic loops",
+          "Claude Opus 4.7 · primary, the model I trust to ship",
+          "Codex / GPT-5.5 · heavy refactors, OpenAI agentic loops",
         ],
       },
       {
         heading: "Frontend design",
         items: [
-          "Gemini 3.1 Pro — currently benchmark-leading at UI work",
+          "Gemini 3.1 Pro · currently benchmark-leading at UI work",
         ],
       },
       {
         heading: "Other",
         items: [
-          "Claude Sonnet 4.6 — fast iteration",
-          "Claude Haiku 4.5 — high-volume routing",
-          "Gemini 2.0 Flash — image generation backbone",
+          "Claude Sonnet 4.6 · fast iteration",
+          "Claude Haiku 4.5 · high-volume routing",
+          "Gemini 2.0 Flash · image generation backbone",
         ],
       },
     ],
@@ -143,7 +143,7 @@ export const stackTabs: StackTab[] = [
       {
         heading: "Data",
         items: [
-          "Supabase (PostgreSQL + RLS) — primary",
+          "Supabase (PostgreSQL + RLS) · primary",
           "Drizzle ORM",
           "Airtable (legacy projects)",
         ],

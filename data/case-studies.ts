@@ -27,7 +27,7 @@ export const caseStudies: CaseStudy[] = [
     org: "Foxelli Group · Netherlands · 7 DTC brands · $20M+ portfolio",
     category: "production",
     categoryLabel: "Shipped to production",
-    year: "2024 — 2026",
+    year: "2024-2026",
     status: "In daily use",
     oneLiner:
       "Six months from blank repo to a platform the entire ads team uses every day. 26-workflow engine. Architected for 100 concurrent users.",
@@ -180,17 +180,17 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "The problem",
         body:
-          "Media buyers drown in dashboards. Meta's native UI tells you what happened, not what to do next. The work that actually moves the account — reading yesterday, deciding the next move, building the creative to test it — still lands on the team every single morning. That's the bottleneck, and it doesn't scale.",
+          "Media buyers drown in dashboards. Meta's native UI tells you what happened, not what to do next. The work that actually moves the account (reading yesterday, deciding the next move, building the creative to test it) still lands on the team every single morning. That's the bottleneck, and it doesn't scale.",
       },
       {
         heading: "The build",
         body:
-          "A custom dashboard installed per brand, wired straight into the Meta Ads account through the Marketing API. It auto-detects each account's real conversion event (purchase, lead, subscribe — never hard-coded), so the numbers are right on day one. Every morning it reads spend, creatives, fatigue, and frequency, then writes a plain-English brief: scale the winner, kill the one that's burning, and here are fresh angles already built and paused.",
+          "A custom dashboard installed per brand, wired straight into the Meta Ads account through the Marketing API. It auto-detects each account's real conversion event (purchase, lead, subscribe, never hard-coded), so the numbers are right on day one. Every morning it reads spend, creatives, fatigue, and frequency, then writes a plain-English brief: scale the winner, kill the one that's burning, and here are fresh angles already built and paused.",
       },
       {
         heading: "The Studio",
         body:
-          "Take a winning ad. One click, and the Studio builds five new angles, each carrying a different expert framework: comparison, problem-aware, offer math, authority, stat-led. Every angle is scored by a 17-expert council grounded in direct-response canon. The real product is never redrawn — every image is composed around the brand's actual SKU, accurate to the pixel.",
+          "Take a winning ad. One click, and the Studio builds five new angles, each carrying a different expert framework: comparison, problem-aware, offer math, authority, stat-led. Every angle is scored by a 17-expert council grounded in direct-response canon. The real product is never redrawn. Every image is composed around the brand's actual SKU, accurate to the pixel.",
       },
       {
         heading: "Accuracy and safety gates",
@@ -200,7 +200,7 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "Why it matters",
         body:
-          "Andromeda-era Meta rewards on-brand, clear-angle creative at volume. The teams that win are the ones who can read the account, build the next test, and score it before lunch — without shipping slop into the auction. CopyAds gives a team that loop every morning and keeps a human on the trigger.",
+          "Andromeda-era Meta rewards on-brand, clear-angle creative at volume. The teams that win are the ones who can read the account, build the next test, and score it before lunch, without shipping slop into the auction. CopyAds gives a team that loop every morning and keeps a human on the trigger.",
       },
     ],
     stack: [
@@ -217,7 +217,7 @@ export const caseStudies: CaseStudy[] = [
     builtOn:
       "Built on Claude Code. Per-brand install reads the account daily, routes winners through the council, and writes every new ad paused for human approval.",
     videoId: "aBdk6GShv2M",
-    videoCaption: "Full walkthrough — it reads, it builds, it scores. 1:13.",
+    videoCaption: "Full walkthrough: it reads, it builds, it scores. 1:13.",
   },
   {
     slug: "copysite",
@@ -310,12 +310,12 @@ export const caseStudies: CaseStudy[] = [
       {
         heading: "Production safeguards",
         body:
-          "Universal AI video small-label text ceiling enforced (no AI-generated text smaller than ~24pt — they always degrade). Cross-scene face consistency check between storyboard panels. Provider fallback when any model degrades or rate-limits. Cost ceiling: $3.16/spot is the production default with the 4K storyboard + Seedance 2.0 720p combo.",
+          "Universal AI video small-label text ceiling enforced (no AI-generated text smaller than ~24pt, they always degrade). Cross-scene face consistency check between storyboard panels. Provider fallback when any model degrades or rate-limits. Cost ceiling: $3.16/spot is the production default with the 4K storyboard + Seedance 2.0 720p combo.",
       },
       {
         heading: "Why it matters",
         body:
-          "DTC brands need video at scale, but most AI video tools produce unusable slop. This pipeline enforces production discipline at every phase — script, visual, motion, voice, composite — and ships cinema-quality output at ad-spend-friendly cost.",
+          "DTC brands need video at scale, but most AI video tools produce unusable slop. This pipeline enforces production discipline at every phase (script, visual, motion, voice, composite) and ships cinema-quality output at ad-spend-friendly cost.",
       },
     ],
     stack: [
@@ -338,7 +338,7 @@ export const caseStudies: CaseStudy[] = [
     org: "Copyweb · Personal infrastructure",
     category: "meta",
     categoryLabel: "Meta-tooling",
-    year: "2025 — Present",
+    year: "Since 2025",
     status: "Used daily",
     oneLiner:
       "I don't just use AI. I build the skills that build the systems, and one deck to run them all. Sixty skills, four pipelines, one council, every campaign launched and watched from a single screen.",
@@ -407,12 +407,12 @@ export const caseStudies: CaseStudy[] = [
     ],
     sections: [
       {
-        heading: "Mission Control — the dashboard",
+        heading: "Mission Control: the dashboard",
         body:
           "A real-time view of every prospect, deliverable, and stage in the business. Pipeline across 11 stages, 14-day stale-lead auto-flagging, and Telegram pings when something needs attention. It cross-references Airtable, Supabase, and n8n executions into a single pane of glass. Standard Next.js + Supabase + n8n, the same materials I use for client builds.",
       },
       {
-        heading: "The Agent Quintet — the workforce",
+        heading: "The Agent Quintet: the workforce",
         body:
           "Five agents run on cron with a shared 3-layer memory. Scout prospects daily against a weighted ICP rubric and enriches via Apollo and Hunter. Wordsmith batches LinkedIn and X content on a 3:1 value ratio. Closer drafts outreach, follow-ups, and proposals in the client's own language. Architect runs a 6-phase delivery engine and produces 90% complete first drafts. Command Center syncs at 5:30 AM, briefs at 7, pulses at noon, and wraps at 8, all over Telegram.",
       },
@@ -471,7 +471,7 @@ export const caseStudies: CaseStudy[] = [
     org: "Copyweb · Substrate",
     category: "meta",
     categoryLabel: "Meta-tooling",
-    year: "2025 — Present",
+    year: "Since 2025",
     status: "Underlies every shipped copywriting deliverable",
     oneLiner:
       "The substrate under everything I ship. Schwartz on awareness. Halbert on directness. Wiebe on voice of customer. Hormozi on offer construction.",

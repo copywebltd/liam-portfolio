@@ -20,6 +20,7 @@ import {
 } from "@/components/v4/sections";
 import { Systems } from "@/components/v4/systems";
 import { Workflows } from "@/components/v4/workflows";
+import { JumpMap } from "@/components/v4/jumpmap";
 
 const instrument = Instrument_Serif({
   subsets: ["latin"],
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
   title:
     "Liam Petersen · Direct Response → AI Strategy → Production AI Builder",
   description:
-    "Direct response copywriter turned Head of AI Strategy, now building production AI. Built Foxelli Studio, an end-to-end ad production platform serving a $20M+ portfolio. Eleven systems shipped end-to-end. Founder of Copyweb.",
+    "Direct response copywriter turned Head of AI Strategy, now building production AI. Built Foxelli Studio, an end-to-end ad production platform serving a $20M+ portfolio. Nine systems shipped end-to-end, plus a library of cross-department automations. Founder of Copyweb.",
 };
 
 export default function Home() {
@@ -44,6 +45,7 @@ export default function Home() {
         <ProgressRail />
         <CommandPalette />
         <Hero />
+        <JumpMap />
         <Ticker />
         <RecruiterCard />
         <Systems />

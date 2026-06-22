@@ -84,7 +84,7 @@ function CanvasVisual({ wf }: { wf: Workflow }) {
       {ok ? (
         <img
           src={src}
-          alt={`${wf.title} — n8n workflow canvas`}
+          alt={`${wf.title} workflow canvas in n8n`}
           className="w-full rounded-xl border border-[var(--v4-border-strong)]"
         />
       ) : (
@@ -229,9 +229,9 @@ export function Workflows() {
         <SectionHeading
           index="01.5"
           eyebrow="Live workflows"
-          title="The boring, expensive busywork —"
+          title="The boring, expensive busywork,"
           accent="automated."
-          description="A growing library of real automations I built and ran in n8n (a tool for wiring apps together). Each one takes a painful, repetitive job a team does by hand and turns it into a system that runs on its own — using the tools a business already pays for. Filter by team, and open any one to see exactly how it works."
+          description="A growing library of real automations I built and ran in n8n (a tool for wiring apps together). Each one takes a painful, repetitive job a team does by hand and turns it into a system that runs on its own, using the tools a business already pays for. Filter by team, and open any one to see exactly how it works."
         />
 
         {/* filters */}
@@ -259,7 +259,7 @@ export function Workflows() {
               The pattern behind all of these
             </div>
             <p className="text-[14px] leading-[1.75] text-[var(--v4-text-2)] max-w-[72ch]">
-              Every workflow runs on the same backbone — and the guardrail is in
+              Every workflow runs on the same backbone, and the guardrail is in
               all of them: a confidence check with a human fallback, so nothing
               risky ever happens unattended.
             </p>

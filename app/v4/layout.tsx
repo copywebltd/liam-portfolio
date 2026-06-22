@@ -13,7 +13,7 @@ const instrument = Instrument_Serif({
 export const metadata: Metadata = {
   title: "Liam Petersen · Direct Response → AI Strategy → Production AI Builder",
   description:
-    "Direct response copywriter turned Head of AI Strategy, now building production AI. Built Foxelli Studio, an end-to-end ad production platform serving a $20M+ portfolio. Eleven systems shipped end-to-end. Founder of Copyweb.",
+    "Direct response copywriter turned Head of AI Strategy, now building production AI. Built Foxelli Studio, an end-to-end ad production platform serving a $20M+ portfolio. Nine systems shipped end-to-end, plus a library of cross-department automations. Founder of Copyweb.",
 };
 
 export default function V4Layout({ children }: { children: React.ReactNode }) {

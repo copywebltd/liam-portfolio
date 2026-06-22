@@ -48,7 +48,7 @@ export function Systems() {
           <SectionHeading
             index="00"
             eyebrow="Systems shipped"
-            title="Eleven systems. Three continents."
+            title={`${caseStudies.length} systems. Three continents.`}
             accent="One builder."
             description="Production platforms, internal tools, open-source templates, and the meta-tooling that ships them. Each one built on Claude Code. Scan the index, expand the builds that matter to you."
           />

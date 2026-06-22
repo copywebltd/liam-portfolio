@@ -18,7 +18,7 @@ export type Workflow = {
   index: string;
   category: WfCategory;
   categoryLabel: string;
-  /** the painful, boring problem in the business's own words — the hook */
+  /** the painful, boring problem in the business's own words (the hook) */
   problem: string;
   /** the named outcome */
   title: string;
@@ -49,10 +49,10 @@ export const workflows: Workflow[] = [
     category: "sales",
     categoryLabel: "Sales",
     problem:
-      "Leads sit for hours before anyone replies — and the hot ones go cold.",
+      "Leads sit for hours before anyone replies. The hot ones go cold.",
     title: "Every lead answered in seconds",
     purpose:
-      "A lead fills in the website form. In one second, AI reads it, decides how hot it is, and either texts them back instantly or starts a nurture email — then saves them to the CRM and pings the sales team. No lead ever waits.",
+      "A lead fills in the website form. In one second, AI reads it, decides how hot it is, and either texts them back instantly or starts a nurture email, then saves them to the CRM and pings the sales team. No lead ever waits.",
     systems: ["WordPress", "OpenAI", "WhatsApp", "Mailchimp", "HubSpot", "Slack"],
     stat: "hot lead · replied in seconds · saved · 0.25s",
     stages: [
@@ -80,7 +80,7 @@ export const workflows: Workflow[] = [
       "The support inbox overflows with the same questions, and replies are slow.",
     title: "An AI front desk for support",
     purpose:
-      "Every incoming message gets sorted by topic and urgency, then AI drafts a reply using only your help-centre articles. If it's confident and simple, it sends and closes the ticket. If not, it hands the draft to a human to approve first — so nothing risky goes out alone.",
+      "Every incoming message gets sorted by topic and urgency, then AI drafts a reply using only your help-centre articles. If it's confident and simple, it sends and closes the ticket. If not, it hands the draft to a human to approve first, so nothing risky goes out alone.",
     systems: ["Gmail", "Zendesk", "Claude", "Slack"],
     stat: "auto-resolved · 2 sources cited · 0.21s",
     stages: [
@@ -108,7 +108,7 @@ export const workflows: Workflow[] = [
       "Your community needs watching around the clock for spam and rule-breakers.",
     title: "A moderator that never sleeps",
     purpose:
-      "Every new post is checked against your community rules. Clean posts pass instantly; anything borderline — spam, self-promo, abuse — gets sent to a human with the reason attached. The bot flags, it never bans on its own, and every decision is logged.",
+      "Every new post is checked against your community rules. Clean posts pass instantly; anything borderline (spam, self-promo, abuse) gets sent to a human with the reason attached. The bot flags, it never bans on its own, and every decision is logged.",
     systems: ["Facebook Groups", "OpenAI", "Slack", "Google Sheets"],
     stat: "flagged · sent to a human · logged · 0.24s",
     stages: [
@@ -135,7 +135,7 @@ export const workflows: Workflow[] = [
       "Teams write copy and make decisions on gut feel instead of what customers actually say.",
     title: "Customer research, in under a second",
     purpose:
-      "Type in one brand, and it listens to what real customers are saying about it in nine different places — Reddit, Amazon reviews, TikTok, competitor Facebook ads, and more. Then it checks it gathered enough, and notes exactly where every quote came from, all before anyone writes a single word.",
+      "Type in one brand, and it listens to what real customers are saying about it in nine different places: Reddit, Amazon reviews, TikTok, competitor Facebook ads, and more. Then it checks it gathered enough, and notes exactly where every quote came from, all before anyone writes a single word.",
     systems: ["Apify", "Jina", "Supabase"],
     stat: "9 sources · 24 findings · checks passed · 0.4s",
     stages: [
@@ -169,7 +169,7 @@ export const workflows: Workflow[] = [
     problem: "A sale closes and six teams scramble to do their bit by hand.",
     title: "When a sale closes, the whole company reacts",
     purpose:
-      "The moment a sale is marked “won,” six teams spring into action at the same time — the invoice goes out, onboarding tasks are created, the customer's account is set up, welcome emails start, and leadership gets a heads-up — all without anyone lifting a finger.",
+      "The moment a sale is marked “won,” six teams spring into action at the same time: the invoice goes out, onboarding tasks are created, the customer's account is set up, welcome emails start, and leadership gets a heads-up, all without anyone lifting a finger.",
     systems: ["GoHighLevel", "Stripe", "Notion", "Intercom", "Klaviyo", "Slack"],
     stat: "6 teams · 6 tools · all done · 0.25s",
     stages: [
@@ -188,7 +188,7 @@ export const workflows: Workflow[] = [
       },
       { nodes: [{ label: "Wait for all six", kind: "merge" }] },
       { nodes: [{ label: "Confirm it all ran", kind: "code" }] },
-      { nodes: [{ label: "Done — team notified", sub: "Slack", kind: "sink" }] },
+      { nodes: [{ label: "Done, team notified", sub: "Slack", kind: "sink" }] },
     ],
   },
   {
@@ -226,7 +226,7 @@ export const workflows: Workflow[] = [
     problem: "Someone chases unpaid invoices by hand every single week.",
     title: "Invoices that chase themselves",
     purpose:
-      "Every morning it pulls your overdue invoices, picks the right tone for each based on how late it is — a gentle nudge, a firm reminder, or a final notice — sends them all, and flags the worst offenders to a human. The money gets chased while you sleep.",
+      "Every morning it pulls your overdue invoices, picks the right tone for each based on how late it is (a gentle nudge, a firm reminder, or a final notice), sends them all, and flags the worst offenders to a human. The money gets chased while you sleep.",
     systems: ["Stripe", "QuickBooks", "Gmail", "Slack", "Google Sheets"],
     stat: "3 invoices · 3 reminders · 1 escalated · 0.2s",
     stages: [
@@ -246,7 +246,7 @@ export const workflows: Workflow[] = [
     problem: "Receipts pile up and get typed into the books one by one.",
     title: "Receipts that file themselves",
     purpose:
-      "A receipt lands in the inbox. AI reads the photo or PDF — vendor, amount, category — checks it isn't a duplicate and fits policy, then posts it straight to the books. Anything odd gets flagged to a human. The shoebox of receipts disappears.",
+      "A receipt lands in the inbox. AI reads the photo or PDF (vendor, amount, category), checks it isn't a duplicate and fits policy, then posts it straight to the books. Anything odd gets flagged to a human. The shoebox of receipts disappears.",
     systems: ["Gmail", "OpenAI", "QuickBooks", "Google Sheets", "Slack"],
     stat: "receipt read · booked to Travel · 0.2s",
     stages: [
@@ -292,7 +292,7 @@ export const workflows: Workflow[] = [
     problem: "One blog post should become ten pieces of content, but never does.",
     title: "One post becomes ten",
     purpose:
-      "Publish a blog post and it instantly becomes a LinkedIn post, an X thread, a newsletter blurb, an Instagram caption and a short-video script — all in your brand voice — then gets scheduled and saved to your content calendar. One piece of work, a week of content.",
+      "Publish a blog post and it instantly becomes a LinkedIn post, an X thread, a newsletter blurb, an Instagram caption and a short-video script, all in your brand voice, then gets scheduled and saved to your content calendar. One piece of work, a week of content.",
     systems: ["WordPress", "OpenAI", "Buffer", "Notion"],
     stat: "1 post → 5 formats · scheduled · 0.3s",
     stages: [
@@ -321,7 +321,7 @@ export const workflows: Workflow[] = [
     problem: "Reps walk into calls cold, with no idea who they're talking to.",
     title: "Every call, fully briefed",
     purpose:
-      "Thirty minutes before a meeting, it looks up who you're talking to — their role, their company, recent news — pulls your past history with them from the CRM, and writes a one-page brief with talking points and smart questions. You walk in knowing exactly what to say.",
+      "Thirty minutes before a meeting, it looks up who you're talking to (their role, their company, recent news), pulls your past history with them from the CRM, and writes a one-page brief with talking points and smart questions. You walk in knowing exactly what to say.",
     systems: ["Google Calendar", "Apollo", "HubSpot", "Claude", "Slack"],
     stat: "company + history + questions · briefed in seconds · 0.25s",
     stages: [
@@ -347,7 +347,7 @@ export const workflows: Workflow[] = [
     problem: "Someone leaves and nobody's sure every account actually got shut off.",
     title: "Offboarding that closes every door",
     purpose:
-      "On an employee's last day, it revokes every login at once — email, Slack, single sign-on across all apps — reassigns their open tasks, stops payroll, then posts a confirmed audit checklist to IT and the manager. No forgotten account left open.",
+      "On an employee's last day, it revokes every login at once (email, Slack, single sign-on across all apps), reassigns their open tasks, stops payroll, then posts a confirmed audit checklist to IT and the manager. No forgotten account left open.",
     systems: ["BambooHR", "Google Workspace", "Slack", "Okta", "Asana"],
     stat: "5 systems closed · audit logged · 0.25s",
     stages: [
@@ -375,7 +375,7 @@ export const workflows: Workflow[] = [
     problem: "Nobody knows the real numbers without half a day of stitching spreadsheets.",
     title: "The numbers, every morning, in one place",
     purpose:
-      "At 7am it pulls yesterday's sales, ad spend, website traffic and pipeline from four different tools, compares them to the day before, and writes a plain-English brief — revenue, ROAS, what changed, what to watch — then posts it to leadership. No more half-day of stitching.",
+      "At 7am it pulls yesterday's sales, ad spend, website traffic and pipeline from four different tools, compares them to the day before, and writes a plain-English brief (revenue, ROAS, what changed, what to watch), then posts it to leadership. No more half-day of stitching.",
     systems: ["Stripe", "Meta Ads", "Google Analytics", "HubSpot", "Claude", "Slack"],
     stat: "4 sources · 1 morning brief · 0.25s",
     stages: [

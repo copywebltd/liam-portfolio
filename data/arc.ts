@@ -9,7 +9,7 @@ export type ArcPhase = {
 
 export const arc: ArcPhase[] = [
   {
-    years: "2021 — 2026",
+    years: "2021-2026",
     role: "DR copywriter → Head of AI Copy",
     org: "Satoshi Gaming Group",
     geo: "United States",
@@ -17,7 +17,7 @@ export const arc: ArcPhase[] = [
     highlight: "1.5M+ players. $96K → $674K/mo. No safety net.",
   },
   {
-    years: "2023 — 2025",
+    years: "2023-2025",
     role: "AI Copywriter → Head of AI Copy",
     org: "Foxelli Group",
     geo: "Netherlands",
@@ -25,7 +25,7 @@ export const arc: ArcPhase[] = [
     highlight: "1.2% → 3.6% conv. Mindful Souls email $76K → $249K in 4 months.",
   },
   {
-    years: "2025 — 2026",
+    years: "2025-2026",
     role: "Head of AI Automation/Strategy",
     org: "Foxelli Group",
     geo: "Netherlands",
@@ -33,7 +33,7 @@ export const arc: ArcPhase[] = [
     highlight: "Foxelli Studio shipped. 73 prod bugs resolved. 4 security audits passed.",
   },
   {
-    years: "2023 — Present",
+    years: "Since 2023",
     role: "Founder",
     org: "Copyweb",
     geo: "South Africa → global",

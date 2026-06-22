@@ -12,6 +12,7 @@ import {
 } from "@/components/v4/sections";
 import { Systems } from "@/components/v4/systems";
 import { Workflows } from "@/components/v4/workflows";
+import { JumpMap } from "@/components/v4/jumpmap";
 
 export default function V4Page() {
   return (
@@ -20,6 +21,7 @@ export default function V4Page() {
       <ProgressRail />
       <CommandPalette />
       <Hero />
+      <JumpMap />
       <Ticker />
       <RecruiterCard />
       <Systems />

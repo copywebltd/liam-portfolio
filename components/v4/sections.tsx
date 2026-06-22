@@ -9,6 +9,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { arc } from "@/data/arc";
+import { caseStudies } from "@/data/case-studies";
 import { stackTabs } from "@/data/stack";
 import { EmberField } from "./shader";
 import { EMAIL, LINKEDIN, openPalette } from "./chrome";
@@ -100,7 +101,7 @@ export function Hero() {
           <div className="mt-11 flex flex-wrap items-center gap-4">
             <Magnetic>
               <a href="#systems" className="v4-btn v4-btn-primary">
-                View the systems
+                See the work
                 <span aria-hidden>↓</span>
               </a>
             </Magnetic>
@@ -155,7 +156,7 @@ const tickerItems = [
   "$800K peak monthly revenue · Hooks & Needles",
   "Email revenue 3.3× in 4 months · Mindful Souls",
   "60+ custom Claude Code skills authored",
-  "11 systems shipped end-to-end",
+  `${caseStudies.length} systems shipped end-to-end`,
   "26 production workflows · Foxelli Studio",
   "$3.16 per cinematic ad spot",
   "~60% media cost reduction via Kie.ai routing",
@@ -209,7 +210,7 @@ export function RecruiterCard() {
               <div className="flex items-center gap-3">
                 <span className="v4-eyebrow">Reading in 10 seconds?</span>
                 <span className="v4-mono-dim hidden md:inline">
-                  — the short version
+                  · the short version
                 </span>
               </div>
               <div className="flex items-center gap-2.5">
@@ -267,7 +268,7 @@ const receipts: Receipt[] = [
   { value: 800, prefix: "$", suffix: "K", label: "Peak monthly revenue", sub: "Hooks & Needles · $414K → $800K via Foxelli Studio" },
   { value: 3.3, suffix: "×", decimals: 1, label: "Email revenue scaled", sub: "$76K → $249K in 4 months · Mindful Souls" },
   { value: 60, suffix: "+", label: "Custom Claude Code skills", sub: "Authored end-to-end" },
-  { value: 11, suffix: "", label: "Systems shipped", sub: "Cross-functional, end-to-end" },
+  { value: caseStudies.length, suffix: "", label: "Systems shipped", sub: "Cross-functional, end-to-end" },
 ];
 
 export function Receipts() {
