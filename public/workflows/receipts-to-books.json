@@ -1,0 +1,216 @@
+{
+  "name": "Receipts to bookkeeping (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "receipts-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "New receipt email",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        304
+      ],
+      "webhookId": "d1983b27-0a41-424b-888e-875dd6ba7957",
+      "notes": "PRODUCTION: Gmail inbound (receipts@) webhook."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ vendor:\"Uber\", date:\"2026-06-20\", amount:24.5, category:\"Travel\", confidence:0.96 }}];"
+      },
+      "id": "read",
+      "name": "Read the receipt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        304
+      ],
+      "notes": "PRODUCTION: OpenAI vision / OCR pulls vendor, date, amount and category from the image or PDF."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ ...d, duplicate:false, policy_ok:true, status:\"clean\" }}];"
+      },
+      "id": "check",
+      "name": "Check duplicates + policy",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        304
+      ],
+      "notes": "Compares against existing entries and your expense policy."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "clean",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "gate",
+      "name": "Looks clean?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        800,
+        304
+      ],
+      "notes": "Clean receipts post straight to the books; anything odd goes to a human."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ system:\"QuickBooks\", action:\"Logged $\"+d.amount+\" to \"+d.category, status:\"ok\" }}];"
+      },
+      "id": "books",
+      "name": "Add to the books",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        192
+      ],
+      "notes": "PRODUCTION: QuickBooks / Xero expense entry, categorized."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Slack\", action:\"Sent to #finance for review\", status:\"ok\" }}];"
+      },
+      "id": "flagr",
+      "name": "Flag for review",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        416
+      ],
+      "notes": "PRODUCTION: Slack posts the receipt to #finance for a human."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Google Sheets\", outcome:\"receipt read + booked\", status:\"ok\" }}];"
+      },
+      "id": "log",
+      "name": "Log it",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        304
+      ],
+      "notes": "PRODUCTION: Google Sheets keeps the running record."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "New receipt email": {
+      "main": [
+        [
+          {
+            "node": "Read the receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the receipt": {
+      "main": [
+        [
+          {
+            "node": "Check duplicates + policy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check duplicates + policy": {
+      "main": [
+        [
+          {
+            "node": "Looks clean?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Looks clean?": {
+      "main": [
+        [
+          {
+            "node": "Add to the books",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Flag for review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add to the books": {
+      "main": [
+        [
+          {
+            "node": "Log it",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flag for review": {
+      "main": [
+        [
+          {
+            "node": "Log it",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "adac8fb5-4ddc-40dc-858e-090553898b55",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "7ZQuCIbZSHSyyLzK",
+  "tags": []
+}

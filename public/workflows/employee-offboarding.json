@@ -1,0 +1,257 @@
+{
+  "name": "Employee offboarding (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "offboard-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "An employee's last day",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        320
+      ],
+      "webhookId": "0de4d438-19e0-4a2c-bb69-62eda0c4a480",
+      "notes": "PRODUCTION: HRIS (BambooHR) termination event."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ name:\"Alex Kim\", email:\"alex@example.com\", role:\"Designer\", manager:\"Dana\" }}];"
+      },
+      "id": "read",
+      "name": "Read who's leaving",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Google Workspace\", action:\"Account suspended\", status:\"ok\" }}];"
+      },
+      "id": "gw",
+      "name": "Revoke Google Workspace",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        80
+      ],
+      "notes": "PRODUCTION: Google Admin SDK suspends the account + ends sessions."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Slack\", action:\"User deactivated\", status:\"ok\" }}];"
+      },
+      "id": "slack",
+      "name": "Remove from Slack",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        192
+      ],
+      "notes": "PRODUCTION: Slack admin deactivates the user."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Okta\", action:\"SSO revoked across all apps\", status:\"ok\" }}];"
+      },
+      "id": "okta",
+      "name": "Revoke app logins (SSO)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        304
+      ],
+      "notes": "PRODUCTION: Okta deactivates SSO across every connected app at once."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Asana\", action:\"Open tasks reassigned to Dana\", status:\"ok\" }}];"
+      },
+      "id": "asana",
+      "name": "Reassign their tasks",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        416
+      ],
+      "notes": "PRODUCTION: Asana moves open tasks to the manager."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Payroll\", action:\"Final pay set + recurring stopped\", status:\"ok\" }}];"
+      },
+      "id": "payroll",
+      "name": "Stop payroll",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        528
+      ],
+      "notes": "PRODUCTION: payroll final-pay calculated + recurring pay stopped."
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "id": "merge",
+      "name": "Collect every step",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        832,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const all=$input.all().map(i=>i.json);\nreturn [{ json:{ system:\"Slack\", action:\"Offboarding complete + audit logged\", systems_closed:all.length, closed:all.map(a=>a.system), all_ok:all.every(a=>a.status===\"ok\"), status:\"ok\" }}];"
+      },
+      "id": "confirm",
+      "name": "Confirm + notify IT",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        320
+      ],
+      "notes": "PRODUCTION: builds the audit checklist + posts it to IT and the manager (Slack). Nothing slips through."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "An employee's last day": {
+      "main": [
+        [
+          {
+            "node": "Read who's leaving",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read who's leaving": {
+      "main": [
+        [
+          {
+            "node": "Revoke Google Workspace",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Remove from Slack",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Revoke app logins (SSO)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Reassign their tasks",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Stop payroll",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revoke Google Workspace": {
+      "main": [
+        [
+          {
+            "node": "Collect every step",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove from Slack": {
+      "main": [
+        [
+          {
+            "node": "Collect every step",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Revoke app logins (SSO)": {
+      "main": [
+        [
+          {
+            "node": "Collect every step",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Reassign their tasks": {
+      "main": [
+        [
+          {
+            "node": "Collect every step",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Stop payroll": {
+      "main": [
+        [
+          {
+            "node": "Collect every step",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Collect every step": {
+      "main": [
+        [
+          {
+            "node": "Confirm + notify IT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "67548eae-0b84-4b43-829b-170874bf36a6",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "Z1Gcbxnf2UWrrUv2",
+  "tags": []
+}

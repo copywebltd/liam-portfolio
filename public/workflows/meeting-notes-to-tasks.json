@@ -1,0 +1,163 @@
+{
+  "name": "Meeting notes to tasks (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "meeting-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "A meeting ends",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        304
+      ],
+      "webhookId": "90db534c-f982-4da6-a7ee-23ae7a7b1d6d",
+      "notes": "PRODUCTION: Zoom / Google Meet transcript-ready webhook (Fireflies / Otter)."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ title:\"Weekly sync\", attendees:[\"Liam\",\"Dana\",\"Sam\"] }}];"
+      },
+      "id": "read",
+      "name": "Read the transcript",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ ...d, tasks:[\n  {task:\"Send the Q3 proposal\", owner:\"Dana\", due:\"Fri\"},\n  {task:\"Fix the checkout bug\", owner:\"Sam\", due:\"Wed\"},\n  {task:\"Book the venue\", owner:\"Liam\", due:\"next Mon\"}\n]}}];"
+      },
+      "id": "extract",
+      "name": "Pull out the action items",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        304
+      ],
+      "notes": "PRODUCTION: Claude extracts tasks, owners and due dates from the transcript."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ ...d, system:\"Asana\", created:d.tasks.length, status:\"ok\" }}];"
+      },
+      "id": "create",
+      "name": "Create the tasks",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        304
+      ],
+      "notes": "PRODUCTION: Asana / Notion tasks created + assigned with due dates."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ ...d, system:\"Slack\", notified:d.tasks.length, status:\"ok\" }}];"
+      },
+      "id": "notify",
+      "name": "Tell each owner",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        304
+      ],
+      "notes": "PRODUCTION: Slack DMs each owner their task."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ system:\"Slack\", action:\"Recap posted\", action_items:d.created, owners_notified:d.notified, status:\"ok\" }}];"
+      },
+      "id": "recap",
+      "name": "Post a recap",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        304
+      ],
+      "notes": "PRODUCTION: Slack / email recap with the decisions + who owns what."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "A meeting ends": {
+      "main": [
+        [
+          {
+            "node": "Read the transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the transcript": {
+      "main": [
+        [
+          {
+            "node": "Pull out the action items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pull out the action items": {
+      "main": [
+        [
+          {
+            "node": "Create the tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create the tasks": {
+      "main": [
+        [
+          {
+            "node": "Tell each owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tell each owner": {
+      "main": [
+        [
+          {
+            "node": "Post a recap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "eda731af-fe43-4f84-8e03-dc9a4018b283",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "AhnBfchfpKMZBI8R",
+  "tags": []
+}

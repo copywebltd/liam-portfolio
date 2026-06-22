@@ -1,0 +1,282 @@
+{
+  "name": "One blog post into ten (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "repurpose-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "New blog post published",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        320
+      ],
+      "webhookId": "ca1723a8-1bb5-45f9-b0ae-17a77d87e2c0",
+      "notes": "PRODUCTION: WordPress publish webhook (or RSS)."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ title:\"5 ways to cut your ad costs\", url:\"https://blog.example.com/cut-ad-costs\" }}];"
+      },
+      "id": "read",
+      "name": "Read the post",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ format:\"LinkedIn post\", status:\"ok\" }}];"
+      },
+      "id": "li",
+      "name": "Write a LinkedIn post",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        112
+      ],
+      "notes": "PRODUCTION: Claude, in your brand voice."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ format:\"X thread\", status:\"ok\" }}];"
+      },
+      "id": "x",
+      "name": "Write an X thread",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        224
+      ],
+      "notes": "PRODUCTION: Claude, in your brand voice."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ format:\"Newsletter blurb\", status:\"ok\" }}];"
+      },
+      "id": "nl",
+      "name": "Write a newsletter blurb",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        320
+      ],
+      "notes": "PRODUCTION: Claude, in your brand voice."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ format:\"Instagram caption\", status:\"ok\" }}];"
+      },
+      "id": "ig",
+      "name": "Write an Instagram caption",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        432
+      ],
+      "notes": "PRODUCTION: Claude, in your brand voice."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ format:\"Short-video script\", status:\"ok\" }}];"
+      },
+      "id": "vid",
+      "name": "Write a short-video script",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        544
+      ],
+      "notes": "PRODUCTION: Claude, in your brand voice."
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "id": "merge",
+      "name": "Collect all five",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        832,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const all=$input.all();\nreturn [{ json:{ system:\"Buffer\", scheduled:all.length, formats:all.map(i=>i.json.format), status:\"ok\" }}];"
+      },
+      "id": "sched",
+      "name": "Schedule them all",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        320
+      ],
+      "notes": "PRODUCTION: Buffer schedules each piece to the right channel + time."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ system:\"Notion\", saved:d.scheduled, status:\"ok\" }}];"
+      },
+      "id": "save",
+      "name": "Save the drafts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        320
+      ],
+      "notes": "PRODUCTION: Notion content calendar."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "New blog post published": {
+      "main": [
+        [
+          {
+            "node": "Read the post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the post": {
+      "main": [
+        [
+          {
+            "node": "Write a LinkedIn post",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Write an X thread",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Write a newsletter blurb",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Write an Instagram caption",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Write a short-video script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write a LinkedIn post": {
+      "main": [
+        [
+          {
+            "node": "Collect all five",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write an X thread": {
+      "main": [
+        [
+          {
+            "node": "Collect all five",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Write a newsletter blurb": {
+      "main": [
+        [
+          {
+            "node": "Collect all five",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Write an Instagram caption": {
+      "main": [
+        [
+          {
+            "node": "Collect all five",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Write a short-video script": {
+      "main": [
+        [
+          {
+            "node": "Collect all five",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Collect all five": {
+      "main": [
+        [
+          {
+            "node": "Schedule them all",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule them all": {
+      "main": [
+        [
+          {
+            "node": "Save the drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "bde91177-c440-4fe8-b785-12f66ab0edac",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "MQcfaQKyDNIn6RT8",
+  "tags": []
+}

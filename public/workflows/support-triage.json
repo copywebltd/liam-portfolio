@@ -1,0 +1,240 @@
+{
+  "name": "AI support triage with approval (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "support-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "New support message",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        304
+      ],
+      "webhookId": "df5b10d0-4921-4747-afc1-9fe63ad8dd04",
+      "notes": "PRODUCTION: Gmail / Zendesk / WhatsApp inbound message webhook."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ from:\"sam@example.com\", subject:\"Can't log into my account\", body:\"I keep getting 'invalid password' even after resetting.\", channel:\"email\" }}];"
+      },
+      "id": "read",
+      "name": "Read the message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ ...d, topic:\"Login / password\", urgency:\"high\", churn_risk:false }}];"
+      },
+      "id": "sort",
+      "name": "Sort it + flag urgency",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        304
+      ],
+      "notes": "PRODUCTION: OpenAI classifies topic + urgency and spots churn-risk language."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ ...d, draft:\"Hi — let's get you back in. Reset at /account/reset; if it still fails your account may be locked, which I've cleared.\", sources:[\"Help: Reset your password\",\"Help: Account locked\"], confidence:0.9 }}];"
+      },
+      "id": "draft",
+      "name": "Draft a grounded reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        304
+      ],
+      "notes": "PRODUCTION: Claude writes a reply using ONLY your help-centre articles, with citations."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.confidence }}",
+              "rightValue": 0.85,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "gate",
+      "name": "Safe to auto-send?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        304
+      ],
+      "notes": "Confident + simple replies send automatically; anything else waits for a human."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Zendesk\", action:\"Reply sent + cited 2 help articles\", status:\"ok\" }}];"
+      },
+      "id": "send",
+      "name": "Send the reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        192
+      ],
+      "notes": "PRODUCTION: Zendesk / Gmail sends the reply to the customer."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Slack\", action:\"Draft routed to an agent in #support-review\", status:\"ok\" }}];"
+      },
+      "id": "approve",
+      "name": "Send to an agent to approve",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        416
+      ],
+      "notes": "PRODUCTION: Slack posts the draft to #support-review for one-click approval."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Zendesk\", outcome:\"auto-resolved · cited sources\", action:\"tagged 'login' + closed\", status:\"ok\" }}];"
+      },
+      "id": "close",
+      "name": "Tag + close the ticket",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        304
+      ],
+      "notes": "PRODUCTION: Zendesk tags + closes, keeping the queue clean."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "New support message": {
+      "main": [
+        [
+          {
+            "node": "Read the message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the message": {
+      "main": [
+        [
+          {
+            "node": "Sort it + flag urgency",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort it + flag urgency": {
+      "main": [
+        [
+          {
+            "node": "Draft a grounded reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft a grounded reply": {
+      "main": [
+        [
+          {
+            "node": "Safe to auto-send?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Safe to auto-send?": {
+      "main": [
+        [
+          {
+            "node": "Send the reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send to an agent to approve",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send the reply": {
+      "main": [
+        [
+          {
+            "node": "Tag + close the ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to an agent to approve": {
+      "main": [
+        [
+          {
+            "node": "Tag + close the ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "c1f9ada3-cfb7-4d31-b38d-d55efd1e4fe0",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "ZJm8Fw7DxCFi9NkA",
+  "tags": []
+}

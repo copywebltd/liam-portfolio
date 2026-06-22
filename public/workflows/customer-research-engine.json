@@ -1,0 +1,421 @@
+{
+  "name": "Customer Research Engine — 9-channel VOC mining (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        48,
+        544
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"brand\": \"Sun Home Saunas\",\n  \"category\": \"wellness\",\n  \"reddit_subreddits\": [\"Sauna\", \"Biohackers\", \"redlighttherapy\"],\n  \"amazon_asins\": [\"B0XXSAUNA1\"],\n  \"fb_ad_search_urls\": [\"facebook.com/ads/library?q=Sun%20Home%20Saunas\"],\n  \"youtube_channel_url\": \"youtube.com/@SunHomeSaunas\",\n  \"tiktok_profiles\": [\"@sunhomesaunas\"],\n  \"trustpilot_domain\": \"sunhome.com\",\n  \"instagram_handles\": [\"sunhomesaunas\"],\n  \"search_brand_queries\": [\"Sun Home Saunas reviews\"],\n  \"search_category_queries\": [\"best home infrared sauna 2026\", \"is infrared sauna worth it\"],\n  \"jina_urls\": [\"https://sunhome.com\"]\n}",
+        "options": {}
+      },
+      "id": "brandfacts",
+      "name": "The brand to research",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        544
+      ],
+      "notes": "The input contract. Only present keys fire a channel — missing keys skip silently. Mode + thresholds gate downstream."
+    },
+    {
+      "parameters": {
+        "jsCode": "// DEMO: real Reddit VOC mined for Sun Home Saunas, cached from a prior Apify run.\nconst posts = [\n  [\"r/Sauna\",294,\"DIY Backyard Sauna Build (8x12 Shed Conversion ~$4k)\",\"Sharing my DIY sauna build for anyone on the fence about starting one.\"],\n  [\"r/redlighttherapy\",407,\"Proof red light therapy works\",\"Hair regime: iRestore Pro helmet every other day, NO minoxidil.\"],\n  [\"r/Sauna\",112,\"benches too low\",\"Swedish sauna so the low benches are on purpose. They don't like the heat as we Finns do.\"],\n  [\"r/redlighttherapy\",411,\"My dog weirdly loves red light\",\"Red light for pets trend is everywhere right now.\"],\n  [\"r/Biohackers\",258,\"dental red light\",\"A dental red light device — my dentist keeps commenting how good my gums look now.\"],\n  [\"r/Sauna\",311,\"old telephone booth sauna\",\"Bumped into this old telephone booth made into a sauna in Helsinki.\"]\n];\nreturn posts.map(p => ({ json: {\n  source_channel:\"reddit\", content_text:p[2]+\" — \"+p[3], author:null, date_iso:null,\n  rating:null, verified:null, engagement_count:p[1],\n  raw:{subreddit:p[0], _actor:\"harshmaur/reddit-scraper\", _actor_used:\"primary\"}\n}}));"
+      },
+      "id": "reddit",
+      "name": "Listen to Reddit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        -224
+      ],
+      "notes": "PRODUCTION: POST api.apify.com/v2/acts/harshmaur~reddit-scraper/run-sync-get-dataset-items · primary harshmaur, fallback trudax/reddit-scraper-lite · ~$0.0075-0.05/sub. Demo returns real cached VOC."
+    },
+    {
+      "parameters": {
+        "jsCode": "// DEMO: category review signal (sauna accessories on Amazon).\nconst reviews = [\n  [5,true,\"Gets hot fast and the EMF readings are genuinely low. Replaced my gym sauna habit.\"],\n  [4,true,\"Great heat but assembly took two people an afternoon. Worth it once built.\"]\n];\nreturn reviews.map(r => ({ json:{\n  source_channel:\"amazon\", content_text:r[2], author:null, date_iso:null,\n  rating:r[0], verified:r[1], engagement_count:0,\n  raw:{_actor:\"web_wanderer/amazon-reviews-extractor\", _actor_used:\"primary\"}\n}}));"
+      },
+      "id": "amazon",
+      "name": "Read Amazon reviews",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        -32
+      ],
+      "notes": "PRODUCTION: api.apify.com/v2/acts/web_wanderer~amazon-reviews-extractor (Billy) · fallback axesso · $1/1k reviews · verified-purchase signal."
+    },
+    {
+      "parameters": {
+        "jsCode": "// DEMO: real Facebook Ad Library creative for Sun Home + competitors.\nconst ads = [\n  [\"Sun Home Saunas\",\"America's #1 Home Sauna — 5-Star Reviews. Real customers. Real results.\"],\n  [\"Sun Home Saunas\",\"Built to Outlast Every Sauna on the Market. Premium Canadian cedar, full-spectrum heaters, integrated red light. The last sauna you'll ever buy.\"],\n  [\"Sunlighten\",\"How infrared sauna mimics cardio — infrared waves raise core body temp and heart rate, 'passive cardio.'\"],\n  [\"HigherDOSE\",\"HeatPod 2.0: the best sauna blanket on the market — max temp 185F, fully customizable sessions.\"]\n];\nreturn ads.map(a => ({ json:{\n  source_channel:\"fb_ads\", content_text:a[1], author:a[0], date_iso:null,\n  rating:null, verified:null, engagement_count:0,\n  raw:{advertiser:a[0], status:\"ACTIVE\", _actor:\"curious_coder/facebook-ads-library-scraper\"}\n}}));"
+      },
+      "id": "fbads",
+      "name": "Pull competitor Facebook ads",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        160
+      ],
+      "notes": "PRODUCTION: api.apify.com/v2/acts/curious_coder~facebook-ads-library-scraper · $0.75/1k ads · competitive swipe + creative iteration history."
+    },
+    {
+      "parameters": {
+        "jsCode": "// DEMO: real YouTube comments (two-stage self-pruning kept only commented videos).\nconst comments = [[\"@AimFaucet\",\"Great minds think alike\"],[\"@brandoncox1900\",\"Gorgeous!\"]];\nreturn comments.map(c => ({ json:{\n  source_channel:\"youtube\", content_text:c[1], author:c[0], date_iso:null,\n  rating:null, verified:null, engagement_count:0,\n  raw:{_actor:\"streamers/youtube-comments-scraper\", stage:\"B\"}\n}}));"
+      },
+      "id": "youtube",
+      "name": "Read YouTube comments",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        352
+      ],
+      "notes": "PRODUCTION: streamers~youtube-scraper (Stage A, self-prune to videos with >=10 comments) -> streamers~youtube-comments-scraper (Stage B, top 5) · aborts cheap on thin engagement."
+    },
+    {
+      "parameters": {
+        "jsCode": "// DEMO: TikTok comment VOC (profiles mode, brand mining).\nconst c = [\n  \"wait it actually helps with recovery? adding to cart\",\n  \"the EMF thing is what sold me ngl\",\n  \"how long till you feel results from infrared?\"\n];\nreturn c.map(t => ({ json:{\n  source_channel:\"tiktok\", content_text:t, author:null, date_iso:null,\n  rating:null, verified:null, engagement_count:0,\n  raw:{_actor:\"clockworks/tiktok-comments-scraper\", mode:\"profiles\"}\n}}));"
+      },
+      "id": "tiktok",
+      "name": "Read TikTok comments",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        544
+      ],
+      "notes": "PRODUCTION: api.apify.com/v2/acts/clockworks~tiktok-comments-scraper (profiles mode) · ~$0.10-0.30/pack · younger-demo VOC."
+    },
+    {
+      "parameters": {
+        "jsCode": "// DEMO: Trustpilot brand-sentiment cross-check (drift vs Amazon).\nconst r = [[5,\"Delivery was white-glove and the sauna runs hotter than my old one.\"],[2,\"Heater fault after 3 months but support shipped a replacement fast.\"]];\nreturn r.map(x => ({ json:{\n  source_channel:\"trustpilot\", content_text:x[1], author:null, date_iso:null,\n  rating:x[0], verified:null, engagement_count:0,\n  raw:{_actor:\"memo23/trustpilot-scraper-ppe\"}\n}}));"
+      },
+      "id": "trustpilot",
+      "name": "Read Trustpilot reviews",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        736
+      ],
+      "notes": "PRODUCTION: api.apify.com/v2/acts/memo23~trustpilot-scraper-ppe · $0.75/1k · GOTCHA O-1: maxItems is non-linear, always set count>=20."
+    },
+    {
+      "parameters": {
+        "jsCode": "// DEMO: Instagram — Mode A (brand posts) + Mode B (comment VOC, fires on wellness category).\nconst ig = [\n  [\"post\",\"Cold plunge + sauna contrast therapy is the protocol. Save this.\"],\n  [\"comment\",\"does the red light come standard or is it an add-on?\"]\n];\nreturn ig.map(p => ({ json:{\n  source_channel:\"instagram\", content_text:p[1], author:null, date_iso:null,\n  rating:null, verified:null, engagement_count:0,\n  raw:{_actor:\"apify/instagram-scraper\", mode:p[0]===\"comment\"?\"B\":\"A\"}\n}}));"
+      },
+      "id": "instagram",
+      "name": "Read Instagram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        928
+      ],
+      "notes": "PRODUCTION: api.apify.com/v2/acts/apify~instagram-scraper · Mode A brand posts (~$0.03) always-on + Mode B comment VOC (~$0.58) fires on wellness/beauty/CPG categories."
+    },
+    {
+      "parameters": {
+        "jsCode": "// DEMO: top-of-funnel intent (category queries). FREE via Jina Search.\nconst s = [\n  \"best home infrared sauna 2026 — buyer's guide comparing full-spectrum vs far-infrared\",\n  \"is an infrared sauna worth it? what the research actually says about circulation + recovery\"\n];\nreturn s.map(t => ({ json:{\n  source_channel:\"web_search\", content_text:t, author:null, date_iso:null,\n  rating:null, verified:null, engagement_count:0,\n  raw:{provider:\"jina_search\", is_brand_query:false}\n}}));"
+      },
+      "id": "websearch",
+      "name": "Search the web",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        1120
+      ],
+      "notes": "PRODUCTION: s.jina.ai on JINA_API_KEY · FREE (1M tokens) · brand queries 24h TTL / category queries 14d TTL · provider-agnostic (Brave/Tavily swappable)."
+    },
+    {
+      "parameters": {
+        "jsCode": "// DEMO: clean markdown of the brand landing page. FREE via Jina Reader.\nreturn [{ json:{\n  source_channel:\"jina\",\n  content_text:\"Sun Home Saunas — America's #1 home sauna. Full-spectrum infrared, ultra-low EMF, premium Canadian cedar, integrated red light therapy. Financing available.\",\n  author:null, date_iso:null, rating:null, verified:null, engagement_count:0,\n  raw:{url:\"https://sunhome.com\", _actor:\"jina-reader\"}\n}}];"
+      },
+      "id": "jina",
+      "name": "Read the brand's website",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        1312
+      ],
+      "notes": "PRODUCTION: r.jina.ai keyless · FREE · GOTCHA O-6: requires browser User-Agent + Accept text/plain. Clean markdown of brand/competitor landing pages."
+    },
+    {
+      "parameters": {
+        "numberInputs": 9
+      },
+      "id": "merge",
+      "name": "Combine everything",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        720,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Aggregate all channel items, compute signal_density, apply fail-loud gates.\nconst all = $input.all().map(i => i.json);\nconst CH = [\"reddit\",\"amazon\",\"fb_ads\",\"youtube\",\"tiktok\",\"trustpilot\",\"instagram\",\"web_search\",\"jina\"];\nconst density = Object.fromEntries(CH.map(c => [c,0]));\nfor (const it of all) if (it.source_channel && density[it.source_channel] !== undefined) density[it.source_channel]++;\nconst MIN = {reddit:5, amazon:0, fb_ads:3, youtube:0, tiktok:0, trustpilot:0, instagram:0, web_search:0, jina:0};\nconst gates = CH.map(c => ({channel:c, count:density[c], min:MIN[c], status: density[c] >= MIN[c] ? \"PASS\" : \"BLOCK\"}));\nconst blocked = gates.filter(g => g.status === \"BLOCK\");\nreturn [{ json:{\n  brand:\"Sun Home Saunas\", total_items:all.length, signal_density:density,\n  gates, gate_status: blocked.length ? \"BLOCKED\" : \"PASS\", items:all\n}}];"
+      },
+      "id": "gates",
+      "name": "Check we found enough",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        544
+      ],
+      "notes": "Per-channel minimum-signal gates block fabrication-of-thin-signal (Tower 28 failure mode). signal_density always returns 9 stable keys."
+    },
+    {
+      "parameters": {
+        "jsCode": "// G-7 provenance manifest — schema v1.0.\nconst d = $input.first().json;\nconst fired = Object.entries(d.signal_density).filter(([,n]) => n>0).map(([c]) => c);\nreturn [{ json:{\n  manifest_schema:\"1.0\", brand:d.brand, mode:\"full\", generated:\"demo-run\",\n  channels_fired:fired, channels_count:fired.length, total_signal_items:d.total_items,\n  signal_density:d.signal_density, gate_status:d.gate_status,\n  provenance: fired.map(c => ({channel:c, items:d.signal_density[c], source:\"apify\", actor_locked:true})),\n  ready_for_classifier: d.gate_status === \"PASS\"\n}}];"
+      },
+      "id": "manifest",
+      "name": "Note where each came from",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1168,
+        544
+      ],
+      "notes": "G-7: every shipped claim must back-reference a channel + actor. ready_for_classifier gates the whole downstream brief."
+    },
+    {
+      "parameters": {},
+      "id": "sink",
+      "name": "Save the research",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        544
+      ],
+      "notes": "PRODUCTION: writes normalized corpus + provenance manifest to Supabase research_briefs (RLS-scoped per brand). Feeds the 9-phase classifier (Georgi 22RQ, Schwartz calibration, synthesis)."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "The brand to research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "The brand to research": {
+      "main": [
+        [
+          {
+            "node": "Listen to Reddit",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Amazon reviews",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Pull competitor Facebook ads",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read YouTube comments",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read TikTok comments",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Trustpilot reviews",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Instagram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search the web",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read the brand's website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listen to Reddit": {
+      "main": [
+        [
+          {
+            "node": "Combine everything",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Amazon reviews": {
+      "main": [
+        [
+          {
+            "node": "Combine everything",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Pull competitor Facebook ads": {
+      "main": [
+        [
+          {
+            "node": "Combine everything",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Read YouTube comments": {
+      "main": [
+        [
+          {
+            "node": "Combine everything",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Read TikTok comments": {
+      "main": [
+        [
+          {
+            "node": "Combine everything",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Read Trustpilot reviews": {
+      "main": [
+        [
+          {
+            "node": "Combine everything",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Read Instagram": {
+      "main": [
+        [
+          {
+            "node": "Combine everything",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "Search the web": {
+      "main": [
+        [
+          {
+            "node": "Combine everything",
+            "type": "main",
+            "index": 7
+          }
+        ]
+      ]
+    },
+    "Read the brand's website": {
+      "main": [
+        [
+          {
+            "node": "Combine everything",
+            "type": "main",
+            "index": 8
+          }
+        ]
+      ]
+    },
+    "Combine everything": {
+      "main": [
+        [
+          {
+            "node": "Check we found enough",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check we found enough": {
+      "main": [
+        [
+          {
+            "node": "Note where each came from",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Note where each came from": {
+      "main": [
+        [
+          {
+            "node": "Save the research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "ef74d242-5f7f-4a94-ab31-a457305a281e",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "TPTj5zdRHnumrsbc",
+  "tags": []
+}

@@ -1,0 +1,241 @@
+{
+  "name": "Instant lead response & qualification (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "New website lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        304
+      ],
+      "webhookId": "cf6fe33d-ab55-4034-983a-bc97e930ce17",
+      "notes": "PRODUCTION: WordPress form (Gravity Forms / Elementor) submission webhook."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ name:\"Jordan M.\", email:\"jordan@example.com\", phone:\"+1 555 0142\", message:\"Looking to get started this month — what's the next step?\", source:\"WordPress form\" }}];"
+      },
+      "id": "read",
+      "name": "Read the lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        304
+      ],
+      "notes": "Pulls name, email, phone, message and source from the form."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ ...d, score:88, tier:\"hot\", reason:\"Ready-to-buy language + clear timeline\" }}];"
+      },
+      "id": "qual",
+      "name": "Score & qualify the lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        304
+      ],
+      "notes": "PRODUCTION: OpenAI / Claude scores buying intent + fit against your ideal-customer rules."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.tier }}",
+              "rightValue": "hot",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "gate",
+      "name": "Is it a hot lead?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        784,
+        304
+      ],
+      "notes": "Hot leads get an instant reply; the rest go to nurture. No lead waits."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ channel:\"WhatsApp\", to:d.name, sent:true, text:\"Hi \"+d.name+\"! Thanks for reaching out — grabbing you a call slot now.\", status:\"ok\" }}];"
+      },
+      "id": "wa",
+      "name": "Text them back in seconds",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        192
+      ],
+      "notes": "PRODUCTION: WhatsApp Business API / Twilio sends an instant personalized reply."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ channel:\"Mailchimp\", enrolled:true, sequence:\"warm-nurture\", status:\"ok\" }}];"
+      },
+      "id": "nur",
+      "name": "Add to email nurture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        416
+      ],
+      "notes": "PRODUCTION: Mailchimp / HubSpot enrols warm + cold leads in a nurture sequence."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"HubSpot\", action:\"Contact saved + tagged hot\", status:\"ok\" }}];"
+      },
+      "id": "crm",
+      "name": "Save to the CRM",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        304
+      ],
+      "notes": "PRODUCTION: HubSpot / GoHighLevel contact created + tagged by tier."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Slack\", channel:\"#new-leads\", summary:\"Hot lead Jordan M. — qualified (88) + replied in seconds\", outcome:\"hot · replied · saved\", status:\"ok\" }}];"
+      },
+      "id": "slack",
+      "name": "Tell the sales team",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        304
+      ],
+      "notes": "PRODUCTION: Slack message to #new-leads."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "New website lead": {
+      "main": [
+        [
+          {
+            "node": "Read the lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the lead": {
+      "main": [
+        [
+          {
+            "node": "Score & qualify the lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score & qualify the lead": {
+      "main": [
+        [
+          {
+            "node": "Is it a hot lead?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is it a hot lead?": {
+      "main": [
+        [
+          {
+            "node": "Text them back in seconds",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add to email nurture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text them back in seconds": {
+      "main": [
+        [
+          {
+            "node": "Save to the CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add to email nurture": {
+      "main": [
+        [
+          {
+            "node": "Save to the CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to the CRM": {
+      "main": [
+        [
+          {
+            "node": "Tell the sales team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "7b262137-56db-42fd-a348-11fbb91c4034",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "YYiHPJIaZYlWyg8f",
+  "tags": []
+}

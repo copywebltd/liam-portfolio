@@ -1,0 +1,203 @@
+{
+  "name": "HR Onboarding Assistant — RAG over the handbook (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "hr-bot-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "New hire asks a question",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        304
+      ],
+      "webhookId": "c8207d33-04a8-4819-9f29-705be1ad4d5d",
+      "notes": "PRODUCTION: Slack Events API / slash command posts the new hire's question here."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demo question from a new hire.\nreturn [{ json:{ query:\"How many PTO days do I get and how do I request them?\", user:\"@new.hire\", channel:\"#ask-hr\" }}];"
+      },
+      "id": "parse",
+      "name": "Read the question",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        304
+      ],
+      "notes": "Extracts the query + who asked + which channel to reply in."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demo retrieval result over the employee handbook.\nconst q = $input.first().json.query;\nconst chunks = [\n  { text:\"Full-time employees accrue 20 days PTO per year, accrued monthly, rolling over up to 5 days.\", source:\"Handbook §4.2 Paid Time Off\", score:0.91 },\n  { text:\"PTO requests are submitted in the HRIS and approved by your manager.\", source:\"Handbook §4.3 Requesting Leave\", score:0.83 },\n  { text:\"Public holidays are additional to PTO and follow the regional calendar.\", source:\"Handbook §4.5 Holidays\", score:0.71 }\n];\nconst top = Math.max(...chunks.map(c=>c.score));\nreturn [{ json:{ query:q, chunks, top_score:top, retrieved:chunks.length }}];"
+      },
+      "id": "retrieve",
+      "name": "Search the employee handbook",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        304
+      ],
+      "notes": "PRODUCTION: embed query (Voyage/OpenAI) → pgvector similarity search over the chunked employee handbook. Returns top-K chunks + scores."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.top_score }}",
+              "rightValue": 0.78,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "gate",
+      "name": "Did we find a good answer?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        784,
+        304
+      ],
+      "notes": "Grounding gate: only answer when retrieval is confident. Otherwise hand to a human — the bot never guesses."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Claude composes a grounded, cited answer from retrieved chunks.\nconst d=$input.first().json;\nconst cite=d.chunks.filter(c=>c.score>=0.8).map(c=>c.source);\nreturn [{ json:{\n  answer:\"You accrue 20 PTO days per year (monthly, up to 5 roll over). Submit requests in the HRIS for manager approval. Public holidays are separate.\",\n  citations:cite, confidence:d.top_score, grounded:true, channel:d.channel\n}}];"
+      },
+      "id": "compose",
+      "name": "Write the answer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        192
+      ],
+      "notes": "PRODUCTION: Claude answers constrained to the retrieved chunks only — refuses if unsupported. Citations attached."
+    },
+    {
+      "parameters": {},
+      "id": "reply",
+      "name": "Reply in Slack",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        192
+      ],
+      "notes": "PRODUCTION: Slack chat.postMessage back in-thread with the answer + handbook citations."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ action:\"escalated\", to:\"#people-team\", reason:\"no handbook chunk above confidence threshold\", status:\"handed to human\" }}];"
+      },
+      "id": "escalate",
+      "name": "Ask a human instead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        432
+      ],
+      "notes": "PRODUCTION: low-confidence → route to a human + log the gap so the handbook gets improved."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "New hire asks a question": {
+      "main": [
+        [
+          {
+            "node": "Read the question",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the question": {
+      "main": [
+        [
+          {
+            "node": "Search the employee handbook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search the employee handbook": {
+      "main": [
+        [
+          {
+            "node": "Did we find a good answer?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Did we find a good answer?": {
+      "main": [
+        [
+          {
+            "node": "Write the answer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ask a human instead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write the answer": {
+      "main": [
+        [
+          {
+            "node": "Reply in Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "39fcc90a-099c-4118-a7b5-2d5f8d2c3afb",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "vjgEoB8NHKzEQXgQ",
+  "tags": []
+}

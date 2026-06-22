@@ -1,0 +1,253 @@
+{
+  "name": "Daily KPI brief (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "kpi-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "Every morning at 7am",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        304
+      ],
+      "webhookId": "62c6256b-5baf-4b4c-a252-79484d065a16",
+      "notes": "PRODUCTION: Schedule Trigger, 7am daily."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ source:\"Stripe\", revenue:8420, orders:64 }}];"
+      },
+      "id": "sales",
+      "name": "Get yesterday's sales",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        112
+      ],
+      "notes": "PRODUCTION: Stripe — revenue + orders."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ source:\"Meta\", spend:2100, roas:4.0 }}];"
+      },
+      "id": "ads",
+      "name": "Get ad spend",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        224
+      ],
+      "notes": "PRODUCTION: Meta Ads API — spend + ROAS."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ source:\"GA4\", visitors:5200, conv:1.9 }}];"
+      },
+      "id": "traffic",
+      "name": "Get website traffic",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        336
+      ],
+      "notes": "PRODUCTION: Google Analytics (GA4) — visitors + conversion rate."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ source:\"HubSpot\", new_leads:38, deals_open:12 }}];"
+      },
+      "id": "pipeline",
+      "name": "Get the sales pipeline",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        448
+      ],
+      "notes": "PRODUCTION: HubSpot — new leads + open deals."
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "id": "merge",
+      "name": "Stitch it together",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        560,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const all=$input.all().map(i=>i.json);\nconst get=s=>all.find(a=>a.source===s)||{};\nreturn [{ json:{ revenue:get(\"Stripe\").revenue, spend:get(\"Meta\").spend, roas:get(\"Meta\").roas, visitors:get(\"GA4\").visitors, new_leads:get(\"HubSpot\").new_leads, sources:all.length }}];"
+      },
+      "id": "compute",
+      "name": "Compare to yesterday",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        304
+      ],
+      "notes": "Calculates the day-over-day changes and what to flag."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ system:\"Claude\", brief:\"Yesterday: $\"+d.revenue+\" revenue on $\"+d.spend+\" ad spend (\"+d.roas+\"x ROAS). \"+d.visitors+\" visitors, \"+d.new_leads+\" new leads. Revenue up vs the day before; keep an eye on ad spend creeping.\", sources:d.sources, status:\"ok\" }}];"
+      },
+      "id": "write",
+      "name": "Write the brief",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        304
+      ],
+      "notes": "PRODUCTION: Claude turns the numbers into a plain-English brief + flags what changed."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ system:\"Slack\", channel:\"#daily-brief\", action:\"Morning brief posted\", sources_stitched:d.sources, status:\"ok\" }}];"
+      },
+      "id": "post",
+      "name": "Post to leadership",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        304
+      ],
+      "notes": "PRODUCTION: Slack #daily-brief."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Every morning at 7am": {
+      "main": [
+        [
+          {
+            "node": "Get yesterday's sales",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get ad spend",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get website traffic",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get the sales pipeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get yesterday's sales": {
+      "main": [
+        [
+          {
+            "node": "Stitch it together",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get ad spend": {
+      "main": [
+        [
+          {
+            "node": "Stitch it together",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get website traffic": {
+      "main": [
+        [
+          {
+            "node": "Stitch it together",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Get the sales pipeline": {
+      "main": [
+        [
+          {
+            "node": "Stitch it together",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Stitch it together": {
+      "main": [
+        [
+          {
+            "node": "Compare to yesterday",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare to yesterday": {
+      "main": [
+        [
+          {
+            "node": "Write the brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write the brief": {
+      "main": [
+        [
+          {
+            "node": "Post to leadership",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "8ea1eaf5-b65d-4de4-a835-6be10e5dafd6",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "dqNkolBWfJTRaet7",
+  "tags": []
+}

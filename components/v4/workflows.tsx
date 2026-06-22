@@ -60,27 +60,36 @@ function Rail({ stages }: { stages: WfStage[] }) {
    /workflows/{id}.png, otherwise falls back to the rendered diagram.
    Drop a correctly-named PNG in public/workflows/ and redeploy. */
 function CanvasVisual({ wf }: { wf: Workflow }) {
-  const [status, setStatus] = useState<"loading" | "ok" | "fail">("loading");
+  const [ok, setOk] = useState(false);
   const src = `/workflows/${wf.id}.png`;
+
+  // preload via a detached Image so the real <img> renders only once it's
+  // confirmed to exist + load (no lazy/hidden-image races, no broken icons)
+  useEffect(() => {
+    let alive = true;
+    const img = new Image();
+    img.onload = () => alive && setOk(true);
+    img.onerror = () => alive && setOk(false);
+    img.src = src;
+    return () => {
+      alive = false;
+    };
+  }, [src]);
+
   return (
     <div>
       <div className="v4-mono-dim !text-[9.5px] mb-4">
-        {status === "ok"
-          ? "Real n8n canvas · executed"
-          : "Live in n8n · runs left to right"}
+        {ok ? "Real n8n canvas · executed" : "Live in n8n · runs left to right"}
       </div>
-      {status !== "fail" && (
+      {ok ? (
         <img
           src={src}
           alt={`${wf.title} — n8n workflow canvas`}
-          loading="lazy"
-          onLoad={() => setStatus("ok")}
-          onError={() => setStatus("fail")}
           className="w-full rounded-xl border border-[var(--v4-border-strong)]"
-          style={{ display: status === "ok" ? "block" : "none" }}
         />
+      ) : (
+        <Rail stages={wf.stages} />
       )}
-      {status !== "ok" && <Rail stages={wf.stages} />}
     </div>
   );
 }

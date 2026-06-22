@@ -1,0 +1,164 @@
+{
+  "name": "Overdue invoice chaser (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "invoices-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "Run every morning",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        304
+      ],
+      "webhookId": "5f891a42-b7d6-41be-8730-d0ab71c6c083",
+      "notes": "PRODUCTION: Schedule Trigger, 8am daily."
+    },
+    {
+      "parameters": {
+        "jsCode": "const invoices=[\n  {customer:\"Acme Co\", amount:1200, days:8},\n  {customer:\"Globex\", amount:3400, days:34},\n  {customer:\"Initech\", amount:900, days:72}\n];\nreturn [{ json:{ invoices, count:invoices.length, overdue_total:invoices.reduce((s,i)=>s+i.amount,0) }}];"
+      },
+      "id": "find",
+      "name": "Find unpaid invoices",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        304
+      ],
+      "notes": "PRODUCTION: Stripe invoices.list (status=open) + QuickBooks overdue report."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nconst tone=days=> days>=60?\"final notice\": days>=30?\"firm reminder\":\"gentle nudge\";\nconst planned=d.invoices.map(i=>({...i, reminder:tone(i.days)}));\nreturn [{ json:{ ...d, planned }}];"
+      },
+      "id": "pick",
+      "name": "Pick the right reminder",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        304
+      ],
+      "notes": "Chooses the tone by how overdue it is: gentle → firm → final notice."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ ...d, system:\"Gmail\", sent:d.planned.length, status:\"ok\" }}];"
+      },
+      "id": "send",
+      "name": "Send the reminders",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        304
+      ],
+      "notes": "PRODUCTION: Gmail sends each customer their reminder."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nconst worst=d.planned.filter(i=>i.days>=60);\nreturn [{ json:{ ...d, system:\"Slack\", escalated:worst.length, status:\"ok\" }}];"
+      },
+      "id": "flag",
+      "name": "Flag the worst for a human",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        304
+      ],
+      "notes": "PRODUCTION: Slack posts invoices 60+ days overdue to #finance."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ system:\"Google Sheets\", invoices:d.count, reminders_sent:d.sent, escalated:d.escalated, total_chased:\"$\"+d.overdue_total, status:\"ok\" }}];"
+      },
+      "id": "log",
+      "name": "Log what went out",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        304
+      ],
+      "notes": "PRODUCTION: Google Sheets audit row."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Run every morning": {
+      "main": [
+        [
+          {
+            "node": "Find unpaid invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find unpaid invoices": {
+      "main": [
+        [
+          {
+            "node": "Pick the right reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick the right reminder": {
+      "main": [
+        [
+          {
+            "node": "Send the reminders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send the reminders": {
+      "main": [
+        [
+          {
+            "node": "Flag the worst for a human",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flag the worst for a human": {
+      "main": [
+        [
+          {
+            "node": "Log what went out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "ae39dc0f-fca9-474c-97b9-bdef2d73c536",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "bwInF8v25lwfshQj",
+  "tags": []
+}

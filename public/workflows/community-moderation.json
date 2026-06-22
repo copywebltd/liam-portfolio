@@ -1,0 +1,215 @@
+{
+  "name": "Community moderation assistant (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mod-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "New community post",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        304
+      ],
+      "webhookId": "6d1b1d67-5adc-4664-930d-bccdaf0b9ce4",
+      "notes": "PRODUCTION: Facebook Group / forum / community-platform new-post webhook."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ author:\"newmember_22\", text:\"Join my free masterclass at biz-opp-link.co — DM me!\", group:\"Academy Community\" }}];"
+      },
+      "id": "read",
+      "name": "Read the post",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ ...d, verdict:\"flag\", reason:\"External promo link + DM solicitation\", confidence:0.82 }}];"
+      },
+      "id": "check",
+      "name": "Check it against the rules",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        304
+      ],
+      "notes": "PRODUCTION: OpenAI checks the post against your community guidelines and returns a verdict."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.verdict }}",
+              "rightValue": "ok",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "gate",
+      "name": "Is it clearly fine?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        784,
+        304
+      ],
+      "notes": "Clean posts pass instantly; anything borderline goes to a human — the bot never bans on its own."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Auto\", action:\"Post approved\", status:\"ok\" }}];"
+      },
+      "id": "approve",
+      "name": "Approve automatically",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        192
+      ],
+      "notes": "PRODUCTION: post left up, no action needed."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ system:\"Slack\", action:\"Flagged to #moderation for a human\", reason:d.reason, status:\"ok\" }}];"
+      },
+      "id": "mod",
+      "name": "Send to a moderator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        416
+      ],
+      "notes": "PRODUCTION: Slack posts the flagged item + reason to #moderation for a human call."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Google Sheets\", action:\"Decision logged\", outcome:\"flagged · sent to a human\", status:\"ok\" }}];"
+      },
+      "id": "log",
+      "name": "Log the decision",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        304
+      ],
+      "notes": "PRODUCTION: Google Sheets keeps an audit trail of every call."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "New community post": {
+      "main": [
+        [
+          {
+            "node": "Read the post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the post": {
+      "main": [
+        [
+          {
+            "node": "Check it against the rules",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check it against the rules": {
+      "main": [
+        [
+          {
+            "node": "Is it clearly fine?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is it clearly fine?": {
+      "main": [
+        [
+          {
+            "node": "Approve automatically",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send to a moderator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approve automatically": {
+      "main": [
+        [
+          {
+            "node": "Log the decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to a moderator": {
+      "main": [
+        [
+          {
+            "node": "Log the decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "bf6b568c-ae19-4ce4-8125-7a93578385b9",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "bwPe5TghcRdBMxJQ",
+  "tags": []
+}

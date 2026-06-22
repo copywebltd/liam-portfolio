@@ -1,0 +1,311 @@
+{
+  "name": "Deal Won → whole-company cascade (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "deal-won-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "A deal is marked Won",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        320
+      ],
+      "webhookId": "3897961e-da36-499b-a67d-2aea8721c1c9",
+      "notes": "PRODUCTION: CRM fires this on stage → Closed Won (GoHighLevel/HubSpot workflow webhook). One event, the whole company reacts."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Canonical deal object (demo payload).\nreturn [{ json:{\n  dealId:\"D-10472\", company:\"Acme Co\", contact:\"Dana Reyes\", email:\"dana@acme.co\",\n  plan:\"Build\", mrr:2000, acv:24000, owner:\"Liam\", closedAt:\"demo-run\"\n}}];"
+      },
+      "id": "norm",
+      "name": "Read the deal details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        320
+      ],
+      "notes": "Maps the raw CRM payload to a canonical deal object the downstream departments consume."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ department:\"Sales\", system:\"GoHighLevel\", action:\"Opportunity → Closed Won\", deal:d.dealId, status:\"ok\" }}];"
+      },
+      "id": "sales",
+      "name": "Sales: mark it Won",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        -48
+      ],
+      "notes": "PRODUCTION: PATCH GoHighLevel /opportunities/{id} status=won (or HubSpot deals API)."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ department:\"Finance\", system:\"Stripe\", action:\"Customer + first invoice created\", amount:\"$\"+d.acv, invoice:\"in_demo_8842\", status:\"ok\" }}];"
+      },
+      "id": "finance",
+      "name": "Finance: create the invoice",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        80
+      ],
+      "notes": "PRODUCTION: Stripe customers.create + invoices.create + invoiceItems."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ department:\"Ops\", system:\"Notion\", action:\"Onboarding checklist (8 tasks) created\", owner:d.owner, status:\"ok\" }}];"
+      },
+      "id": "ops",
+      "name": "Ops: build the onboarding checklist",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        192
+      ],
+      "notes": "PRODUCTION: Notion pages.create in the Onboarding DB — 1 checklist, 8 tasks, owner assigned."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ department:\"Support\", system:\"Intercom\", action:\"Account provisioned + welcome sent\", status:\"ok\" }}];"
+      },
+      "id": "support",
+      "name": "Support: set up their account",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        304
+      ],
+      "notes": "PRODUCTION: Intercom contacts.create + companies.attach + welcome macro."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ department:\"Marketing\", system:\"Klaviyo\", action:\"Enrolled in onboarding flow\", profile:d.email, status:\"ok\" }}];"
+      },
+      "id": "marketing",
+      "name": "Marketing: start the welcome emails",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        400
+      ],
+      "notes": "PRODUCTION: Klaviyo profiles.subscribe → triggers the onboarding email flow."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ department:\"Exec\", system:\"Slack\", action:\"#revenue: New Build deal +$\"+d.acv+\" (\"+d.company+\")\", status:\"ok\" }}];"
+      },
+      "id": "exec",
+      "name": "Leadership: post the good news",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        512
+      ],
+      "notes": "PRODUCTION: Slack chat.postMessage to #revenue with the deal summary."
+    },
+    {
+      "parameters": {
+        "numberInputs": 6
+      },
+      "id": "merge",
+      "name": "Wait for all six",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        848,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const all=$input.all().map(i=>i.json);\nconst depts=[...new Set(all.map(a=>a.department))];\nreturn [{ json:{\n  event:\"deal.won\", company:\"Acme Co\", acv:\"$24,000\",\n  departments_touched:depts.length, departments:depts,\n  actions:all.length, all_ok: all.every(a=>a.status===\"ok\"),\n  systems:[...new Set(all.map(a=>a.system))], status:\"cascade complete\"\n}}];"
+      },
+      "id": "summary",
+      "name": "Confirm it all ran",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        240
+      ],
+      "notes": "Confirms every department acted. In production this is the audit record of the cascade."
+    },
+    {
+      "parameters": {},
+      "id": "sink",
+      "name": "Done — team notified",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        240
+      ],
+      "notes": "Terminal: leadership gets one clean summary instead of six tools' worth of noise."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "A deal is marked Won": {
+      "main": [
+        [
+          {
+            "node": "Read the deal details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the deal details": {
+      "main": [
+        [
+          {
+            "node": "Sales: mark it Won",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Finance: create the invoice",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Ops: build the onboarding checklist",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Support: set up their account",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Marketing: start the welcome emails",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Leadership: post the good news",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sales: mark it Won": {
+      "main": [
+        [
+          {
+            "node": "Wait for all six",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finance: create the invoice": {
+      "main": [
+        [
+          {
+            "node": "Wait for all six",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Ops: build the onboarding checklist": {
+      "main": [
+        [
+          {
+            "node": "Wait for all six",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Support: set up their account": {
+      "main": [
+        [
+          {
+            "node": "Wait for all six",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Marketing: start the welcome emails": {
+      "main": [
+        [
+          {
+            "node": "Wait for all six",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Leadership: post the good news": {
+      "main": [
+        [
+          {
+            "node": "Wait for all six",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Wait for all six": {
+      "main": [
+        [
+          {
+            "node": "Confirm it all ran",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm it all ran": {
+      "main": [
+        [
+          {
+            "node": "Done — team notified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "99c60d94-9dba-45b2-9bad-4ac38d48137f",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "XFUDlphOerHr0E8C",
+  "tags": []
+}

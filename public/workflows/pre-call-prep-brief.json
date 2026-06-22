@@ -1,0 +1,190 @@
+{
+  "name": "Pre-call prep brief (portfolio demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "prep-demo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hook",
+      "name": "A call is coming up",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        48,
+        304
+      ],
+      "webhookId": "8f0e09c3-e46c-4f69-a5a0-4a7b4a9d4076",
+      "notes": "PRODUCTION: Google Calendar trigger, 30 min before an external meeting."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ attendee:\"Morgan Lee\", company:\"Brightwave Co\", email:\"morgan@brightwave.co\", time:\"2:00pm\" }}];"
+      },
+      "id": "read",
+      "name": "Read the calendar event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ source:\"Apollo\", role:\"Head of Growth\", size:\"50-100\", note:\"Just raised a seed round\" }}];"
+      },
+      "id": "enrich",
+      "name": "Look them up",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        192
+      ],
+      "notes": "PRODUCTION: Apollo / Clearbit + web — role, company size, recent news."
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ source:\"HubSpot\", history:\"Demoed in March, went quiet on pricing\" }}];"
+      },
+      "id": "crm",
+      "name": "Pull their CRM history",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        416
+      ],
+      "notes": "PRODUCTION: HubSpot — past deals, notes, last contact."
+    },
+    {
+      "parameters": {},
+      "id": "merge",
+      "name": "Bring it together",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        800,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json:{ system:\"Claude\", brief:\"Morgan Lee · Head of Growth at Brightwave (50-100, just raised seed). Last: demoed in March, quiet on pricing. Lead with ROI + a founder-friendly plan.\", talking_points:3, questions:3, status:\"ok\" }}];"
+      },
+      "id": "brief",
+      "name": "Write the prep brief",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        304
+      ],
+      "notes": "PRODUCTION: Claude writes talking points + smart questions from the research."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d=$input.first().json;\nreturn [{ json:{ system:\"Slack\", action:\"Prep brief sent before the call\", talking_points:d.talking_points, questions:d.questions, status:\"ok\" }}];"
+      },
+      "id": "send",
+      "name": "Send it to the rep",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        304
+      ],
+      "notes": "PRODUCTION: Slack DM to the rep before the call."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "A call is coming up": {
+      "main": [
+        [
+          {
+            "node": "Read the calendar event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the calendar event": {
+      "main": [
+        [
+          {
+            "node": "Look them up",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Pull their CRM history",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Look them up": {
+      "main": [
+        [
+          {
+            "node": "Bring it together",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pull their CRM history": {
+      "main": [
+        [
+          {
+            "node": "Bring it together",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Bring it together": {
+      "main": [
+        [
+          {
+            "node": "Write the prep brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write the prep brief": {
+      "main": [
+        [
+          {
+            "node": "Send it to the rep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "ea7dff7e-470e-4dc5-979e-a091b753358f",
+  "meta": {
+    "instanceId": "6050bdb6a76b378c6215d00c36ffb72e4e76f4b0bc8766f5d666f936ec1c0c9c"
+  },
+  "id": "jl0ikKTl1FC5FsQ5",
+  "tags": []
+}
