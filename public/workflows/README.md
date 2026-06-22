@@ -36,3 +36,36 @@ the live site automatically shows the real canvas instead of the diagram.
 - Landscape orientation, roughly 1400–1800px wide is ideal.
 - You don't have to do all 13 at once — add any subset; the rest keep their diagrams.
 - Keep each file under ~500KB if you can (PNG is fine; compress if large).
+
+---
+
+# Workflow JSON exports (the "Download workflow" link)
+
+Each card can also offer a **Download workflow (.json)** link — the real n8n
+export, so a technical reviewer can import it into their own n8n. The link only
+appears on a card once its `.json` file is in this folder.
+
+## How to export each one
+1. Open the workflow in **n8n.copyweb.io**.
+2. Top-right **⋮ (three dots) menu → Download**.
+3. n8n saves a `.json` file. **Rename it to the exact name below** and drop it
+   in this folder (same names as the screenshots, just `.json`).
+
+| Save the export as… | Workflow |
+|---|---|
+| `instant-lead-response.json`     | Instant lead response & qualification |
+| `support-triage.json`            | AI support triage with approval |
+| `community-moderation.json`      | Community moderation assistant |
+| `customer-research-engine.json`  | Customer Research Engine — 9-channel VOC mining |
+| `deal-won-cascade.json`          | Deal Won → whole-company cascade |
+| `hr-onboarding-assistant.json`   | HR Onboarding Assistant — RAG over the handbook |
+| `overdue-invoice-chaser.json`    | Overdue invoice chaser |
+| `receipts-to-books.json`         | Receipts to bookkeeping |
+| `meeting-notes-to-tasks.json`    | Meeting notes to tasks |
+| `content-repurposing.json`       | One blog post into ten |
+| `pre-call-prep-brief.json`       | Pre-call prep brief |
+| `employee-offboarding.json`      | Employee offboarding |
+| `daily-kpi-brief.json`           | Daily KPI brief |
+
+Then tell Claude "JSONs added" and it'll redeploy. Each card's download link
+appears automatically.

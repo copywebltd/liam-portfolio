@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   categoryOrder,
@@ -87,7 +87,21 @@ function CanvasVisual({ wf }: { wf: Workflow }) {
 
 function Card({ wf }: { wf: Workflow }) {
   const [open, setOpen] = useState(false);
+  const [hasJson, setHasJson] = useState(false);
   const stepCount = wf.stages.reduce((n, s) => n + s.nodes.length, 0);
+
+  // show the download link only when the exported workflow actually exists
+  useEffect(() => {
+    let alive = true;
+    fetch(`/workflows/${wf.id}.json`, { method: "HEAD" })
+      .then((r) => {
+        if (alive && r.ok) setHasJson(true);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [wf.id]);
 
   return (
     <div className={`v4-card v4-spot rounded-2xl p-7 md:p-8 ${open ? "lg:col-span-2" : ""}`}>
@@ -138,18 +152,29 @@ function Card({ wf }: { wf: Workflow }) {
         ))}
       </div>
 
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="mt-6 inline-flex items-center gap-2 text-[13px] font-medium text-[var(--v4-amber)] hover:text-[var(--v4-amber-hi)] transition-colors"
-      >
-        {open ? "Hide the steps" : `See how it works · ${stepCount} steps`}
-        <span
-          className={`transition-transform duration-300 ${open ? "rotate-90" : ""}`}
-          aria-hidden
+      <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2.5">
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="inline-flex items-center gap-2 text-[13px] font-medium text-[var(--v4-amber)] hover:text-[var(--v4-amber-hi)] transition-colors"
         >
-          →
-        </span>
-      </button>
+          {open ? "Hide the steps" : `See how it works · ${stepCount} steps`}
+          <span
+            className={`transition-transform duration-300 ${open ? "rotate-90" : ""}`}
+            aria-hidden
+          >
+            →
+          </span>
+        </button>
+        {hasJson && (
+          <a
+            href={`/workflows/${wf.id}.json`}
+            download
+            className="inline-flex items-center gap-1.5 text-[12.5px] text-[var(--v4-text-3)] hover:text-[var(--v4-text)] transition-colors"
+          >
+            <span aria-hidden>↓</span> Download workflow (.json)
+          </a>
+        )}
+      </div>
 
       <AnimatePresence initial={false}>
         {open && (
@@ -215,6 +240,47 @@ export function Workflows() {
             <span className="ml-auto self-center v4-mono-dim">
               {visible.length} {visible.length === 1 ? "system" : "systems"}
             </span>
+          </div>
+        </Reveal>
+
+        {/* the pattern */}
+        <Reveal delay={0.12}>
+          <div className="mt-8 v4-card rounded-2xl p-6 md:p-7">
+            <div className="v4-eyebrow !text-[10px] mb-3.5">
+              The pattern behind all of these
+            </div>
+            <p className="text-[14px] leading-[1.75] text-[var(--v4-text-2)] max-w-[72ch]">
+              Every workflow runs on the same backbone — and the guardrail is in
+              all of them: a confidence check with a human fallback, so nothing
+              risky ever happens unattended.
+            </p>
+            <div className="mt-5 flex flex-wrap items-center gap-x-1.5 gap-y-2.5">
+              {[
+                "Something happens",
+                "Read it",
+                "AI does the thinking",
+                "Check it · human if unsure",
+                "Take the action",
+                "Log it",
+              ].map((step, i, arr) => (
+                <span key={step} className="inline-flex items-center gap-1.5">
+                  <span
+                    className={`font-mono text-[11px] rounded-md border px-2.5 py-1 ${
+                      i === 3
+                        ? "border-[rgba(245,158,11,0.5)] bg-[rgba(245,158,11,0.08)] text-[var(--v4-amber-hi)]"
+                        : "border-[var(--v4-border)] bg-[rgba(255,244,224,0.02)] text-[var(--v4-text-2)]"
+                    }`}
+                  >
+                    {step}
+                  </span>
+                  {i < arr.length - 1 ? (
+                    <span className="text-[var(--v4-amber)]/50 text-[11px]" aria-hidden>
+                      →
+                    </span>
+                  ) : null}
+                </span>
+              ))}
+            </div>
           </div>
         </Reveal>
 
