@@ -8,11 +8,14 @@ import { EASE, useCopy } from "./primitives";
 export const EMAIL = "liam@copyweb.io";
 export const LINKEDIN = "https://linkedin.com/in/liam-petersen-68464118b";
 export const GITHUB = "https://github.com/copywebltd";
+export const CV_PDF = "/Liam-Petersen-CV.pdf";
 
 export const SECTIONS = [
   { id: "systems", label: "Systems" },
   { id: "workflows", label: "Workflows" },
   { id: "showcase", label: "Creative" },
+  { id: "hijacks", label: "Hijacks" },
+  { id: "video-ads", label: "Video" },
   { id: "receipts", label: "Receipts" },
   { id: "arc", label: "The arc" },
   { id: "principles", label: "How I work" },

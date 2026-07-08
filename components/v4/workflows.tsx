@@ -204,6 +204,7 @@ function Card({ wf }: { wf: Workflow }) {
 
 export function Workflows() {
   const [filter, setFilter] = useState<WfCategory | "all">("all");
+  const [showAll, setShowAll] = useState(false);
 
   const chips = useMemo(() => {
     const present = new Set(workflows.map((w) => w.category));
@@ -217,6 +218,11 @@ export function Workflows() {
     () => (filter === "all" ? workflows : workflows.filter((w) => w.category === filter)),
     [filter]
   );
+
+  // keep the section skimmable: cap the unfiltered list until asked
+  const shown =
+    filter !== "all" || showAll ? visible : visible.slice(0, 6);
+  const hiddenCount = visible.length - shown.length;
 
   return (
     <section
@@ -245,7 +251,9 @@ export function Workflows() {
               </button>
             ))}
             <span className="ml-auto self-center v4-mono-dim">
-              {visible.length} {visible.length === 1 ? "system" : "systems"}
+              {shown.length === visible.length
+                ? `${visible.length} ${visible.length === 1 ? "workflow" : "workflows"}`
+                : `${shown.length} of ${visible.length} workflows`}
             </span>
           </div>
         </Reveal>
@@ -293,12 +301,23 @@ export function Workflows() {
 
         {/* library */}
         <div className="mt-8 grid lg:grid-cols-2 gap-5 items-start">
-          {visible.map((wf, i) => (
+          {shown.map((wf, i) => (
             <Reveal key={wf.id} delay={Math.min(i * 0.05, 0.25)}>
               <Card wf={wf} />
             </Reveal>
           ))}
         </div>
+
+        {hiddenCount > 0 && (
+          <div className="mt-9 flex justify-center">
+            <button
+              onClick={() => setShowAll(true)}
+              className="v4-chip v4-chip-on !px-7 !py-3 text-[13px]"
+            >
+              Show all {visible.length} workflows ⌄
+            </button>
+          </div>
+        )}
 
         <Reveal delay={0.1}>
           <p className="mt-10 max-w-2xl font-mono text-[11.5px] leading-relaxed text-[var(--v4-text-3)]">

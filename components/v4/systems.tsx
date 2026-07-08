@@ -51,7 +51,7 @@ export function Systems() {
             eyebrow="Systems shipped"
             title={`${caseStudies.length} systems. Three continents.`}
             accent="One builder."
-            description="Production platforms, internal tools, open-source templates, and the meta-tooling that ships them. Each one built on Claude Code. Tap any row to open the build."
+            description="Production platforms and the internal ops that run the business. Each one built on Claude Code. Tap any row to open the build."
           />
           <Reveal delay={0.15}>
             <div className="v4-mono-dim pb-2">
@@ -121,8 +121,13 @@ export function Systems() {
                     </span>
 
                     <span className="flex items-center gap-3 shrink-0">
-                      <span className="text-[15px] md:text-[18px] font-light tracking-[-0.02em] text-[var(--v4-amber)] tabular-nums">
-                        {cs.metrics[0]?.value}
+                      <span className="flex max-w-[92px] flex-col items-end sm:max-w-[150px]">
+                        <span className="text-[15px] md:text-[18px] font-light tracking-[-0.02em] text-[var(--v4-amber)] tabular-nums">
+                          {cs.metrics[0]?.value}
+                        </span>
+                        <span className="mt-0.5 text-right font-mono text-[8.5px] uppercase tracking-[0.08em] leading-[1.35] text-[var(--v4-text-3)]">
+                          {cs.metrics[0]?.label}
+                        </span>
                       </span>
                       <span
                         className={`text-[var(--v4-text-3)] text-[13px] transition-transform duration-300 ${

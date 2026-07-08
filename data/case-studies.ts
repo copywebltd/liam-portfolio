@@ -162,7 +162,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "copyads",
     title: "CopyAds",
-    subtitle: "A Meta Ads AIOS that reads your account and builds the next ads",
+    subtitle: "A Meta Ads system that reads your account and builds the next ads",
     org: "Copyweb · Meta Ads operating system · per-brand install",
     category: "production",
     categoryLabel: "Shipped to production",
@@ -222,7 +222,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "copysite",
     title: "CopySite",
-    subtitle: "A Landing Page AIOS: a brand URL in, a deployed page out",
+    subtitle: "A landing page system: a brand URL in, a deployed page out",
     org: "Copyweb · Landing Page operating system",
     category: "production",
     categoryLabel: "Shipped to production",
@@ -280,6 +280,91 @@ export const caseStudies: CaseStudy[] = [
     videoCaption: "A CopySite build, start to finish: copyweb.io. 1:01.",
   },
   {
+    slug: "deal-analyzer",
+    title: "AI Deal Analyzer",
+    subtitle: "A mentor-grade property deal review, automated, in the company's own stack",
+    org: "UK property education company · built inside their hiring process",
+    category: "production",
+    categoryLabel: "Built for a real business",
+    year: "2026",
+    status: "Live build + recorded walkthrough",
+    oneLiner:
+      "Their academy sells a service where a member sends in a property deal and a mentor works the numbers by hand. Mentor time was the growth bottleneck. I built that review, automated, in their stack: n8n, Claude, and GoHighLevel. In an afternoon.",
+    metrics: [
+      { value: "£11,997", label: "The paid feature it automates" },
+      { value: "Seconds", label: "Per deal review" },
+      { value: "0", label: "AI-touched arithmetic" },
+      { value: "1 afternoon", label: "Build time" },
+    ],
+    sections: [
+      {
+        heading: "The build",
+        body:
+          "A member enters the deal: purchase price, refurb, after-repair value, rent. The deal maths is computed deterministically, so the AI never touches the arithmetic and the numbers are always right. Claude then reviews the computed result like a mentor would: a clear verdict, the real numbers (yield, forced equity, cash pulled back out on refinance, money left in, return), the strengths, the risks a mentor would flag, and the next step.",
+      },
+      {
+        heading: "The compliance line",
+        body:
+          "It gives the investment analysis, but it refuses to give tax or stamp-duty advice and routes those questions to a qualified accountant. That is the exact line the brand has to hold, built in so it can't be crossed.",
+      },
+      {
+        heading: "Honest by design",
+        body:
+          "Push the purchase price up and the after-repair value down and it returns 'walk away.' It grades the deal, not the member's hopes. An automated review only has value if it can say no.",
+      },
+      {
+        heading: "Where the results go",
+        body:
+          "Every analyzed deal lands in GoHighLevel tagged by quality with the review attached, so the team knows who to call first. The analysis serves the member; the tag serves the pipeline.",
+      },
+    ],
+    stack: ["n8n", "Claude", "GoHighLevel", "Deterministic deal-math engine", "Vercel"],
+    builtOn:
+      "Built on Claude Code. Deal-math engine, Claude review prompt, GoHighLevel wiring, and the walkthrough demo, one afternoon.",
+    proofPoint:
+      "A feature the company charges £11,997 for, running in seconds, for every member at once.",
+  },
+  {
+    slug: "candidate-scorer",
+    title: "Candidate Scorer",
+    subtitle: "Every application parsed, scored, and routed before a human opens it",
+    org: "Swiss recruiting consultancy · DACH market",
+    category: "production",
+    categoryLabel: "Built for a real business",
+    year: "2026",
+    status: "Built and live",
+    oneLiner:
+      "A recruiting consultancy wanted ranked shortlists instead of a pile of CVs, with a human owning every judgement. So I built the intake: careers page in, scored and routed applicant out.",
+    metrics: [
+      { value: "1-5", label: "Claude score before a human opens it" },
+      { value: "6", label: "Scoring dimensions" },
+      { value: "3", label: "Routes: ping · queue · rejection" },
+      { value: "100%", label: "Rejections in the candidate's language" },
+    ],
+    sections: [
+      {
+        heading: "The build",
+        body:
+          "An application arrives from the careers page and Claude scores it 1 to 5 across six dimensions: role match, seniority, language, location, salary, stability, with a two-line why-fit and why-not. Then it routes: a 4 or 5 pings the recruiter on Telegram, a 2 or 3 lands in the review queue, and a clear hard-fail gets a respectful rejection written in the candidate's own language. Every applicant is logged to the CRM.",
+      },
+      {
+        heading: "The guardrails",
+        body:
+          "Nothing candidate-facing ships without a human gate. Mid-scores are never auto-rejected, and the scorer is calibrated on a sample of real applications before it touches a live one. The machine handles the noise; the humans own the relationships.",
+      },
+      {
+        heading: "Why recruiters care",
+        body:
+          "The pile of unread CVs is the most expensive queue in recruiting. This turns it into a ranked shortlist with reasons attached, so the first human minute goes to the best candidate instead of the top of the stack.",
+      },
+    ],
+    stack: ["n8n", "Claude", "Telegram Bot", "Careers page", "CRM logging", "Vercel"],
+    builtOn:
+      "Built on Claude Code. Careers page, scoring workflow, Telegram routing, and the rejection templates, end to end.",
+    proofPoint:
+      "Built and live as working proof inside a real consultancy's automation scope: careers page to Telegram ping, end to end.",
+  },
+  {
     slug: "cinematic-ad-pipeline",
     title: "Cinematic Ad Pipeline",
     subtitle: "Single AI video ad spots, end-to-end, $3.16/spot",
@@ -332,63 +417,6 @@ export const caseStudies: CaseStudy[] = [
       "Built on Claude Code. Single skill orchestrator (/cinematic-ad) chains storyboard → ad copy → image gen → video synthesis → voice clone → composite.",
   },
   {
-    slug: "operator",
-    title: "Operator",
-    subtitle: "60+ skills, four pipelines, one deck",
-    org: "Copyweb · Personal infrastructure",
-    category: "meta",
-    categoryLabel: "Meta-tooling",
-    year: "Since 2025",
-    status: "Used daily",
-    oneLiner:
-      "I don't just use AI. I build the skills that build the systems, and one deck to run them all. Sixty skills, four pipelines, one council, every campaign launched and watched from a single screen.",
-    metrics: [
-      { value: "60+", label: "Custom skills authored" },
-      { value: "9", label: "MCP servers wired" },
-      { value: "3", label: "CLIs addressable" },
-      { value: "1", label: "Operator running it all" },
-    ],
-    sections: [
-      {
-        heading: "The thesis",
-        body:
-          "Don't write a script when you can write the skill that writes the script. Don't write the skill when you can write the agent that picks the right skill. The leverage compounds.",
-      },
-      {
-        heading: "The deck",
-        body:
-          "Operator is the command surface for all of it. Launch a workflow and the pipeline runs in front of you: it reads the brand, writes the sales letter, designs the pack, scores every line against the council, and runs a final quality check, with the fabrication count and the cost ticking up live. Four pipelines, one operator, one council of sixteen direct-response minds. A system that runs the work, with a human on every gate.",
-      },
-      {
-        heading: "What's in the library",
-        body:
-          "/lfsl orchestrates a full cold-outreach brand pack in 60 minutes. /creative-engine ships five direct-response ad concepts grounded in expert frameworks. /customer-research runs deep pre-writing research with Georgi's 22 questions and One Big Idea. /codex-loop runs adversarial planning against my own plans before I touch code. /stream-new, /stream-start, /stream-end run the work-stream system that replaced my todo list. /humanizer strips AI-writing signals. /fact-checker verifies claims. Plus 50+ more.",
-      },
-      {
-        heading: "How they're built",
-        body:
-          "Progressive-disclosure pattern. Each skill has a small frontmatter, a body that only loads when called, and references to deeper resources fetched only when needed. Token-efficient by design. Versioned in the vault. Updated whenever the work corrects them.",
-      },
-      {
-        heading: "Why it matters",
-        body:
-          "Most 'AI engineers' use Claude or ChatGPT as an assistant. The shift is using Claude Code as the build environment. The 60+ skills are how a one-person operation moves at the velocity of a team. They're also how new work onboards fast: new client, new campaign, new project, the skill stack already knows the patterns.",
-      },
-    ],
-    stack: [
-      "Claude Code",
-      "Claude Agent SDK",
-      "MCP servers",
-      "Custom hooks",
-      "settings.json automation",
-      "Markdown vault",
-    ],
-    builtOn:
-      "Built on Claude Code. The skills that build the skills.",
-    videoId: "MYCKNc7t5-o",
-    videoCaption: "The deck, live: launch a build, watch it run. 0:47.",
-  },
-  {
     slug: "autonomous-ops",
     title: "Autonomous Ops",
     subtitle: "A pipeline dashboard plus five agents that run the business on cron",
@@ -426,83 +454,10 @@ export const caseStudies: CaseStudy[] = [
     builtOn:
       "Built on Claude Code. A Next.js + Supabase ops dashboard plus five skill-bundle agents on cron with shared 3-layer memory.",
   },
-  {
-    slug: "creative-content-engine",
-    title: "Forge",
-    subtitle: "AI content factory: from product photo to scheduled post",
-    org: "Open community template",
-    category: "open-source",
-    categoryLabel: "Open source",
-    year: "2026",
-    status: "Released as community template",
-    oneLiner:
-      "Open-sourced because the alternatives cost $200/month and produce slop. Mine produces work I'd actually post.",
-    metrics: [
-      { value: "3", label: "Core workflows" },
-      { value: "6", label: "Python tools" },
-      { value: "<$7", label: "Per 30-day campaign" },
-      { value: "4", label: "Social platforms" },
-    ],
-    sections: [
-      {
-        heading: "ART framework architecture",
-        body:
-          ".agent/ folder with AGENT.md brain (404 lines), modular skills (Blotato scheduling, Modal deployment), and 3 declarative workflows: 30-Day Campaign, On-Demand Generation, and YouTube-to-LinkedIn automation.",
-      },
-      {
-        heading: "Multi-provider abstraction",
-        body:
-          "Provider registry routes to Google AI Studio (free tier), Kie AI, or WaveSpeed based on model and availability. Image generation via Nano Banana 2, video via Veo 3.1 / Kling 3.0 / Sora 2 Pro. Automatic fallback when a provider goes down.",
-      },
-      {
-        heading: "Serverless automation",
-        body:
-          "YouTube-to-LinkedIn pipeline runs daily on Modal.com (~$0.30/month). Monitors RSS feeds, extracts transcripts, generates branded infographics, writes captions in creator's voice, and posts automatically.",
-      },
-    ],
-    stack: ["Python", "Claude Code", "Google AI Studio", "Kie AI", "WaveSpeed AI", "Gemini 2.0 Flash", "Airtable", "Blotato", "Modal.com"],
-    builtOn:
-      "Built on Claude Code. ART framework with declarative workflows, Modal.com for serverless cron.",
-  },
-  {
-    slug: "copywriting-intelligence-layer",
-    title: "The Canon",
-    subtitle: "16 expert frameworks · ~280 evidence entries · weighted ranker",
-    org: "Copyweb · Substrate",
-    category: "meta",
-    categoryLabel: "Meta-tooling",
-    year: "Since 2025",
-    status: "Underlies every shipped copywriting deliverable",
-    oneLiner:
-      "The substrate under everything I ship. Schwartz on awareness. Halbert on directness. Wiebe on voice of customer. Hormozi on offer construction.",
-    metrics: [
-      { value: "16", label: "Expert frameworks" },
-      { value: "~280", label: "Evidence entries" },
-      { value: "10", label: "New JSONs added in 2026" },
-      { value: "51", label: "Reference ads bound" },
-    ],
-    sections: [
-      {
-        heading: "What it is",
-        body:
-          "A research-grade knowledge substrate that powers every copywriting and creative skill across the stack. Each expert has a profile, a worked-examples library, and a weighted set of canonical principles. The ranker chooses the right voice for the angle, the awareness level, the audience, and the medium.",
-      },
-      {
-        heading: "Why it exists",
-        body:
-          "Generic AI copy is generic because the model doesn't know whose voice it should be channeling. Give it an expert, give it evidence, give it a ranker. The output stops sounding like 'a model trying to write copy.' It starts sounding like a craftsman writing for a specific situation.",
-      },
-    ],
-    stack: ["Claude Code", "Markdown vault", "Weighted ranker", "JSON evidence canon"],
-    builtOn:
-      "Built on Claude Code. Skill-driven canon ingestion, weighted ranker, ~280 evidence entries.",
-  },
 ];
 
 export const filterChips: { id: CaseStudy["category"] | "all"; label: string }[] = [
   { id: "all", label: "All systems" },
   { id: "production", label: "Production" },
   { id: "internal", label: "Internal tools" },
-  { id: "open-source", label: "Open source" },
-  { id: "meta", label: "Meta-tooling" },
 ];

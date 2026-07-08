@@ -7,6 +7,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: __dirname,
+  async redirects() {
+    // retired design explorations — anyone holding an old link lands on the real site
+    return [
+      { source: "/v2", destination: "/", permanent: true },
+      { source: "/v3", destination: "/", permanent: true },
+      { source: "/v3/:path*", destination: "/", permanent: true },
+      { source: "/v4", destination: "/", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -12,7 +12,7 @@ import { arc } from "@/data/arc";
 import { caseStudies } from "@/data/case-studies";
 import { stackTabs } from "@/data/stack";
 import { EmberField } from "./shader";
-import { EMAIL, LINKEDIN, openPalette } from "./chrome";
+import { CV_PDF, EMAIL, LINKEDIN, openPalette } from "./chrome";
 import {
   Counter,
   EASE,
@@ -84,14 +84,15 @@ export function Hero() {
         <Reveal delay={0.85}>
           <div className="mt-10 max-w-[560px] space-y-4 text-[15px] leading-[1.75] text-[var(--v4-text-2)]">
             <p>
-              I&apos;m Liam. Six years writing copy that had to convert or get
-              killed. Three years building the systems that scale that work to
-              a $20M+ portfolio.
+              I&apos;m Liam. For six years I wrote copy that had to convert or
+              get killed. For the last three, I&apos;ve built the AI systems
+              that scale that work across a $20M+ portfolio. Now those same
+              systems run support, hiring, finance, and operations too.
             </p>
             <p className="text-[var(--v4-text)]">
               Every system on this site was built inside Claude Code.
-              Frontends, backends, agents, skills, MCP integrations. One
-              runtime, one builder, real receipts.
+              Frontends, backends, agents, and the tooling that ships them.
+              One runtime, one builder, real receipts.
             </p>
           </div>
         </Reveal>
@@ -215,18 +216,40 @@ export function RecruiterCard() {
     <section className="relative py-16 md:py-20">
       <div className="max-w-[1320px] mx-auto px-6 md:px-10">
         <Reveal>
-          <Spot className="v4-card rounded-2xl p-8 md:p-10">
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-              <div className="flex items-center gap-3">
-                <span className="v4-eyebrow">Reading in 10 seconds?</span>
-                <span className="v4-mono-dim hidden md:inline">
-                  · the short version
-                </span>
+          <Spot className="relative overflow-hidden rounded-2xl border border-[rgba(245,158,11,0.3)] bg-[linear-gradient(180deg,rgba(245,158,11,0.075),rgba(245,158,11,0.02)_55%,rgba(245,158,11,0.008))] p-8 md:p-10">
+            {/* glowing top accent — only this card gets it */}
+            <div
+              aria-hidden
+              className="absolute inset-x-0 top-0 h-[2px] bg-[linear-gradient(90deg,transparent,var(--v4-amber)_35%,var(--v4-amber-hi)_50%,var(--v4-amber)_65%,transparent)]"
+            />
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-5 mb-9">
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--v4-green)] opacity-60" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--v4-green)]" />
+                  </span>
+                  <span className="v4-eyebrow">Recruiter fast path</span>
+                </div>
+                <h2 className="mt-3 text-[24px] md:text-[28px] font-medium tracking-[-0.02em] leading-tight text-[var(--v4-text)]">
+                  Reading in{" "}
+                  <span className="v4-serif italic text-[var(--v4-amber)]">
+                    10 seconds?
+                  </span>{" "}
+                  Everything you need is here.
+                </h2>
               </div>
-              <div className="flex items-center gap-2.5">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <a
+                  href={CV_PDF}
+                  download="Liam-Petersen-CV.pdf"
+                  className="whitespace-nowrap rounded-full bg-[var(--v4-amber)] px-5 py-2.5 text-[13px] font-medium text-black transition-colors hover:bg-[var(--v4-amber-hi)]"
+                >
+                  ↓ Download CV
+                </a>
                 <button
                   onClick={() => void copy()}
-                  className="v4-chip !py-2 !px-4 text-[12.5px]"
+                  className="v4-chip !py-2 !px-4 text-[12.5px] !border-[rgba(245,158,11,0.35)]"
                 >
                   {copied ? "Copied ✓" : `Copy ${EMAIL}`}
                 </button>
@@ -234,7 +257,7 @@ export function RecruiterCard() {
                   href={LINKEDIN}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="v4-chip !py-2 !px-4 text-[12.5px]"
+                  className="v4-chip !py-2 !px-4 text-[12.5px] !border-[rgba(245,158,11,0.35)]"
                 >
                   LinkedIn ↗
                 </a>
@@ -400,7 +423,7 @@ export function Arc() {
 const principles = [
   {
     title: "Claude Code is the build environment, not the assistant.",
-    body: "Every system in this portfolio shipped through Claude Code. Frontends, backends, agents, skills, MCP integrations, CLIs. One runtime. Most people use AI to write code. I use it to ship systems.",
+    body: "Every system in this portfolio shipped through Claude Code. Frontends, backends, agents, custom tooling, CLIs. One runtime. Most people use AI to write code. I use it to ship systems.",
   },
   {
     title: "Humans where it counts. Autonomous everywhere else.",
@@ -688,6 +711,15 @@ export function Contact() {
                 className="v4-btn v4-btn-ghost"
               >
                 LinkedIn ↗
+              </a>
+            </Magnetic>
+            <Magnetic>
+              <a
+                href={CV_PDF}
+                download="Liam-Petersen-CV.pdf"
+                className="v4-btn v4-btn-ghost"
+              >
+                ↓ Download CV
               </a>
             </Magnetic>
           </div>

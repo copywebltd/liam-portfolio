@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liam Petersen · Copywriting Portfolio</title>
+<style>
+  :root{
+    --ink:#111; --muted:#555; --faint:#888;
+    --bg:#fff; --soft:#f5f5f3; --line:#e2e2de; --line2:#111;
+    --red:#e21b1b; --yellow:#ffee00; --yellow-soft:#fff9c9;
+    --green:#0f8a4d; --green-soft:#e9f6ef;
+    --arial:Arial,'Helvetica Neue',Helvetica,sans-serif;
+    --courier:'Courier New',Courier,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--arial);
+    font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--yellow)}
+
+  /* ===== layout ===== */
+  .side{position:fixed;top:0;left:0;bottom:0;width:240px;background:#fff;
+    border-right:2px solid var(--ink);padding:34px 0 22px;display:flex;
+    flex-direction:column;z-index:20}
+  main{margin-left:240px;min-height:100vh}
+  .content{max-width:840px;margin:0 auto;padding:54px 46px 90px}
+
+  /* ===== sidebar ===== */
+  .brand{padding:0 26px 22px;border-bottom:2px solid var(--ink)}
+  .brand .nm{font-weight:900;font-size:21px;letter-spacing:-.02em;line-height:1.1}
+  .brand .rl{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.5;font-weight:700;
+    text-transform:uppercase;letter-spacing:.06em}
+  .tabs{flex:1;padding:18px 0}
+  .tab{display:block;width:100%;text-align:left;background:none;border:none;
+    color:var(--ink);font-family:var(--arial);font-size:16px;font-weight:800;
+    padding:13px 26px;cursor:pointer;border-left:5px solid transparent;transition:.12s}
+  .tab:hover{background:var(--soft)}
+  .tab.active{border-left-color:var(--red);background:var(--yellow)}
+  .side-foot{padding:18px 26px 0;border-top:2px solid var(--ink);
+    font-size:12px;color:var(--muted);line-height:1.9;font-weight:700}
+  .side-foot a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--yellow)}
+
+  @media(max-width:820px){
+    .side{position:sticky;top:0;width:100%;height:auto;padding:14px 0 0;
+      border-right:none;border-bottom:2px solid var(--ink)}
+    .brand{padding:0 18px 12px;border-bottom:none}
+    .brand .rl{display:none}
+    .tabs{display:flex;overflow-x:auto;padding:0 12px 0;gap:4px}
+    .tab{white-space:nowrap;border-left:none;border-bottom:4px solid transparent;
+      padding:9px 14px;font-size:14px}
+    .tab.active{border-left:none;border-bottom-color:var(--red)}
+    .side-foot{display:none}
+    main{margin-left:0}
+    .content{padding:32px 20px 60px}
+  }
+
+  /* ===== panels ===== */
+  .panel{display:none}
+  .panel.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+  /* ===== sales-letter typography ===== */
+  h1{font-size:clamp(34px,5.2vw,52px);line-height:1.06;letter-spacing:-.02em;
+    margin:0 0 22px;font-weight:900}
+  .strike{color:var(--red);text-decoration:line-through;text-decoration-thickness:.12em}
+  .hi{background:var(--yellow);padding:0 6px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .hi-red{background:var(--yellow);color:var(--red);font-style:italic;font-weight:900;
+    display:inline-block;padding:2px 12px;line-height:1.18}
+  h2{font-size:clamp(24px,3.4vw,32px);letter-spacing:-.01em;margin:0 0 12px;font-weight:900}
+  h3{font-size:19px;font-weight:900;margin:0 0 12px}
+  .kicker{font-family:var(--courier);font-size:12px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--red);font-weight:700;margin:0 0 12px}
+  .lead{font-size:16.5px;color:var(--muted);max-width:680px;margin:0 0 24px}
+  .letter p{margin:0 0 16px;max-width:640px}
+  .ov-grid{display:grid;grid-template-columns:1fr 240px;gap:36px;align-items:start;margin-top:4px}
+  .headshot{margin:0;border:2px solid var(--ink);background:#fff;padding:10px 10px 8px;
+    box-shadow:5px 5px 0 rgba(17,17,17,.9)}
+  .headshot img{display:block;width:100%}
+  .headshot figcaption{font-family:var(--courier);font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:700;text-align:center;padding-top:9px;color:#333}
+  @media(max-width:700px){
+    .ov-grid{grid-template-columns:1fr}
+    .headshot{order:-1;max-width:230px}
+  }
+  .note{font-family:var(--courier);font-size:13px;color:#333;background:var(--soft);
+    border:2px solid var(--ink);padding:14px 18px;max-width:660px;line-height:1.6;margin:26px 0}
+  .note b{color:var(--red)}
+
+  /* overview toc */
+  .toc{display:grid;grid-template-columns:1fr;gap:12px;max-width:560px;margin-top:30px}
+  .toc button{display:flex;align-items:center;gap:14px;background:#fff;
+    border:2px solid var(--ink);padding:16px 18px;cursor:pointer;
+    font-family:var(--arial);font-size:16px;font-weight:800;text-align:left;
+    color:var(--ink);transition:.12s;box-shadow:4px 4px 0 var(--ink)}
+  .toc button:hover{background:var(--yellow);transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+  .toc .no{font-family:var(--courier);font-size:12px;color:var(--red);font-weight:700}
+  .toc small{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:2px}
+
+  /* cards */
+  .card{border:2px solid var(--ink);background:#fff;padding:26px 28px;margin:22px 0;
+    box-shadow:5px 5px 0 rgba(17,17,17,.9)}
+  .card-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:16px;flex-wrap:wrap}
+  .card-head h3{margin:0}
+  .chip{font-family:var(--courier);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    font-weight:700;border:2px solid var(--ink);padding:3px 9px;white-space:nowrap;background:var(--soft)}
+  .chip.red{background:var(--red);color:#fff;border-color:var(--red)}
+
+  .label{font-family:var(--courier);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--red);font-weight:700;margin:20px 0 9px}
+  .hooks{list-style:none;padding:0;margin:0}
+  .hooks li{padding:8px 0 8px 26px;border-bottom:1px dotted var(--line);
+    font-size:16px;position:relative;font-weight:600}
+  .hooks li:before{content:"☞";position:absolute;left:0;color:var(--red)}
+  .hooks li:last-child{border:none}
+  .picked{background:var(--yellow);padding:0 5px}
+  .picktag{font-family:var(--courier);font-size:10px;color:var(--red);font-weight:700;
+    margin-left:8px;white-space:nowrap;letter-spacing:.06em}
+  .sample{font-family:var(--courier);font-size:14px;line-height:1.62;color:#1c1c1c;
+    white-space:pre-line;background:var(--soft);border-left:5px solid var(--ink);
+    padding:15px 19px;margin:8px 0}
+  .why{margin:16px 0 4px;padding:13px 17px;background:var(--yellow-soft);
+    border-left:5px solid var(--red);font-size:14.5px}
+  .why b{color:var(--red);font-family:var(--courier);font-size:12px;letter-spacing:.08em}
+  .marks{list-style:none;margin:12px 0 0;padding:0;font-size:13.5px}
+  .marks li{display:flex;gap:10px;padding-top:7px;margin-top:7px;border-top:1px dotted rgba(0,0,0,.22)}
+  .marks .k{font-family:var(--courier);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--red);font-weight:700;flex:none;width:138px;padding-top:3px}
+  @media(max-width:560px){.marks li{flex-direction:column;gap:2px}.marks .k{width:auto}}
+  .role{font-size:13px;color:var(--muted)} .role b{color:var(--ink)}
+  .divider{height:2px;background:var(--ink);margin:26px 0;opacity:.12}
+  .metrics{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 2px}
+  .ph{font-family:var(--courier);font-size:12px;color:#333;
+    background:#fff;border:2px dashed var(--ink);padding:4px 10px}
+  .hl{font-style:italic;font-weight:900;font-size:20px;margin:2px 0 12px;line-height:1.3}
+
+  /* teardown versus */
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+  .vbox{border:2px solid var(--ink);padding:14px 16px;position:relative;background:#fff}
+  .vh{font-family:var(--courier);font-size:10.5px;letter-spacing:.12em;
+    text-transform:uppercase;font-weight:700;margin-bottom:6px}
+  .vh.w{color:var(--green)} .vh.l{color:var(--faint)}
+  .vbox p{margin:0;font-size:16px;font-weight:700;font-style:italic}
+  @media(max-width:620px){.versus{grid-template-columns:1fr}}
+
+  /* gallery + strategy toggle */
+  .gallery{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:26px 0 6px}
+  @media(max-width:720px){.gallery{grid-template-columns:1fr}}
+  .adwork{border:2px solid var(--ink);background:#fff;box-shadow:5px 5px 0 rgba(17,17,17,.9)}
+  .adwork img{display:block;width:100%;background:#f2f2ef}
+  .adwork .meta{display:flex;justify-content:space-between;align-items:baseline;
+    gap:10px;padding:12px 16px 4px}
+  .adwork .b{font-weight:900;font-size:15px}
+  .adwork .b a{color:inherit;text-decoration:none;border-bottom:2px solid var(--yellow)}
+  .adwork .b a:hover{color:var(--red);border-bottom-color:var(--red)}
+  .adwork .b a:after{content:" ↗";font-size:11px;color:var(--red)}
+  .adwork .a{font-family:var(--courier);font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--red);font-weight:700;white-space:nowrap}
+  .adwork details{margin:8px 12px 12px;border:2px solid var(--ink);background:var(--soft)}
+  .adwork summary{list-style:none;cursor:pointer;padding:10px 14px;display:flex;
+    justify-content:space-between;align-items:center;gap:10px;
+    font-family:var(--courier);font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;font-weight:700;color:var(--ink)}
+  .adwork summary::-webkit-details-marker{display:none}
+  .adwork summary:hover{background:var(--yellow)}
+  .adwork summary .pl{color:var(--red);font-size:14px;transition:.2s}
+  .adwork details[open] summary .pl{transform:rotate(45deg);display:inline-block}
+  .adwork details[open] summary{background:var(--yellow)}
+  .strat{padding:4px 14px 14px;font-size:13.5px;line-height:1.6}
+  .strat .f{margin-top:10px}
+  .strat .fh{font-family:var(--courier);font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:2px}
+  .gallery-note{font-family:var(--courier);font-size:12.5px;color:#333;max-width:680px;
+    line-height:1.7;margin:20px 0 0;border-top:2px solid var(--ink);padding-top:14px}
+  .gallery-note b{background:var(--yellow);padding:0 4px}
+
+  /* script accordions (video tab) */
+  details.script{border:2px solid var(--ink);margin:16px 0;background:#fff;
+    box-shadow:5px 5px 0 rgba(17,17,17,.9)}
+  details.script summary{list-style:none;cursor:pointer;padding:17px 22px;display:flex;
+    align-items:center;gap:14px}
+  details.script summary::-webkit-details-marker{display:none}
+  details.script summary:hover{background:var(--soft)}
+  details.script[open] summary{border-bottom:2px solid var(--ink);background:var(--yellow-soft)}
+  .st{flex:1;font-size:17px;font-weight:900}
+  .st small{display:block;font-size:12.5px;font-weight:400;color:var(--muted);margin-top:3px}
+  .plus{width:26px;height:26px;flex:none;border:2px solid var(--ink);display:grid;
+    place-items:center;font-weight:900;font-size:15px;transition:.2s;background:#fff}
+  details.script[open] .plus{transform:rotate(45deg);background:var(--yellow)}
+  .sbody{padding:6px 22px 24px}
+
+  /* mini grid */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  .mini{border:2px solid var(--ink);padding:13px 15px;background:#fff}
+  .mini h4{margin:0 0 5px;font-size:14.5px}
+  .mini h4:before{content:"№ ";color:var(--red)}
+  .mini p{margin:0;font-size:13.5px;color:#333}
+  @media(max-width:600px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="side">
+  <div class="brand">
+    <div class="nm">Liam Petersen</div>
+    <div class="rl">Direct-Response<br>Copywriter &amp; Creative Strategist</div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-panel="overview">Overview</button>
+    <button class="tab" data-panel="video">Video Scripts</button>
+    <button class="tab" data-panel="meta">Meta Ads</button>
+    <button class="tab" data-panel="testing">Testing System</button>
+  </nav>
+  <div class="side-foot">
+    <a href="mailto:liam@copyweb.io">liam@copyweb.io</a><br>
+    <a href="https://liampetersen.dev" target="_blank">liampetersen.dev</a>
+  </div>
+</aside>
+
+<main><div class="content">
+
+<!-- ============ OVERVIEW ============ -->
+<section class="panel active" id="overview">
+  <h1><span class="strike">WARNING:</span> Don't Hire An AI Marketer Who Can't Tell You <span class="hi-red">Why It Worked!</span></h1>
+
+  <div class="ov-grid">
+    <div class="letter">
+      <p><b>Dear Friend,</b></p>
+      <p>If you're <i>looking for a proven marketer</i> who can write killer video scripts, hooks, and ads, honed across brands that made over $20M in sales…</p>
+      <p>...then read this letter carefully.</p>
+      <p>My name is Liam. I write direct-response copy for DTC brands: video ad scripts, Meta ads, long-form sales letters. Every piece is built to be <span class="hi">tested, not admired</span>. Multiple hooks from day one, angles run in parallel, and a plain-English reason <i>why the winner won</i>.</p>
+      <p>Inside this portfolio you'll find the actual scripts, the actual ad copy, and, behind every static ad, <span class="hi">the strategic markings that explain why it converts.</span></p>
+      <p><b>Talk soon,<br>Liam</b></p>
+    </div>
+    <figure class="headshot">
+      <img src="public/liam-headshot.jpg" alt="Liam Petersen">
+      <figcaption>Liam Petersen · Cape Town</figcaption>
+    </figure>
+  </div>
+
+  <div class="note"><b>P.S. about the numbers:</b> my role on the work you're about to read was copywriter and creative strategist. We worked in partnership with dedicated media buyers, who owned the ad accounts and the performance data. That data belongs to the brands and sits under NDA, so no campaign-level performance data appears anywhere in this portfolio. What I can show you is the thinking, the copy, and exactly how I'd prove it on your account: the Testing System tab sets out the precise metrics I hold my work to, and those get filled with results we generate together.</div>
+
+  <div class="card">
+    <div class="card-head"><h3>How every piece here is graded</h3><span class="chip">The four lenses</span></div>
+    <p style="margin:0 0 12px;max-width:660px">Copy doesn't work by accident. Every script and ad below carries its strategic markings against the same four lenses:</p>
+    <ul class="hooks">
+      <li><b>1. Awareness stage (Schwartz, Breakthrough Advertising).</b> Where is the buyer when the ad finds them: Unaware → Problem Aware → Solution Aware → Product Aware → Most Aware. The lead must match the stage. A Most Aware buyer wants the deal and the deadline; an Unaware buyer needs the problem dramatized before the product can even appear. The less aware the market, the further from the product the ad must start.</li>
+      <li><b>2. Market sophistication (Schwartz's second scale).</b> Not "how aware is she" but "how many promises has this market already heard." Stage 1-2: a direct claim still lands, or a bigger one. Stage 3: claims are worn out, so you lead with a new mechanism. Stage 4: you expand and out-prove the mechanism. Stage 5: claims are exhausted entirely, so you stop promising and identify with the prospect. Beauty is a Stage 4-5 market; a roofing emergency is effectively Stage 1: no cleverness needed, name the problem and be reachable.</li>
+      <li><b>3. Psychology (Cashvertising).</b> Which of the Life-Force 8 desires the ad fires (survival, food, freedom from fear, companionship, comfort, superiority, protection of loved ones, social approval) and the principle carrying it: social proof, fear at the right dose, ego morphing, mental movies, bandwagon, authority transfer, scarcity, risk reversal.</li>
+      <li><b>4. Expert framework.</b> The canon mechanic doing the work: Halbert's problem-first leads and his hierarchy (market first, offer second, copy third), Hopkins' specificity and reason-why, Bencivenga's claim-equals-proof, Ogilvy's authority register, Sugarman's slippery slide, the PAS structure.</li>
+    </ul>
+  </div>
+
+  <div class="toc">
+    <button data-go="video"><span class="no">01</span><span>Video Scripts<small>5 UGC scripts · 20+ tested hooks · quilting subscription box</small></span></button>
+    <button data-go="meta"><span class="no">02</span><span>Meta Ads<small>Campaign copy · AI-written ads · static ad gallery with the strategy behind each</small></span></button>
+    <button data-go="testing"><span class="no">03</span><span>Testing System<small>How I test in the Andromeda era: concept diversity, kill discipline, 2026 platform behaviour</small></span></button>
+  </div>
+</section>
+
+<!-- ============ VIDEO SCRIPTS ============ -->
+<section class="panel" id="video">
+  <p class="kicker">Video Scripts</p>
+  <h2>Five scripts. Five angles. <span class="hi">One product.</span></h2>
+  <p class="lead">UGC video ad scripts for Mrs. Quilty (quilting subscription box): one brief, five distinct angles, each written with 3-5 test hooks and full voice-over plus captions, briefed to named UGC creators. The highlighted hook is the one that ran.</p>
+
+  <div class="card">
+    <h3 style="margin-bottom:8px">First: why one hook beats another</h3>
+    <div class="versus">
+      <div class="vbox"><div class="vh l">Weaker</div><p>"My stash needed an UPGRADE…"</p></div>
+      <div class="vbox"><div class="vh w">Ran this</div><p>"Why I got rid of my fabric stash…"</p></div>
+    </div>
+    <div class="why"><b>THE READ:</b> both point at the same problem, but only one opens a loop. "Needed an upgrade" is a statement. The viewer already knows how it ends. "Why I got rid of my fabric stash" is a confession with the reason missing: it implies a story, and the brain has to watch the next second to close it. Same product, same body copy. The only variable is whether the first three words make you <i>need</i> the fourth.
+      <ul class="marks">
+        <li><span class="k">Awareness</span><span>Both hooks meet a <b>Problem Aware</b> quilter. She owns the frustration. At this stage the hook's only job is to name her problem and open a loop; the product waits.</span></li>
+        <li><span class="k">Psychology</span><span><b>Curiosity</b>, one of Cashvertising's nine learned wants. A confession with the reason missing is an information gap the brain must close. The weaker hook resolves itself; the winner doesn't.</span></li>
+        <li><span class="k">Framework</span><span>Halbert: enter the conversation already running in her head. Sugarman: the first line's only job is to get the second line read.</span></li>
+      </ul></div>
+  </div>
+
+  <details class="script" open>
+    <summary><span class="st">Script 1 · "Why I got rid of my fabric stash"<small>Upgrade / problem angle</small></span><span class="plus">+</span></summary>
+    <div class="sbody">
+      <div class="label">Hooks written for testing</div>
+      <ul class="hooks">
+        <li>My stash needed an UPGRADE…</li>
+        <li><span class="picked">Why I got rid of my fabric stash…</span><span class="picktag">✓ RAN</span></li>
+        <li>Say goodbye to this old stash!</li>
+        <li>Don't you HATE when this happens?</li>
+      </ul>
+      <div class="label">Voice-over</div>
+      <div class="sample">Why I got rid of my fabric stash…
+I finally found a supplier for high quality fabrics! It's the Mrs. Quilty Monthly Kit.
+Now I get 16 pieces of premium cotton fabrics with vibrant and perfectly matched patterns every month. I never have to worry about faded colors or mismatched patterns.
+The quilting kit also comes with easy instructions. So everything is curated for me. Which makes quilting easier and fun.
+Join 18k happy quilters. Subscribe now and get two FREE gifts!</div>
+      <div class="why"><b>WHY IT WORKS:</b> opens on a felt frustration, not the product. Anyone with a "fabric stash" is instantly qualified, and the box arrives as the upgrade to a problem she already owns. That's why it can appear in second two without reading as an ad.
+      <ul class="marks">
+        <li><span class="k">Awareness</span><span><b>Problem Aware.</b> She knows faded, mismatched fabrics; she doesn't know the box. So the lead names the problem, and the product enters as the mechanism that ends it.</span></li>
+        <li><span class="k">Sophistication</span><span>Craft-supply promises are worn (Stage 3), so the ad leads with a <b>mechanism</b>: a curated monthly kit, not "better fabric."</span></li>
+        <li><span class="k">Psychology</span><span>Learned wants: <b>dependability and quality</b> ("never worry about faded colors") plus <b>convenience</b> ("everything is curated for me"). The specifics do the believing: 16 pieces, every month.</span></li>
+        <li><span class="k">Framework</span><span>Halbert problem-first lead · Hopkins specificity: a number is an argument.</span></li>
+      </ul></div>
+    </div>
+  </details>
+
+  <details class="script">
+    <summary><span class="st">Script 2 · "My go-to relaxing hobby"<small>Calming / ASMR angle · researched from TikTok ASMR copy</small></span><span class="plus">+</span></summary>
+    <div class="sbody">
+      <div class="label">Hooks written for testing</div>
+      <ul class="hooks">
+        <li>The thing no one tells you about quilting…</li>
+        <li><span class="picked">My go-to relaxing hobby…</span><span class="picktag">✓ RAN</span></li>
+        <li>The most soothing hobby</li>
+        <li>Take a deep breath &amp; try THIS</li>
+      </ul>
+      <div class="label">Voice-over</div>
+      <div class="sample">My go-to relaxing hobby…
+Quilting is so fun but no one talks about how calming it is?
+My friend loves quilting with the Mrs. Quilty Monthly Kit. She always goes on about how relaxing it is. So I had to give it a try.
+My first box came with super soft cotton fabrics, quilting supplies, these clear templates and instructions to make my first quilt.
+It's one of those hobbies where you're loving every moment. Time flies and you get lost in this new world where you're free to express your creativity.
+I never expected this to be so therapeutic. It's no wonder they sold over 30 000 kits.
+Click below if you want to learn more.</div>
+      <div class="why"><b>WHY IT WORKS:</b> sells a feeling, not a feature. Same box, completely different buyer. Anchored in a friend's recommendation for built-in social proof, and the "30,000 kits" lands <i>after</i> the emotion, as confirmation rather than a pitch.
+      <ul class="marks">
+        <li><span class="k">Awareness</span><span><b>Solution Unaware.</b> She feels the stress but doesn't know quilting treats it. Schwartz's rule: you can't create desire, only channel it. This ad channels an existing desire (calm) onto a new solution.</span></li>
+        <li><span class="k">Psychology</span><span><b>LF8 #3, freedom from stress and pain,</b> delivered as a <b>mental movie</b> (PVA): "time flies… you get lost in this new world." Then <b>bandwagon</b> closes: 30,000 kits.</span></li>
+        <li><span class="k">Framework</span><span>Schwartz desire-channeling · Whitman PVAs · the friend's-recommendation frame borrows word-of-mouth trust.</span></li>
+      </ul></div>
+    </div>
+  </details>
+
+  <details class="script">
+    <summary><span class="st">Script 3 · "Creative but not artsy? Watch this…"<small>Identity / permission angle · numbered structure</small></span><span class="plus">+</span></summary>
+    <div class="sbody">
+      <div class="label">Hooks written for testing</div>
+      <ul class="hooks">
+        <li><span class="picked">Creative but not artsy? Watch this…</span><span class="picktag">✓ RAN</span></li>
+        <li>Try this if you love crafting</li>
+        <li>Creativity beats artistic right?</li>
+        <li>This hobby is for DIY lovers</li>
+        <li>Only creative people will love this…</li>
+      </ul>
+      <div class="label">Voice-over</div>
+      <div class="sample">Creative but not artsy? Watch this…
+You need to try quilting with the Mrs. Quilty Monthly Box! Here's why.
+First. Everything for one project is included. Beautiful cotton fabrics and clear instructions make quilting an easy hobby for anyone to learn.
+Second. No need to draw or paint. Just choose your favorite colors and patterns, and you're ready to start.
+Third. It allows your creativity to flow. It's all about having fun and making something that's yours.
+Join over 11k passionate souls who started just like you. Subscribe now and get 2 FREE gifts!</div>
+      <div class="why"><b>WHY IT WORKS:</b> names a real identity gap ("creative but can't draw") and grants permission. The numbered structure isn't decoration. It lets the box appear by line two while the list keeps pulling the viewer forward. Written to the brief's constraint: product on screen early without the copy feeling like nonsense.
+      <ul class="marks">
+        <li><span class="k">Awareness</span><span><b>Problem Aware, about herself, not the product.</b> "Creative but can't draw" is the felt identity gap; the ad meets her there, then hands her the product as the permission slip.</span></li>
+        <li><span class="k">Psychology</span><span><b>Ego morphing:</b> she buys the identity, not the kit. Fires <b>LF8 #6</b> (achievement) and <b>#8</b> (approval: "making something that's yours"). The numbered reasons are inoculation against "but I'm not artistic."</span></li>
+        <li><span class="k">Framework</span><span>Schwartz identification · Hopkins reason-why in numbered form.</span></li>
+      </ul></div>
+    </div>
+  </details>
+
+  <details class="script">
+    <summary><span class="st">Script 4 · "What learning quilting looks like"<small>Beginner journey · brand-voice / company perspective</small></span><span class="plus">+</span></summary>
+    <div class="sbody">
+      <div class="label">Hooks written for testing</div>
+      <ul class="hooks">
+        <li><span class="picked">What learning quilting looks like…</span><span class="picktag">✓ RAN</span></li>
+        <li>THIS is where beginners go to quilt…</li>
+        <li>Quilting the EASY way!</li>
+        <li>The best newbie quilting experience??</li>
+        <li>Learning to quilt is easier than it looks.</li>
+      </ul>
+      <div class="label">Voice-over</div>
+      <div class="sample">What learning quilting looks like…
+It's so rewarding and fun with Mrs. Quilty's Box. A monthly kit where we make beginners fall in love with quilting.
+Every Mrs. Quilty Box comes with 16 pieces of premium cotton fabrics, rotary cutting templates, easy-to-follow instructions, and monthly surprises. All delivered to your door.
+We curate everything, so you spend more time quilting and less time preparing.
+Join 11k+ beginners who made their first quilt with Mrs. Quilty. Click below to learn more.</div>
+      <div class="why"><b>WHY IT WORKS:</b> the company-voice variant for the same test matrix. "We make beginners fall in love with quilting" flips the POV from testimonial to invitation, and "more time quilting, less time preparing" is the whole value proposition in eight words.
+      <ul class="marks">
+        <li><span class="k">Awareness</span><span><b>Solution → Product Aware.</b> She's seen craft kits before, so the ad differentiates on the mechanism, total curation, instead of re-selling quilting.</span></li>
+        <li><span class="k">Psychology</span><span><b>Bandwagon</b> (11k+ beginners who started just like her) plus the learned wants of <b>convenience and dependability</b>. Company voice is a confidence <b>transfer</b>: "we make beginners fall in love" is a promise, not a review.</span></li>
+        <li><span class="k">Framework</span><span>Ogilvy's brand-authority register · Hopkins specifics (16 fabrics, rotary templates, monthly surprises).</span></li>
+      </ul></div>
+    </div>
+  </details>
+
+  <details class="script">
+    <summary><span class="st">Script 5 · "Need quality fabrics? Try this…"<small>Fabric-quality angle · targets the experienced quilter</small></span><span class="plus">+</span></summary>
+    <div class="sbody">
+      <div class="label">Hooks written for testing</div>
+      <ul class="hooks">
+        <li><span class="picked">Need quality fabrics? Try this…</span><span class="picktag">✓ RAN</span></li>
+        <li>Is this RUINING your quilts?</li>
+        <li>A quilting fabric BOX?</li>
+      </ul>
+      <div class="label">Voice-over</div>
+      <div class="sample">Need quality fabrics? Try this…
+I struggled with faded quilting fabrics for years! Then I found the Mrs. Quilty Box and I never looked back.
+It's the best value for money on the market. You get 16 premium cotton fabrics every month. Plus extra supplies like cutting templates and easy instructions for a full project.
+So it's perfect for both beginners and seasoned quilters. Each box comes with handpicked patterns, designed to mix and match beautifully.
+You never have to worry about ruining your quilts ever again! Over 30k+ fabric boxes are already sold.
+Subscribe today. Cancel anytime.</div>
+      <div class="why"><b>WHY IT WORKS:</b> aimed at the <i>experienced</i> quilter, not the beginner. "I struggled with faded fabrics for years" qualifies her in one line, and the same box gets repositioned as a fabric supply, because for this buyer the fabric IS the product.
+      <ul class="marks">
+        <li><span class="k">Awareness</span><span><b>Product Aware, in the wrong category.</b> She already buys fabric; she's never considered a subscription for it. The ad re-frames the box into a category she shops weekly.</span></li>
+        <li><span class="k">Psychology</span><span><b>Fear at the right dose:</b> "Is this RUINING your quilts?" fires LF8 #3 (loss aversion on hours of hand-work), then resolves it in the same breath. Closes on the <b>bargain</b> want: "best value on the market." "Cancel anytime" is the risk reversal.</span></li>
+        <li><span class="k">Framework</span><span>PAS (problem, agitate, solve) · Bencivenga claim-equals-proof: 30k boxes sold backs "never looked back."</span></li>
+      </ul></div>
+    </div>
+  </details>
+
+  <div class="card">
+    <h3 style="margin-bottom:6px">The system behind the five</h3>
+    <p style="margin:0 0 10px;max-width:660px">One product, five separate desires: <b>upgrade</b> (problem), <b>calm</b> (emotion), <b>identity</b> (permission), <b>beginner journey</b> (invitation), <b>fabric quality</b> (expert buyer). Each script carries 3-5 hooks so the hook, roughly 80% of a video ad's performance, is tested in isolation. The market picks the winner, not my taste. Full VO plus caption versions were written for every script and briefed to named UGC creators.</p>
+    <div class="metrics"><span class="ph">Campaign performance: held under brand NDA</span></div>
+  </div>
+</section>
+
+<!-- ============ META ADS ============ -->
+<section class="panel" id="meta">
+  <p class="kicker">Meta Ads</p>
+  <h2>Ad copy, AI-written ads, and <span class="hi">the strategy behind each one</span></h2>
+  <p class="lead">Three layers: campaign copy I wrote for a DTC brand portfolio · AI-generated ad copy from my creative systems · a gallery of finished AI-generated static ads, each with a toggle that opens the strategic markings behind it.</p>
+
+  <!-- 1. campaign copy -->
+  <div class="card">
+    <div class="card-head">
+      <h3>Seasonal campaign: one winner, scaled across 3 brands</h3>
+      <span class="chip">WINTER30</span>
+    </div>
+    <p class="role" style="margin-bottom:14px"><b>The play:</b> a well-performing Mrs. Quilty ad became the template for a coordinated Christmas push across three sister subscription brands. Same proven skeleton, re-voiced per audience. <b>Role:</b> all copy plus headline test variants.</p>
+
+    <div class="label">Hooks &amp; Needles · knitting box (built off the winning Mrs. Quilty ad)</div>
+    <div class="sample">🎅 CHRISTMAS SALE 🎅 Get 30% OFF your first Hooks &amp; Needles Box! Use code: WINTER30.
+Loved by 5,000+ beginners as the #1 crafting gift.
+Everything you need for 1 full knitting project:
+🧶 Luxurious Italian yarns
+📑 Guides with expert tips
+🎁 Crafting essentials &amp; more
+But why knitting?
+✅ Perfect for women 40+  ✅ Keeps hands &amp; mind busy  ✅ Learn an easy &amp; rewarding skill  ✅ Create memorable gifts
+100% risk-free. Return or cancel anytime. Available while stocks last!</div>
+
+    <div class="label">Mrs. Quilty · quilting box</div>
+    <div class="sample">"The best $23 I spent this Christmas" 😍 30% OFF Mrs. Quilty Box with code WINTER30.
+🎁 All you need for 1 full quilting project.
+📦 Premium fabrics, templates &amp; more.
+🚚 Express delivery to your home.
+💸 $75+ worth of supplies for ONLY $20.98
++ 2 FREE gifts worth $29.99 when you subscribe today!
+Limited boxes left. Flexible payment plans. Cancel ANYTIME!</div>
+
+    <div class="label">Beads &amp; Stones · jewelry box</div>
+    <div class="sample">"The perfect DIY gift doesn't exi….." 🎁 Get 30% OFF your first jewelry-making kit this Xmas. 💎🎄
+Every Beads &amp; Stones monthly box comes with:
+✨ Supplies to make one full jewelry project
+✨ A curated selection of luxury beads
+✨ Easy to follow instructions &amp; tips
+Make a statement with one-of-a-kind pieces that set you apart from the crowd.
+Risk-free subscription. Cancel ANYTIME. Act fast, offer ends soon!</div>
+
+    <div class="why"><b>WHY IT WORKS:</b> the discount code lands in line one (the reason to act now), then value-stacking ($75+ for $20.98) and risk reversal carry the close. Leading with a customer-voice line, "the best $23 I spent," beats a brand claim because it reads as proof. Same skeleton, three brand voices: that's how you scale a winner instead of starting from zero.
+    <ul class="marks">
+      <li><span class="k">Awareness</span><span><b>Most Aware.</b> Seasonal deal traffic knows the product. Schwartz's rule for this stage is blunt: lead with the product, the deal and the deadline. That's exactly why WINTER30 is line one, not paragraph three.</span></li>
+      <li><span class="k">Psychology</span><span><b>Bargain</b> want carried by concrete math ($75+ → $20.98) · <b>scarcity</b> ("limited boxes," "while stocks last") · <b>LF8 #7</b> in the gifting angle (care of loved ones at Christmas) · <b>social proof</b> in the customer-voice opener · <b>risk reversal</b> ("cancel anytime") to kill the subscription objection.</span></li>
+      <li><span class="k">Framework</span><span>Schwartz stage-matched lead · Hopkins specificity: $20.98 out-sells "over 70% off."</span></li>
+    </ul></div>
+
+    <div class="label">Headline test variants</div>
+    <ul class="hooks">
+      <li>30% OFF Full Quilting Kit 🎁 Use code: WINTER30</li>
+      <li>XMAS SALE 🎄 30% OFF with code: WINTER30</li>
+      <li>"The best $23 I spent this Xmas" 🥰 Save 30%</li>
+    </ul>
+    <div class="metrics"><span class="ph">Campaign performance: held under brand NDA</span></div>
+  </div>
+
+  <!-- 2. AI copy -->
+  <div class="card">
+    <div class="card-head">
+      <h3>AI-written ad copy, steered by direct response</h3>
+      <span class="chip red">AI-generated</span>
+    </div>
+    <p class="role" style="margin-bottom:14px">Written by my AI copy systems, directed and quality-read by me. AI writes the volume; the direct-response judgment decides what's worth testing. That combination is how you feed an ad account 10x the angles without drowning it in copy that only <i>reads</i> well.</p>
+
+    <div class="label">Mrs. Quilty · beginner / aspiration angle</div>
+    <p class="hl">"Always Wanted to Quilt? Start This Weekend."</p>
+    <div class="sample">You've been "meaning to start quilting" for how many years now?
+Here's what nobody tells you: you don't need a fancy machine, a spare room, or 20 years of practice. You need one good beginner kit and someone who won't make you feel silly for asking questions.
+That's the whole reason Mrs. Quilty exists. Everything's pre-cut, the instructions read like a friend is sitting next to you, and your first finished quilt is closer than you think.
+👉 Start your first quilt this weekend.</div>
+    <div class="why"><b>THE READ:</b> leads with the guilt of the unstarted hobby (the real emotional block), then removes every excuse before the CTA. Sells the identity, not the fabric.
+    <ul class="marks">
+      <li><span class="k">Awareness</span><span><b>Problem Aware.</b> The problem is the guilt of the unstarted hobby, not fabric.</span></li>
+      <li><span class="k">Psychology</span><span><b>Ego morphing</b> (she buys "quilter" as an identity) plus LF8 #6/#8. Each objection, machine, space, skill, is knocked down before the ask (inoculation).</span></li>
+    </ul></div>
+
+    <div class="label">Mrs. Quilty · heirloom / legacy angle</div>
+    <p class="hl">"The Blanket That Becomes an Heirloom."</p>
+    <div class="sample">Nobody keeps a store-bought blanket for 40 years.
+But a quilt you made by hand? That gets passed down, fought over, and cried into at weddings.
+Mrs. Quilty is for makers who want to leave behind something that actually means something. Pick your pattern. We'll handle the rest.
+👉 Make the one they'll keep forever.</div>
+    <div class="why"><b>THE READ:</b> reframes a hobby purchase as a legacy decision. Raises the emotional stakes so price stops being the conversation.
+    <ul class="marks">
+      <li><span class="k">Awareness</span><span><b>Solution Aware,</b> with the stakes deliberately raised. The value reframe (blanket → heirloom) moves the purchase into a category where price logic changes.</span></li>
+      <li><span class="k">Psychology</span><span><b>LF8 #7, care of loved ones,</b> plus symbolic permanence ("passed down, cried into at weddings"): a mental movie of her own legacy.</span></li>
+    </ul></div>
+
+    <div class="divider"></div>
+
+    <div class="label">My Ramen Box · authentic-vs-instant angle</div>
+    <p class="hl">"Ramen So Good You'll Forget the Packet Kind Existed."</p>
+    <div class="sample">If your idea of ramen is a 30-cent packet and a foil sachet of flavour dust… we need to talk.
+Real ramen, the kind people queue around the block for in Tokyo, is rich, deep, slurp-out-loud good. And it does NOT require a 2-hour broth or a plane ticket.
+My Ramen Box drops restaurant-grade ramen on your doorstep. Real noodles, real broth, ready in minutes.
+👉 Taste what ramen is actually supposed to be.</div>
+    <div class="why"><b>THE READ:</b> names the enemy (instant ramen) in the first line. A pattern-interrupt that qualifies the ramen-lover and disqualifies no one who matters.
+    <ul class="marks">
+      <li><span class="k">Awareness</span><span><b>Solution Aware</b> foodie. She knows good ramen exists; the ad positions against what's in her cupboard, not against other boxes.</span></li>
+      <li><span class="k">Psychology</span><span><b>LF8 #2, food and drink,</b> the one desire you can fire with adjectives alone ("rich, deep, slurp-out-loud"), plus <b>superiority</b> (LF8 #6): siding against packet ramen flatters her taste.</span></li>
+    </ul></div>
+
+    <div class="label">My Ramen Box · craving / restaurant-at-home angle</div>
+    <p class="hl">"Restaurant Ramen. Pyjamas On."</p>
+    <div class="sample">It's 8pm. You want ramen. Actual ramen, not the sad instant kind.
+The good spot's a 25-minute drive, there's a wait, and you're already in your pyjamas.
+That's exactly why My Ramen Box exists. Authentic, rich, restaurant-level ramen, in your kitchen, in minutes. Pyjamas stay on. 🍜
+👉 Get your first box.</div>
+    <div class="why"><b>THE READ:</b> drops the reader into a specific, high-intent moment (the 8pm craving) instead of describing the product. The scene does the selling.
+    <ul class="marks">
+      <li><span class="k">Awareness</span><span><b>Problem Aware, in the moment.</b> The ad recreates the exact craving scenario where the purchase decision actually happens.</span></li>
+      <li><span class="k">Psychology</span><span><b>Mental movie (PVA):</b> 8pm, pyjamas, the 25-minute drive she won't make. Plus the <b>convenience</b> want. LF8 #2 and #5 (comfort).</span></li>
+    </ul></div>
+  </div>
+
+  <!-- 3. gallery with strategy toggles -->
+  <h3 style="margin:34px 0 6px;font-size:22px">Static ad gallery: <span class="hi">open the strategy behind each ad</span></h3>
+  <p class="lead" style="margin-bottom:6px">Finished static ads produced with my AI creative systems. Every ad is one cell of an angle test matrix. Click the toggle under each one to see the strategic markings.</p>
+
+  <div class="gallery">
+
+    <figure class="adwork" style="margin:0">
+      <img src="public/showcase/create-headline-hero.png" alt="Create Wellness, headline hero" loading="lazy">
+      <div class="meta"><span class="b"><a href="https://trycreate.co" target="_blank" rel="noopener">Create Wellness</a></span><span class="a">Headline hero</span></div>
+      <details>
+        <summary>View the strategic markings <span class="pl">+</span></summary>
+        <div class="strat">
+          <div class="f"><div class="fh">Angle</div>Category-widening headline hero. "creatine for everybody." takes a gym-bro ingredient and hands it to the mainstream.</div>
+          <div class="f"><div class="fh">Hook mechanic</div>The headline IS the positioning. "The daily mineral your body forgot it needed" reframes supplement → mineral: novelty plus permission in one line.</div>
+          <div class="f"><div class="fh">Awareness &amp; psychology</div><b>Unaware → Problem Aware</b> mainstream buyer (Schwartz). Fires LF8 #1 (health and vitality) made ego-safe: "for everybody" removes the gym-identity barrier, and inclusion doubles as bandwagon.</div>
+          <div class="f"><div class="fh">Visual choice</div>Soft daylight, pastel variety pack, kitchen-counter energy. Deliberately un-gym: the visual makes the "for everybody" claim so the copy doesn't have to.</div>
+        </div>
+      </details>
+    </figure>
+
+    <figure class="adwork" style="margin:0">
+      <img src="public/showcase/clove-stat-led.png" alt="Clove, stat-led" loading="lazy">
+      <div class="meta"><span class="b"><a href="https://goclove.com" target="_blank" rel="noopener">Clove</a></span><span class="a">Stat-led</span></div>
+      <details>
+        <summary>View the strategic markings <span class="pl">+</span></summary>
+        <div class="strat">
+          <div class="f"><div class="fh">Angle</div>Stat-led social proof: "155,091,849 shifts walked in Clove."</div>
+          <div class="f"><div class="fh">Hook mechanic</div>An absurdly specific number forces a double-take (specificity = believability), and "shifts walked" converts units sold into lived proof from the exact buyer: healthcare workers.</div>
+          <div class="f"><div class="fh">Awareness &amp; psychology</div><b>Solution Aware</b> nurse; she knows work shoes exist (Schwartz). Social proof at professional-tribe scale: "shifts walked" makes the crowd <i>her</i> crowd (LF8 #8, tribe approval), and Hopkins-grade specificity makes the number believable.</div>
+          <div class="f"><div class="fh">Visual choice</div>One shoe on a clinical blue field. The number is the hero; the product plays the supporting role. Nothing competes with the stat.</div>
+        </div>
+      </details>
+    </figure>
+
+    <figure class="adwork" style="margin:0">
+      <img src="public/showcase/blk-and-bold-feature-callout.png" alt="BLK &amp; Bold, feature callout" loading="lazy">
+      <div class="meta"><span class="b"><a href="https://blkandbold.com" target="_blank" rel="noopener">BLK &amp; Bold</a></span><span class="a">Feature callout</span></div>
+      <details>
+        <summary>View the strategic markings <span class="pl">+</span></summary>
+        <div class="strat">
+          <div class="f"><div class="fh">Angle</div>Feature callout / provenance: "What 1,850 meters tastes like."</div>
+          <div class="f"><div class="fh">Hook mechanic</div>A spec (altitude) turned into a taste promise. The flavour call-outs, sweet, creamy, toffee, nutty, lemon, map around the bag like a diagram: an ad that teaches instead of shouts.</div>
+          <div class="f"><div class="fh">Awareness &amp; psychology</div><b>Product Aware</b> coffee buyer choosing between bags (Schwartz). Fires the learned want <b>to be informed</b> plus curiosity ("what does altitude taste like?") because an ad that teaches gets read, and teaching transfers authority.</div>
+          <div class="f"><div class="fh">Visual choice</div>Annotated schematic around the real bag, editorial not salesy. Label lines borrow the authority of a spec sheet, and the packaging is the brand's real SKU, untouched.</div>
+        </div>
+      </details>
+    </figure>
+
+    <figure class="adwork" style="margin:0">
+      <img src="public/showcase/project-m-600.png" alt="Project M, stat-led" loading="lazy">
+      <div class="meta"><span class="b"><a href="https://joinprojectm.com" target="_blank" rel="noopener">Project M</a></span><span class="a">Stat-led</span></div>
+      <details>
+        <summary>View the strategic markings <span class="pl">+</span></summary>
+        <div class="strat">
+          <div class="f"><div class="fh">Angle</div>Stat-led heritage: "600 years of clinical history behind one 10-herb formula."</div>
+          <div class="f"><div class="fh">Hook mechanic</div>One giant numeral as the pattern interrupt. Time as proof: the anti-fad claim in a category drowning in fads.</div>
+          <div class="f"><div class="fh">Awareness &amp; psychology</div><b>Solution Aware, burned before</b> (Schwartz); she's tried supplements that didn't work. This is also a <b>Stage 3-4 sophistication</b> play: claims are worn out in this market, so the ad leads with mechanism and proof-of-time. Fires dependability and quiets LF8 #3, the fear of falling for one more fad.</div>
+          <div class="f"><div class="fh">Visual choice</div>Apothecary styling, real bottle, oversized serif numeral. The typography itself signals heritage before a word is read.</div>
+        </div>
+      </details>
+    </figure>
+
+    <figure class="adwork" style="margin:0">
+      <img src="public/showcase/inno-supps-social-proof.png" alt="Inno Supps, social proof" loading="lazy">
+      <div class="meta"><span class="b"><a href="https://www.innosupps.com" target="_blank" rel="noopener">Inno Supps</a></span><span class="a">Social proof</span></div>
+      <details>
+        <summary>View the strategic markings <span class="pl">+</span></summary>
+        <div class="strat">
+          <div class="f"><div class="fh">Angle</div>Social-proof stack: 4.8 stars · 2,077 reviews · 4 board-certified doctors.</div>
+          <div class="f"><div class="fh">Hook mechanic</div>Triangulated proof: crowd (reviews), quality (stars), authority (doctors) in one frame. Each number defends the other two.</div>
+          <div class="f"><div class="fh">Awareness &amp; psychology</div><b>Product Aware</b> evaluator comparing options (Schwartz). Whitman's twin engines run together, <b>bandwagon</b> (2,077 reviews) and <b>authority transfer</b> (4 board-certified doctors), each covering the other's weakness, in service of LF8 #1.</div>
+          <div class="f"><div class="fh">Visual choice</div>Dark plus neon, consistent with the brand's shelf presence; the product stays centre frame because the claim is about the product's track record.</div>
+        </div>
+      </details>
+    </figure>
+
+    <figure class="adwork" style="margin:0">
+      <img src="public/showcase/pique-cafe-rejection.png" alt="Pique, us vs them" loading="lazy">
+      <div class="meta"><span class="b"><a href="https://www.piquelife.com" target="_blank" rel="noopener">Pique</a></span><span class="a">Us vs them</span></div>
+      <details>
+        <summary>View the strategic markings <span class="pl">+</span></summary>
+        <div class="strat">
+          <div class="f"><div class="fh">Angle</div>Us-vs-them: "Cafes don't take matcha seriously. Pique does."</div>
+          <div class="f"><div class="fh">Hook mechanic</div>Names an enemy the buyer already suspects. Two-sentence rhythm: accusation, then flag-plant. Positions ceremonial-grade against the daily latte without naming a competitor.</div>
+          <div class="f"><div class="fh">Awareness &amp; psychology</div><b>Product Aware</b> matcha drinker (Schwartz). Enemy-naming fires <b>LF8 #6 (superiority)</b> and <b>#8 (insider status)</b>: buying Pique means joining the side that takes it seriously. Identity, not ingredients.</div>
+          <div class="f"><div class="fh">Visual choice</div>Gallery-white field, single box, museum framing. The layout itself says "we take this seriously."</div>
+        </div>
+      </details>
+    </figure>
+
+    <figure class="adwork" style="margin:0">
+      <img src="public/showcase/jones-road-poetic.png" alt="Jones Road, poetic" loading="lazy">
+      <div class="meta"><span class="b"><a href="https://jonesroadbeauty.com" target="_blank" rel="noopener">Jones Road</a></span><span class="a">Poetic</span></div>
+      <details>
+        <summary>View the strategic markings <span class="pl">+</span></summary>
+        <div class="strat">
+          <div class="f"><div class="fh">Angle</div>Poetic / product-truth: "Fifteen shades. One pot. No makeup."</div>
+          <div class="f"><div class="fh">Hook mechanic</div>Three-beat telegraphic copy. The paradox, "no makeup" from a makeup brand, is the hook: it sells the no-makeup-makeup category in six words.</div>
+          <div class="f"><div class="fh">Awareness &amp; psychology</div><b>Stage 4-5 sophistication</b> beauty market (Schwartz's second scale): claims are exhausted, so the ad identifies instead of arguing. <b>Ego morphing</b> into the effortless-chic identity; the paradox supplies the curiosity.</div>
+          <div class="f"><div class="fh">Visual choice</div>Open pot plus a dotted swatch arc: the fifteen shades made literal. Copy and visual complete each other; neither works alone.</div>
+        </div>
+      </details>
+    </figure>
+
+    <figure class="adwork" style="margin:0">
+      <img src="public/showcase/create-poetic.png" alt="Create Wellness, poetic" loading="lazy">
+      <div class="meta"><span class="b"><a href="https://trycreate.co" target="_blank" rel="noopener">Create Wellness</a></span><span class="a">Poetic</span></div>
+      <details>
+        <summary>View the strategic markings <span class="pl">+</span></summary>
+        <div class="strat">
+          <div class="f"><div class="fh">Angle</div>Poetic / experience arc: "subtle at first. Then suddenly very obvious."</div>
+          <div class="f"><div class="fh">Hook mechanic</div>Describes the felt timeline of results without one claim number. An honesty signal that builds curiosity; lowercase styling reads like a friend's aside, not an ad.</div>
+          <div class="f"><div class="fh">Awareness &amp; psychology</div><b>Problem Aware skeptic</b> (Schwartz); she's heard big supplement promises before. The under-claim is the persuasion: honesty lowers ad-reactance, and the open question ("what becomes obvious?") fires the curiosity want.</div>
+          <div class="f"><div class="fh">Visual choice</div>A single sachet at hand-scale. Minimalism mirrors the "subtle" of the copy; the ad performs its own promise.</div>
+        </div>
+      </details>
+    </figure>
+
+    <figure class="adwork" style="margin:0">
+      <img src="public/showcase/project-m-ogilvy.png" alt="Project M, fact-led Ogilvy" loading="lazy">
+      <div class="meta"><span class="b"><a href="https://joinprojectm.com" target="_blank" rel="noopener">Project M</a></span><span class="a">Fact-led · Ogilvy</span></div>
+      <details>
+        <summary>View the strategic markings <span class="pl">+</span></summary>
+        <div class="strat">
+          <div class="f"><div class="fh">Angle</div>Fact-led authority: "Formulated by Harvard-trained herbalists. Tested by 600 years."</div>
+          <div class="f"><div class="fh">Hook mechanic</div>Contradiction-resolution credential: modern Western authority (Harvard) welded to ancient Eastern proof (600 years). Each half covers the other's weakness.</div>
+          <div class="f"><div class="fh">Awareness &amp; psychology</div><b>Product Aware, research-mode</b> buyer (Schwartz); she's comparing and reading labels. <b>Authority transfer</b> (Harvard) plus heritage dependability calm LF8 #3: the fear around hormones and unknowns.</div>
+          <div class="f"><div class="fh">Visual choice</div>Editorial still-life: journal, herbs, real bottle, composed like a broadsheet ad. Ogilvy register: calm, factual, expensive-looking.</div>
+        </div>
+      </details>
+    </figure>
+
+  </div>
+
+  <p class="gallery-note"><b>Generated by my creative systems, not hand-designed.</b> Every product is composed around the brand's real packaging, accurate to the SKU. Each ad is one cell of an angle test matrix (headline hero, stat-led, feature callout, social proof, us-vs-them, poetic), never a one-off design.</p>
+</section>
+
+<!-- ============ TESTING SYSTEM ============ -->
+<section class="panel" id="testing">
+  <p class="kicker">Testing System · 2026</p>
+  <h2>How I test in the Andromeda era: <span class="hi">psychology is the targeting</span></h2>
+  <p class="lead">My general testing methodology for any account, DTC or lead gen. Built on how Meta's Andromeda retrieval engine actually behaves in 2026, fused with the direct-response system running through the rest of this portfolio: the same four lenses, now used to build the test matrix instead of just reading it.</p>
+
+  <div class="card">
+    <div class="card-head"><h3>What Andromeda changed</h3><span class="chip">Platform reality · 2026</span></div>
+    <ul class="hooks">
+      <li><b>One Entity ID per concept, not per file.</b> Eight versions of the same ad with different fonts and backgrounds collapse into one entity that competes against itself in the auction. Recolored variations aren't testing; they're cannibalization.</li>
+      <li><b>Consolidation beats fragmentation.</b> Meta's own data: one ad set with 25 creatives beat five ad sets of five, roughly 17% more conversions at 16% lower cost. Budget stays liquid in one place so every concept gets a real read.</li>
+      <li><b>Broad plus creative IS the targeting.</b> Age plus location radius, no interest stacking. Advantage+ out-delivers manual audiences once conversion data flows: the creative signals who the ad is for, and the algorithm finds them.</li>
+      <li><b>Fatigue is a signal, not a calendar.</b> First-impression frequency dropping plus falling CTR means refresh. And nothing gets judged before day 7 unless it's catastrophic; early kills reset the learning.</li>
+      <li><b>Meta's auto-AI adjustments default OFF.</b> Background expansion, copy rewrites, auto-music: tested deliberately against controls, never left on blind.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>The fusion: psychology is the diversity engine</h3><span class="chip red">The core idea</span></div>
+    <p style="margin:0 0 14px;max-width:700px">Andromeda demands <b>genuinely different concepts</b>. Direct response is the only reliable machine for producing them, because "different" isn't a new background. It's a <span class="hi">different desire, met at a different awareness stage, in a different format.</span> The four lenses aren't just analysis; they're how the test matrix gets built:</p>
+    <ul class="hooks">
+      <li><b>WHO · awareness stage (Schwartz):</b> where is this buyer when the ad finds them: problem screaming NOW, quietly comparing, or not yet aware?</li>
+      <li><b>MARKET · sophistication (Schwartz):</b> how many promises has this market already heard? Local-service emergencies are effectively Stage 1: no cleverness needed, name the problem and be reachable. The trust angle fights in a more sophisticated arena, where every competitor claims "licensed and reliable," so proof has to escalate.</li>
+      <li><b>DESIRE · psychology (Cashvertising):</b> which Life-Force desire carries the concept: fear and loss, family protection, trust in the tribe, bargain?</li>
+      <li><b>FORMAT:</b> direct-to-camera tech, UGC selfie, social-proof carousel, before/after demo.</li>
+    </ul>
+    <p style="margin:14px 0;max-width:700px">Cross them and you get 20-30 <b>true</b> Entity IDs per client, each with its own hook set. This is the same machine that produced the five Mrs. Quilty scripts: five desires, one product. To show it travels, here's the identical matrix applied to a completely different world, a local home-services brand:</p>
+    <div class="grid2">
+      <div class="mini"><h4>1 · Emergency</h4><p><b>Awareness:</b> Most Aware of the problem; it's raining into the kitchen. <b>Psych:</b> LF8 #3, fear and loss, zero patience. <i>"Roof leaking after last night's storm?"</i> Hook names the problem NOW; CTA is the phone.</p></div>
+      <div class="mini"><h4>2 · Trust / local</h4><p><b>Awareness:</b> Solution Aware; she knows she needs a roofer, she's choosing WHO. <b>Psych:</b> LF8 #8 plus authority transfer: reviews, licensed, "your neighbours call us back." The fear being solved is the scam, not the leak.</p></div>
+      <div class="mini"><h4>3 · Cost fear</h4><p><b>Awareness:</b> Problem Unaware → Aware. <b>Psych:</b> loss aversion, agitated at the right dose. <i>"That little brown stain? A $12k repair waiting to happen."</i> Converts a latent worry into a call today.</p></div>
+      <div class="mini"><h4>4 · Seasonal</h4><p><b>Awareness:</b> Latent / Unaware; nothing is broken yet. <b>Psych:</b> convenience plus light fear, pre-empting the rush. <i>"Before the first heatwave, book the tune-up everyone forgets."</i> Fills the pipeline between storms.</p></div>
+    </div>
+    <div class="why"><b>WHY THIS WINS:</b> the algorithm can only scale what it's fed. Feed it four versions of one idea and it has one bet. Feed it four psychologically distinct concepts and it has a portfolio, and the market's vote tells you <i>which desire, at which awareness stage,</i> is moving this market right now. That read is what the next batch gets built from. Halbert's hierarchy still governs all of it: market first (the starving crowd is the storm), offer second (same-day inspection, upfront price), copy third.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>The weekly operating rhythm</h3><span class="chip">Velocity with discipline</span></div>
+    <ul class="hooks">
+      <li><b>One consolidated ad set, 8-15 live creatives:</b> roughly 4-6 proven leaders, 3-5 solid mid-tier, 2-3 fresh concepts entering every cycle.</li>
+      <li><b>New concepts every 7-14 days,</b> not daily churn (that just recreates Entity ID redundancy). Each concept ships with 3-5 hooks, because the hook is roughly 80% of a video ad's performance and gets tested in isolation.</li>
+      <li><b>The read, in order:</b> hook rate judges the hook. Under 20% it isn't stopping the scroll; 25-35%+ is the working zone. Hold rate judges the body. <b>The money metric decides what lives:</b> ROAS or CPA on ecommerce, cost-per-qualified-lead or cost-per-call on lead gen.</li>
+      <li><b>Refresh triggers:</b> frequency around 3.0 in 7 days on cold audiences; retargeting tolerates 6-8 over 30. Fatigue signals, not gut feel.</li>
+      <li><b>Kill discipline:</b> conversion reads are protected to day 7 unless catastrophic; leading-indicator kills can come much earlier (see the small-budget doctrine below). Winners get iterated by <i>mechanism</i>, the psychological reason they won, never cloned by cosmetics.</li>
+    </ul>
+    <div class="metrics"><span class="ph">Hook rate target: 25-35%+</span><span class="ph">CPA / CPL: set vs account baseline</span><span class="ph">Test velocity: 2-3 new concepts / week</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>When the test budget is a few hundred dollars</h3><span class="chip red">Small-budget doctrine</span></div>
+    <p style="margin:0 0 12px;max-width:700px">Everything above assumes enough spend to read CPL per creative. Plenty of real accounts don't have it: a local client testing on a few hundred dollars can't buy fifty conversions per ad. The system doesn't break; it re-orders.</p>
+    <ul class="hooks">
+      <li><b>Two-stage testing.</b> Stage 1 reads the cheap, fast signals: hook rate and hold rate stabilize on a few thousand impressions, roughly $20-40 per creative, so ten hooks get an honest read inside a small budget. Stage 2: only the survivors graduate to conversion spend, where the limited dollars buy CPL data on pre-validated creative instead of funding losers.</li>
+      <li><b>Judge the hook early, the conversion late.</b> Kill discipline splits in two: leading-indicator kills at 48-72 hours, conversion reads protected to day 7 and beyond. You never burn conversion budget proving a hook nobody stopped for.</li>
+      <li><b>The vertical is the real test budget.</b> One client's few hundred dollars is a cell, not the experiment. Across many clients in the same trade, every validated hook and angle becomes the seeded control for the next account: the psychology of a winning roofer hook doesn't care which roofer runs it. The compounding asset is a per-vertical angle and hook library with the WHY documented, and building that library is exactly what a creative strategist is for.</li>
+      <li><b>The loop.</b> I set the angle matrix and the hook hypotheses, production turns them into low-fi video fast, media buying runs delivery, and I close the loop with the data: name the mechanism behind the winner, log it, re-seed the next batch. Strategy and diagnosis, not just scripts.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>The system bends to the money metric</h3><span class="chip">Applied: lead gen</span></div>
+    <p style="margin:0 0 12px;max-width:700px">The rhythm above doesn't change between accounts; the end metric does. Ecommerce optimises to ROAS. When the goal is inbound calls and booked jobs, for example local services, the same system bends like this:</p>
+    <ul class="hooks">
+      <li><b>Trust formats win this category:</b> direct-to-camera tech/founder video (30-90s, problem first, no pitch for the first stretch) and low-fi UGC, which runs roughly 25% lower CPA than studio-polished in 2026 lead-gen testing. Polish reads as an ad; low-fi reads as a neighbour.</li>
+      <li><b>The specificity rule:</b> exact client type plus named problem plus concrete outcome plus evidence anchor ("300+ roofs completed, 4.8 stars"). Specific consistently beats broad benefit claims on CPL. It's Hopkins, holding up in 2026.</li>
+      <li><b>Signal is oxygen:</b> CAPI wired so calls and qualified leads feed back into delivery; losing 30-40% of lead signals starves the algorithm. Qualifying questions on lead forms cut junk leads by more than half.</li>
+      <li><b>Speed-to-lead is part of creative ROI:</b> a 5-minute response converts roughly 9x better than 30 minutes. The ad and the call-handling are one system, and I read them together with the PPC team.</li>
+      <li><b>Geo:</b> radius targeting, broad demographics, and let the creative do the qualifying. The hook that names the storm, the suburb and the stain finds its own audience.</li>
+    </ul>
+    <p class="role" style="margin-top:14px">Benchmarks above are 2026 published platform data and industry tests; sources available on request. Per-client targets always get set against the account's own baseline, never against someone else's average.</p>
+  </div>
+</section>
+
+</div></main>
+
+<script>
+  var tabs = document.querySelectorAll('.tab');
+  var panels = document.querySelectorAll('.panel');
+  function show(id){
+    panels.forEach(function(p){ p.classList.toggle('active', p.id === id); });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.dataset.panel === id); });
+    window.scrollTo({top:0});
+    if(history.replaceState) history.replaceState(null,'','#'+id);
+  }
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ show(t.dataset.panel); }); });
+  document.querySelectorAll('[data-go]').forEach(function(b){
+    b.addEventListener('click', function(){ show(b.dataset.go); });
+  });
+  var h = location.hash.replace('#','');
+  if(h && document.getElementById(h)) show(h);
+</script>
+
+</body>
+</html>
