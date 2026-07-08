@@ -14,7 +14,7 @@ export const SECTIONS = [
   { id: "systems", label: "Systems" },
   { id: "workflows", label: "Workflows" },
   { id: "showcase", label: "Creative" },
-  { id: "hijacks", label: "Hijacks" },
+  { id: "craft", label: "The craft" },
   { id: "video-ads", label: "Video" },
   { id: "receipts", label: "Receipts" },
   { id: "arc", label: "The arc" },
